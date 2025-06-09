@@ -5,7 +5,13 @@ apis:
   - aid: tray-ai:tray-ai
     name: Tray.ai
     tags:
-      - API
+      - iPaaS
+      - Agents
+      - Process Automation
+      - Data Integration
+      - API Management
+      - Integration Marketplaces
+      - Agile Connectivity
     humanURL: ' https://tray.ai'
     properties:
       - url: ' https://tray.ai'
