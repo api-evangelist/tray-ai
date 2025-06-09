@@ -1,7 +1,7 @@
-# Prismatic (prismatic)
-The most efficient way to build, deploy, and manage integrations. Prismatic empowers everyone on your team with integration tools for devs and non-devs alike. 
+# Tray.ai (tray-ai)
+Were rethinking how enterprises connect systems, teams, and data so they can move faster, adapt quicker, and solve bigger problems with AI at the center. 
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/prismatic/refs/heads/main/apis.yml)
+**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/tray-ai/refs/heads/main/apis.yml)
 
 ## Scope
 
@@ -11,48 +11,42 @@ The most efficient way to build, deploy, and manage integrations. Prismatic empo
 
 ## Tags:
 
- - Integrations, Embedded SaaS Integration, Workflows, Connectors
+ - iPaaS, Agents, Process Automation, Data Integration, API Management, Integration Marketplaces, Agile Connectivity
 
 ## Timestamps
 
 - **Created:** 2025-06-05 
-- **Modified:** 2025-06-05 
+- **Modified:** 2025-06-09 
 
 ## APIs
 
-### Prismatics GraphQL API
-Prismatic provides a GraphQL-based API for you to build, deploy, and support your integrations programmatically. While we recommend that new users use the web app or Prismatic CLI tool to manage Prismatic resources, developer users will likely want to use the API to script out integration management.
+### Tray.ai
+Were rethinking how enterprises connect systems, teams, and data so they can move faster, adapt quicker, and solve bigger problems with AI at the center. 
 
-**Human URL:** [https://prismatic.io/docs/api/](https://prismatic.io/docs/api/)
+**Human URL:** [ https://tray.ai]( https://tray.ai)
 
 
 #### Tags:
 
- - Integrations, Embedded SaaS Integration, Workflows, Connectors
+ - iPaaS, Agents, Process Automation, Data Integration, API Management, Integration Marketplaces, Agile Connectivity
 
 #### Properties
 
-- [Documentation](https://prismatic.io/docs/api/)
-- [Authentication](https://prismatic.io/docs/api/authentication/)
-- [Pagination](https://prismatic.io/docs/api/pagination/)
-- [Authentication](https://prismatic.io/docs/api/authentication/)
+- [Documentation]( https://tray.ai)
 
 ## Common Properties
 
-- [SDKs](https://prismatic.io/docs/custom-connectors/)
-- [CI/CD](https://prismatic.io/docs/api/ci-cd-system/)
-- [GitHubActions](https://prismatic.io/docs/api/github-actions/)
-- [CLI](https://prismatic.io/docs/cli/)
-- [ChangeLog](https://prismatic.io/docs/changelog/)
-- [Explorer](https://prismatic.io/docs/explorer/)
-- [GettingStarted](https://prismatic.io/docs/integrations/low-code-integration-designer/get-started/first-integration/)
-- [PrivacyPolicy](https://prismatic.io/legal/privacy/)
-- [TermsOfService](https://prismatic.io/legal/terms/)
-- [Security](https://prismatic.io/legal/security/)
-- [GitHubOrganization](https://github.com/prismatic-io)
-- [Integrations](https://prismatic.io/connectors/)
+- [Plans](https://tray.ai/packages)
+- [Integrations](https://tray.ai/connectors?sort=alphabetical)
+- [Login](https://app.tray.io/login)
+- [Blog](https://tray.ai/blog)
+- [CaseStudies](https://tray.ai/customers)
+- [PrivacyPolicy](https://tray.ai/privacy)
+- [TermsOfService](https://tray.ai/terms)
+- [Status](https://status.tray.ai/)
+- [Website](https://tray.ai/)
+- [UseCases](undefined)
 - [Features](undefined)
-- [Benefits](undefined)
 
 ## Maintainers
 
