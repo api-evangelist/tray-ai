@@ -2,15 +2,28 @@ aid: tray-ai
 url: >-
   https://raw.githubusercontent.com/api-evangelist/tray-ai/refs/heads/main/apis.yml
 apis:
-  - aid: tray-ai:tray-ai
-    name: Tray.ai
+  - aid: tray-ai:embedded-api
+    name: Tray.ai Embedded API
     tags:
-      - API
-    humanURL: ' https://tray.ai'
+      - Automation
+      - Integration
+      - GraphQL
+      - Embedded
+    humanURL: https://developer.tray.ai/openapi/embeddedapi-introduction/
+    baseURL: https://tray.io/graphql
     properties:
-      - url: ' https://tray.ai'
+      - url: https://developer.tray.ai/openapi/embeddedapi-introduction/
         type: Documentation
-    description: "We're rethinking how enterprises connect systems, teams, and data so they can move faster, adapt quicker, and solve bigger problems with AI at the center.\_ "
+      - url: openapi/tray-ai-embedded-api-openapi.yml
+        type: OpenAPI
+      - url: https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
+        type: PostmanCollection
+    description: >-
+      The Tray.ai Embedded API is a GraphQL-based API that allows partners
+      and customers to present in-app embedded integration experiences.
+      It provides programmatic access to manage users, solutions, solution
+      instances, authentications, workflows, and connector operations via
+      HTTP POST to the GraphQL endpoint with Bearer token authentication.
 name: Tray.ai
 tags:
   - API
@@ -18,7 +31,7 @@ type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
 created: '2025-06-05T00:00:00.000Z'
-modified: '2025-06-10'
+modified: '2026-03-14'
 position: Consumer
 description: "We're rethinking how enterprises connect systems, teams, and data so they can move faster, adapt quicker, and solve bigger problems with AI at the center.\_ "
 maintainers:
