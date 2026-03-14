@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/tray-ai/refs/heads/main/json-schema/solution.json",
+  "title": "Tray.ai Solution",
+  "description": "A published solution (integration) available on the Tray.ai platform.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique solution identifier"
+    },
+    "title": {
+      "type": "string",
+      "description": "Title of the solution"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the solution"
+    },
+    "tags": {
+      "type": "array",
+      "description": "Tags associated with the solution",
+      "items": {
+        "type": "string"
+      }
+    },
+    "configSlots": {
+      "type": "array",
+      "description": "Configuration slots that must be filled when creating an instance",
+      "items": {
+        "type": "object",
+        "properties": {
+          "externalId": {
+            "type": "string",
+            "description": "External identifier for the config slot"
+          },
+          "title": {
+            "type": "string",
+            "description": "Display name for the config slot"
+          },
+          "defaultValue": {
+            "type": "string",
+            "description": "Default value for the config slot"
+          }
+        }
+      }
+    },
+    "authSlots": {
+      "type": "array",
+      "description": "Authentication slots that must be filled when creating an instance",
+      "items": {
+        "type": "object",
+        "properties": {
+          "externalId": {
+            "type": "string",
+            "description": "External identifier for the auth slot"
+          },
+          "title": {
+            "type": "string",
+            "description": "Display name for the auth slot"
+          }
+        }
+      }
+    }
+  },
+  "required": ["id"]
+}

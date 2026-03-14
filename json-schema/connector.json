@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/tray-ai/refs/heads/main/json-schema/connector.json",
+  "title": "Tray.ai Connector",
+  "description": "A Tray.ai connector that exposes third-party API operations for integration workflows.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The connector name identifier (e.g., salesforce, slack)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Display name of the connector"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the connector and its capabilities"
+    },
+    "icon": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to the connector icon"
+    },
+    "versions": {
+      "type": "array",
+      "description": "Available versions of the connector",
+      "items": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Version identifier"
+          },
+          "isLatest": {
+            "type": "boolean",
+            "description": "Whether this is the latest version"
+          },
+          "operations": {
+            "type": "array",
+            "description": "Operations available in this version",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Operation name identifier"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Display name of the operation"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Description of what the operation does"
+                },
+                "inputSchema": {
+                  "type": "object",
+                  "description": "JSON Schema defining the operation input"
+                },
+                "outputSchema": {
+                  "type": "object",
+                  "description": "JSON Schema defining the operation output"
+                }
+              },
+              "required": ["name"]
+            }
+          }
+        },
+        "required": ["version"]
+      }
+    }
+  },
+  "required": ["name"]
+}

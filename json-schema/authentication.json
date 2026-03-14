@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/tray-ai/refs/heads/main/json-schema/authentication.json",
+  "title": "Tray.ai Authentication",
+  "description": "A third-party service authentication used by Tray.ai connectors to access external services.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique authentication identifier"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name of the authentication"
+    },
+    "serviceEnvironmentId": {
+      "type": "string",
+      "description": "The service environment against which this authentication was created"
+    },
+    "service": {
+      "type": "object",
+      "description": "The third-party service this authentication is for",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Service identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Service display name"
+        },
+        "icon": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the service icon"
+        }
+      }
+    },
+    "serviceEnvironment": {
+      "type": "object",
+      "description": "The service environment instance",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Service environment identifier"
+        },
+        "title": {
+          "type": "string",
+          "description": "Service environment display name"
+        }
+      }
+    },
+    "scopes": {
+      "type": "array",
+      "description": "OAuth scopes associated with this authentication",
+      "items": {
+        "type": "string"
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the authentication was created"
+    }
+  },
+  "required": ["id"]
+}

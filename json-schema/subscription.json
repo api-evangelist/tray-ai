@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/tray-ai/refs/heads/main/json-schema/subscription.json",
+  "title": "Tray.ai Trigger Subscription",
+  "description": "A trigger subscription that receives real-time data from a third-party service via a Tray.ai trigger.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique subscription identifier"
+    },
+    "triggerName": {
+      "type": "string",
+      "description": "The trigger operation name"
+    },
+    "connectorName": {
+      "type": "string",
+      "description": "The connector associated with the trigger"
+    },
+    "connectorVersion": {
+      "type": "string",
+      "description": "The version of the connector"
+    },
+    "authId": {
+      "type": "string",
+      "description": "The authentication ID used by this subscription"
+    },
+    "status": {
+      "type": "string",
+      "description": "Current subscription status"
+    },
+    "input": {
+      "type": "object",
+      "description": "Input configuration for the subscription"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the subscription was created"
+    }
+  },
+  "required": ["id"]
+}

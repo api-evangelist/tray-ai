@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/tray-ai/refs/heads/main/json-schema/workspace.json",
+  "title": "Tray.ai Workspace",
+  "description": "A workspace in the Tray.ai platform used to organize users, projects, and workflows into sub-categories.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique workspace identifier"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name of the workspace"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the workspace purpose"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the workspace was created"
+    }
+  },
+  "required": ["id"]
+}

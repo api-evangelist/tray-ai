@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/tray-ai/refs/heads/main/json-schema/solution-instance.json",
+  "title": "Tray.ai Solution Instance",
+  "description": "An instance of a published solution created for a specific end user.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique solution instance identifier"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the solution instance"
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "Whether the solution instance is currently enabled"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the instance was created"
+    },
+    "owner": {
+      "type": "string",
+      "description": "User ID of the instance owner"
+    },
+    "solutionId": {
+      "type": "string",
+      "description": "The ID of the solution this instance is based on"
+    },
+    "authValues": {
+      "type": "array",
+      "description": "Authentication values configured for this instance",
+      "items": {
+        "type": "object",
+        "properties": {
+          "externalId": {
+            "type": "string",
+            "description": "External identifier for the auth slot"
+          },
+          "authId": {
+            "type": "string",
+            "description": "The authentication ID assigned to this slot"
+          }
+        }
+      }
+    },
+    "configValues": {
+      "type": "array",
+      "description": "Configuration values set for this instance",
+      "items": {
+        "type": "object",
+        "properties": {
+          "externalId": {
+            "type": "string",
+            "description": "External identifier for the config slot"
+          },
+          "value": {
+            "type": "string",
+            "description": "The configured value"
+          }
+        }
+      }
+    },
+    "workflows": {
+      "type": "object",
+      "description": "Workflows associated with this instance",
+      "properties": {
+        "edges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "node": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Workflow identifier"
+                  },
+                  "triggerUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "URL to trigger the workflow"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "solutionVersionFlags": {
+      "type": "object",
+      "properties": {
+        "hasNewerVersion": {
+          "type": "boolean",
+          "description": "Whether a newer version of the solution is available"
+        }
+      }
+    }
+  },
+  "required": ["id"]
+}

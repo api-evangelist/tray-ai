@@ -18,22 +18,71 @@ apis:
         type: OpenAPI
       - url: https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
         type: PostmanCollection
+      - url: json-schema/user.json
+        type: JSONSchema
+      - url: json-schema/solution.json
+        type: JSONSchema
+      - url: json-schema/solution-instance.json
+        type: JSONSchema
+      - url: json-schema/authentication.json
+        type: JSONSchema
+      - url: json-ld/tray-ai-context.jsonld
+        type: JSONLD
     description: >-
       The Tray.ai Embedded API is a GraphQL-based API that allows partners
       and customers to present in-app embedded integration experiences.
       It provides programmatic access to manage users, solutions, solution
       instances, authentications, workflows, and connector operations via
       HTTP POST to the GraphQL endpoint with Bearer token authentication.
+  - aid: tray-ai:platform-api
+    name: Tray.ai Platform API
+    tags:
+      - Automation
+      - Integration
+      - Connectors
+      - iPaaS
+    humanURL: https://developer.tray.ai/openapi/trayapi/overview/
+    baseURL: https://api.tray.io/core/v1
+    properties:
+      - url: https://developer.tray.ai/openapi/trayapi/overview/
+        type: Documentation
+      - url: openapi/tray-ai-platform-api-openapi.yml
+        type: OpenAPI
+      - url: json-schema/connector.json
+        type: JSONSchema
+      - url: json-schema/authentication.json
+        type: JSONSchema
+      - url: json-schema/subscription.json
+        type: JSONSchema
+      - url: json-schema/user.json
+        type: JSONSchema
+      - url: json-schema/workspace.json
+        type: JSONSchema
+      - url: json-ld/tray-ai-context.jsonld
+        type: JSONLD
+    description: >-
+      The Tray.ai Platform API (also known as the Connectivity API) provides
+      direct programmatic REST access to Tray's 700+ pre-built service
+      connectors, authentication management, trigger subscriptions, user and
+      workspace administration, and project/solution lifecycle operations. It
+      enables developers to integrate third-party service operations into their
+      own applications without using the Builder UI.
 name: Tray.ai
 tags:
-  - API
+  - Automation
+  - Integration
+  - iPaaS
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
-created: '2025-06-05T00:00:00.000Z'
+created: '2025-06-05'
 modified: '2026-03-14'
 position: Consumer
-description: "We're rethinking how enterprises connect systems, teams, and data so they can move faster, adapt quicker, and solve bigger problems with AI at the center.\_ "
+description: >-
+  Tray.ai is an AI-ready integration and automation platform that helps
+  enterprises connect systems, teams, and data. It provides 700+ pre-built
+  connectors, a visual workflow builder, embedded integration capabilities,
+  and programmatic APIs for building and managing integrations at scale.
 maintainers:
   - FN: Kin Lane
     email: info@apievangelist.com
@@ -196,6 +245,10 @@ common:
     description: 'null'
     url: https://tray.ai/
     type: Website
+  - name: Developer Portal
+    description: 'null'
+    url: https://developer.tray.ai/
+    type: Portal
   - name: Use Cases
     type: UseCases
     data:
