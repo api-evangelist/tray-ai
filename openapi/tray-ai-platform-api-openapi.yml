@@ -26,14 +26,22 @@ servers:
 security:
   - bearerAuth: []
 tags:
-  - name: Connectors
-    description: >-
-      List available connectors and their operations, and call connector
-      operations to interact with third-party services programmatically.
   - name: Authentications
     description: >-
       Create, retrieve, and delete third-party service authentications
       required by connectors to access external services.
+  - name: Connectors
+    description: >-
+      List available connectors and their operations, and call connector
+      operations to interact with third-party services programmatically.
+  - name: Deployments
+    description: >-
+      Deploy CDK (Connector Development Kit) connectors to the Tray
+      platform.
+  - name: Projects
+    description: >-
+      Manage projects and solutions for environment promotion, including
+      creating, exporting, and importing project versions.
   - name: Triggers
     description: >-
       List available triggers and manage trigger subscriptions to receive
@@ -47,14 +55,6 @@ tags:
       Manage workspaces and workspace users. Workspaces divide your
       organization into sub-categories such as departments or dev/prod
       environments.
-  - name: Projects
-    description: >-
-      Manage projects and solutions for environment promotion, including
-      creating, exporting, and importing project versions.
-  - name: Deployments
-    description: >-
-      Deploy CDK (Connector Development Kit) connectors to the Tray
-      platform.
 paths:
   /connectors:
     get:

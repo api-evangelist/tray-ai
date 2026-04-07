@@ -29,34 +29,34 @@ servers:
 security:
   - bearerAuth: []
 tags:
-  - name: Users
-    description: >-
-      Manage external users of your embedded application. Requires a master
-      token for most operations.
   - name: Authentication
     description: >-
       Generate and manage user tokens for authenticating API calls. The
       authorize mutation generates a user token from a master token.
-  - name: Solutions
-    description: >-
-      Retrieve solutions (integrations) that have been built and published
-      on the Tray platform.
-  - name: Solution Instances
-    description: >-
-      Create, update, enable, disable, and delete solution instances for
-      end users. Requires a user token for most operations.
   - name: Authentications
     description: >-
       Create, retrieve, and delete third-party service authentications
       that power Tray connectors (e.g., Salesforce, Slack).
-  - name: Workflows
-    description: >-
-      Import and export Tray workflows between embedded accounts, useful
-      for promoting workflows from staging to production.
   - name: Call Connector
     description: >-
       Call any Tray connector operation to pull data from a particular
       service and display it in your application.
+  - name: Solution Instances
+    description: >-
+      Create, update, enable, disable, and delete solution instances for
+      end users. Requires a user token for most operations.
+  - name: Solutions
+    description: >-
+      Retrieve solutions (integrations) that have been built and published
+      on the Tray platform.
+  - name: Users
+    description: >-
+      Manage external users of your embedded application. Requires a master
+      token for most operations.
+  - name: Workflows
+    description: >-
+      Import and export Tray workflows between embedded accounts, useful
+      for promoting workflows from staging to production.
 paths:
   /graphql:
     post:

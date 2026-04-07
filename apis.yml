@@ -6,9 +6,9 @@ apis:
     name: Tray.ai Embedded API
     tags:
       - Automation
-      - Integration
-      - GraphQL
       - Embedded
+      - GraphQL
+      - Integration
     humanURL: https://developer.tray.ai/openapi/embeddedapi-introduction/
     baseURL: https://tray.io/graphql
     properties:
@@ -38,8 +38,8 @@ apis:
     name: Tray.ai Platform API
     tags:
       - Automation
-      - Integration
       - Connectors
+      - Integration
       - iPaaS
     humanURL: https://developer.tray.ai/openapi/trayapi/overview/
     baseURL: https://api.tray.io/core/v1
