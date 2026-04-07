@@ -59,7 +59,7 @@ paths:
   /connectors:
     get:
       operationId: listConnectors
-      summary: List Connectors
+      summary: Tray.ai List Connectors
       description: >-
         Returns a list of all available connectors from Tray's connector
         library. A connector can have multiple versions. Each connector
@@ -83,7 +83,7 @@ paths:
   /connectors/{connectorName}/versions/{connectorVersion}:
     get:
       operationId: getConnectorVersion
-      summary: Get Connector Version
+      summary: Tray.ai Get Connector Version
       description: >-
         Retrieves details of a specific connector version, including its
         available operations, input schemas, and output schemas.
@@ -116,7 +116,7 @@ paths:
   /connectors/{connectorName}/versions/{connectorVersion}/call:
     post:
       operationId: callConnector
-      summary: Call Connector
+      summary: Tray.ai Call Connector
       description: >-
         Executes an operation of a connector and returns the result. This
         is a billable endpoint. The input must conform to the input schema
@@ -162,7 +162,7 @@ paths:
   /authentications:
     get:
       operationId: listAuthentications
-      summary: List Authentications
+      summary: Tray.ai List Authentications
       description: >-
         Retrieves a list of authentications associated with the
         authenticated user or organization.
@@ -184,7 +184,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
     post:
       operationId: createAuthentication
-      summary: Create Authentication
+      summary: Tray.ai Create Authentication
       description: >-
         Creates a new user authentication for a third-party service in
         Tray. Requires the serviceEnvironmentId, user data, and
@@ -212,7 +212,7 @@ paths:
   /authentications/{authenticationId}:
     get:
       operationId: getAuthentication
-      summary: Get Authentication
+      summary: Tray.ai Get Authentication
       description: >-
         Retrieves metadata associated with a user authentication by its
         ID, including auth id, serviceEnvironmentId, name, and scopes.
@@ -238,7 +238,7 @@ paths:
           description: Authentication not found
     delete:
       operationId: deleteAuthentication
-      summary: Delete Authentication
+      summary: Tray.ai Delete Authentication
       description: >-
         Deletes a user authentication using the authentication ID.
       tags:
@@ -260,7 +260,7 @@ paths:
   /triggers:
     get:
       operationId: listTriggers
-      summary: List Triggers
+      summary: Tray.ai List Triggers
       description: >-
         Returns a list of all available triggers from Tray's trigger
         library. Triggers allow you to receive data from third-party
@@ -284,7 +284,7 @@ paths:
   /subscriptions:
     post:
       operationId: createSubscription
-      summary: Create Subscription
+      summary: Tray.ai Create Subscription
       description: >-
         Creates a new trigger subscription using a trigger operation.
         The input must conform to the input schema of the trigger
@@ -311,7 +311,7 @@ paths:
   /subscriptions/{subscriptionId}:
     delete:
       operationId: deleteSubscription
-      summary: Delete Subscription
+      summary: Tray.ai Delete Subscription
       description: >-
         Deletes a trigger subscription by its ID. Requires a user token.
       tags:
@@ -333,7 +333,7 @@ paths:
   /users:
     get:
       operationId: listUsers
-      summary: List Users
+      summary: Tray.ai List Users
       description: >-
         Retrieves a list of users within the organization. Returns
         user details including name, email, and role information.
@@ -356,7 +356,7 @@ paths:
   /users/invite:
     post:
       operationId: inviteUser
-      summary: Invite User
+      summary: Tray.ai Invite User
       description: >-
         Invites a user to the organization by email address. The invited
         user will receive an email with instructions to join.
@@ -382,7 +382,7 @@ paths:
   /workspaces:
     get:
       operationId: listWorkspaces
-      summary: List Workspaces
+      summary: Tray.ai List Workspaces
       description: >-
         Retrieves a list of workspaces in the organization. Workspaces
         divide the organization into sub-categories such as departments
@@ -406,7 +406,7 @@ paths:
   /workspaces/{workspaceId}:
     get:
       operationId: getWorkspace
-      summary: Get Workspace
+      summary: Tray.ai Get Workspace
       description: >-
         Retrieves details for a specific workspace by its ID.
       tags:
@@ -432,7 +432,7 @@ paths:
   /workspaces/{workspaceId}/users:
     get:
       operationId: listWorkspaceUsers
-      summary: List Workspace Users
+      summary: Tray.ai List Workspace Users
       description: >-
         Retrieves a list of users belonging to a specific workspace.
       tags:
@@ -463,7 +463,7 @@ paths:
   /projects/{projectId}/export:
     post:
       operationId: exportProject
-      summary: Export Project
+      summary: Tray.ai Export Project
       description: >-
         Exports a project version for environment promotion, such as
         moving from staging to production workspaces.
@@ -494,7 +494,7 @@ paths:
   /projects/import:
     post:
       operationId: importProject
-      summary: Import Project
+      summary: Tray.ai Import Project
       description: >-
         Imports a project version from exported data into the target
         workspace for environment promotion.
@@ -533,7 +533,7 @@ paths:
   /connectors/{connectorName}/versions/{connectorVersion}/deploy:
     post:
       operationId: deployConnector
-      summary: Deploy CDK Connector
+      summary: Tray.ai Deploy CDK Connector
       description: >-
         Deploys a CDK (Connector Development Kit) connector to the Tray
         platform. The connector name and version must match those defined

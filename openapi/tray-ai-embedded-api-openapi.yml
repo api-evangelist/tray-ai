@@ -61,7 +61,7 @@ paths:
   /graphql:
     post:
       operationId: createExternalUser
-      summary: Create External User
+      summary: Tray.ai Create External User
       description: >-
         Creates a new external user for your embedded application. Accepts
         a name, externalUserId, and optional isTestUser flag. Test users
@@ -106,7 +106,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
     get:
       operationId: graphqlPlayground
-      summary: GraphQL Playground
+      summary: Tray.ai GraphQL Playground
       description: >-
         Access the GraphQL Playground interface for exploring the Tray
         Embedded API interactively. This is only available for development
@@ -123,7 +123,7 @@ paths:
   /graphql#getUsers:
     post:
       operationId: getUsers
-      summary: Get Users
+      summary: Tray.ai Get Users
       description: >-
         Retrieves a list of external users with pagination support. Returns
         user details including name, id, externalUserId, and pagination
@@ -186,7 +186,7 @@ paths:
   /graphql#updateExternalUser:
     post:
       operationId: updateExternalUser
-      summary: Update External User
+      summary: Tray.ai Update External User
       description: >-
         Updates an external user's properties, such as marking them as a
         test user to exclude from billing. Requires a master token.
@@ -229,7 +229,7 @@ paths:
   /graphql#removeUser:
     post:
       operationId: removeUser
-      summary: Remove User
+      summary: Tray.ai Remove User
       description: >-
         Removes an external user from your embedded application. This will
         also remove all associated solution instances and authentications.
@@ -272,7 +272,7 @@ paths:
   /graphql#authorize:
     post:
       operationId: authorize
-      summary: Create User Token (Authorize)
+      summary: Tray.ai Create User Token (Authorize)
       description: >-
         Generates a user access token from a master token for a specific
         user. The returned token is used as a Bearer token for user-scoped
@@ -317,7 +317,7 @@ paths:
   /graphql#getSolutions:
     post:
       operationId: getSolutions
-      summary: Get Solutions
+      summary: Tray.ai Get Solutions
       description: >-
         Retrieves a list of published solutions (integrations) available
         in your embedded application. Solutions represent integrations
@@ -385,7 +385,7 @@ paths:
   /graphql#createSolutionInstance:
     post:
       operationId: createSolutionInstance
-      summary: Create Solution Instance
+      summary: Tray.ai Create Solution Instance
       description: >-
         Creates a new solution instance from a published solution for a
         specific end user. Accepts the solutionId, instanceName, and
@@ -449,7 +449,7 @@ paths:
   /graphql#getSolutionInstances:
     post:
       operationId: getSolutionInstances
-      summary: Get Solution Instances
+      summary: Tray.ai Get Solution Instances
       description: >-
         Retrieves solution instances. When called with a master token,
         returns instances for all end users. When called with a user
@@ -521,7 +521,7 @@ paths:
   /graphql#updateSolutionInstance:
     post:
       operationId: updateSolutionInstance
-      summary: Update Solution Instance
+      summary: Tray.ai Update Solution Instance
       description: >-
         Updates an existing solution instance. Can update the instance
         name, enable/disable status, auth values, and config values.
@@ -572,7 +572,7 @@ paths:
   /graphql#deleteSolutionInstance:
     post:
       operationId: deleteSolutionInstance
-      summary: Delete Solution Instance
+      summary: Tray.ai Delete Solution Instance
       description: >-
         Deletes a solution instance and all associated data. This action
         is irreversible. Requires a user token.
@@ -614,7 +614,7 @@ paths:
   /graphql#createUserAuthentication:
     post:
       operationId: createUserAuthentication
-      summary: Create User Authentication
+      summary: Tray.ai Create User Authentication
       description: >-
         Creates a new authentication for a third-party service (e.g.,
         Salesforce, Slack) for a specific user. Returns an authId that
@@ -666,7 +666,7 @@ paths:
   /graphql#getAuthentications:
     post:
       operationId: getAuthentications
-      summary: Get Authentications
+      summary: Tray.ai Get Authentications
       description: >-
         Retrieves a list of authentications for third-party services.
         Supports both master token (returns all authentications) and
@@ -740,7 +740,7 @@ paths:
   /graphql#deleteAuthentication:
     post:
       operationId: deleteAuthentication
-      summary: Delete Authentication
+      summary: Tray.ai Delete Authentication
       description: >-
         Deletes a third-party service authentication. Requires a user
         token.
@@ -782,7 +782,7 @@ paths:
   /graphql#exportWorkflows:
     post:
       operationId: exportWorkflows
-      summary: Export Workflows
+      summary: Tray.ai Export Workflows
       description: >-
         Exports workflows from your embedded account. Useful for promoting
         workflows from staging to production environments. Requires a
@@ -826,7 +826,7 @@ paths:
   /graphql#importWorkflows:
     post:
       operationId: importWorkflows
-      summary: Import Workflows
+      summary: Tray.ai Import Workflows
       description: >-
         Imports workflows into your embedded account from exported data.
         Useful for promoting workflows from staging to production
@@ -869,7 +869,7 @@ paths:
   /graphql#callConnector:
     post:
       operationId: callConnector
-      summary: Call Connector
+      summary: Tray.ai Call Connector
       description: >-
         Calls any Tray connector operation to pull data from a particular
         third-party service. Used in combination with a user token and
