@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://api.tray.io/core/v1/connectors/slack/versions/4.0/call",
+    "headers": {
+      "Authorization": "Bearer {user_token}",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "operation": "list_channels",
+      "authId": "auth-uuid-abc123",
+      "input": {
+        "limit": 100
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "channels": [
+        {
+          "id": "C01234567",
+          "name": "general",
+          "is_channel": true,
+          "num_members": 42
+        },
+        {
+          "id": "C07654321",
+          "name": "engineering",
+          "is_channel": true,
+          "num_members": 15
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,106 @@
+extends: spectral:oas
+rules:
+  # Tray.ai API naming conventions
+  tray-ai-operation-summary-prefix:
+    description: >-
+      All operation summaries should be prefixed with "Tray.ai" to clearly
+      identify the provider in multi-API environments.
+    message: "Operation summary '{{value}}' should start with 'Tray.ai'"
+    severity: warn
+    given: "$.paths[*][*].summary"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^Tray\\.ai "
+
+  tray-ai-operation-id-camel-case:
+    description: >-
+      Operation IDs should use camelCase naming convention as used throughout
+      the Tray.ai API (e.g., listConnectors, callConnector, createAuthentication).
+    message: "Operation ID '{{value}}' should use camelCase"
+    severity: warn
+    given: "$.paths[*][*].operationId"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]*$"
+
+  tray-ai-bearer-auth-required:
+    description: >-
+      All Tray.ai API endpoints require Bearer token authentication. Operations
+      must either inherit global security or declare their own bearerAuth security.
+    message: "All operations require Bearer token authentication"
+    severity: error
+    given: "$.paths[*][*]"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          oneOf:
+            - required: ["security"]
+            - not:
+                required: ["security"]
+
+  tray-ai-response-200-defined:
+    description: >-
+      All operations should define a 200 or 204 success response to document
+      the expected output format for Tray.ai API consumers.
+    message: "Operation should define a successful response (200 or 204)"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].responses"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          oneOf:
+            - required: ["200"]
+            - required: ["204"]
+
+  tray-ai-401-response-defined:
+    description: >-
+      All Tray.ai operations require authentication. Each operation should
+      document the 401 Unauthorized response for token errors.
+    message: "Operation should define a 401 Unauthorized response"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].responses"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          required: ["401"]
+
+  tray-ai-description-required:
+    description: >-
+      All operations should include a description field that explains the
+      operation's purpose, token requirements, and any billing implications.
+    message: "Operation should have a description"
+    severity: warn
+    given: "$.paths[*][*]"
+    then:
+      field: description
+      function: truthy
+
+  tray-ai-tags-required:
+    description: >-
+      All operations should be tagged to support navigation in developer
+      documentation and API catalog tools.
+    message: "Operation should have at least one tag"
+    severity: warn
+    given: "$.paths[*][*].tags"
+    then:
+      function: length
+      functionOptions:
+        min: 1
+
+  tray-ai-no-empty-paths:
+    description: >-
+      API paths should not be empty. Each path should contain at least
+      one HTTP method.
+    message: "Path should define at least one HTTP operation"
+    severity: error
+    given: "$.paths[*]"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          minProperties: 1

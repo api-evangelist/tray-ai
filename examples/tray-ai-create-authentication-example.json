@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://api.tray.io/core/v1/authentications",
+    "headers": {
+      "Authorization": "Bearer {master_token}",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "name": "My Salesforce Production Auth",
+      "serviceEnvironmentId": "svc-env-uuid-xyz",
+      "userData": {
+        "userId": "user-uuid-abc"
+      },
+      "credentials": {
+        "api_key": "sf-api-key-here"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "auth-uuid-def456",
+      "name": "My Salesforce Production Auth",
+      "serviceEnvironmentId": "svc-env-uuid-xyz",
+      "scopes": ["read", "write"],
+      "createdAt": "2026-05-03T10:00:00Z"
+    }
+  }
+}

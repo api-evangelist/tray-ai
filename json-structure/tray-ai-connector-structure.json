@@ -1,0 +1,35 @@
+{
+  "title": "Tray.ai Connector Structure",
+  "description": "Structural documentation for the Tray.ai Connector and ConnectorVersion objects",
+  "type": "object",
+  "structure": {
+    "Connector": {
+      "name": { "type": "string", "description": "Connector identifier (e.g., salesforce, slack)" },
+      "title": { "type": "string", "description": "Human-readable display name" },
+      "description": { "type": "string", "description": "What the connector does" },
+      "icon": { "type": "string", "format": "uri", "description": "URL to connector icon" },
+      "versions": {
+        "type": "array",
+        "items": {
+          "version": { "type": "string", "description": "Version identifier (e.g., 2.1)" },
+          "isLatest": { "type": "boolean", "description": "Whether this is the latest version" }
+        }
+      }
+    },
+    "ConnectorVersion": {
+      "name": { "type": "string", "description": "Connector identifier" },
+      "version": { "type": "string", "description": "Version string" },
+      "title": { "type": "string", "description": "Display name" },
+      "operations": {
+        "type": "array",
+        "items": {
+          "name": { "type": "string", "description": "Operation identifier" },
+          "title": { "type": "string", "description": "Operation display name" },
+          "description": { "type": "string", "description": "What the operation does" },
+          "inputSchema": { "type": "object", "description": "JSON Schema for operation inputs" },
+          "outputSchema": { "type": "object", "description": "JSON Schema for operation outputs" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,201 @@
+title: Tray.ai Vocabulary
+description: >-
+  Domain vocabulary and taxonomy for the Tray.ai integration and automation
+  platform, covering connectors, solutions, embedded integrations, and
+  workflow automation concepts.
+created: "2026-05-03"
+modified: "2026-05-03"
+
+terms:
+  - term: Connector
+    definition: >-
+      A pre-built integration module that exposes the API operations of a
+      third-party service (e.g., Salesforce, Slack, HubSpot). Tray.ai provides
+      700+ connectors. Each connector can have multiple versions.
+    tags:
+      - Core Concept
+      - Integration
+    related:
+      - ConnectorVersion
+      - Operation
+      - Authentication
+
+  - term: ConnectorVersion
+    definition: >-
+      A specific versioned release of a connector that defines available
+      operations, input schemas, and output schemas. Versions are identified
+      by a version string (e.g., "4.0").
+    tags:
+      - Core Concept
+      - Versioning
+    related:
+      - Connector
+      - Operation
+
+  - term: Operation
+    definition: >-
+      A single callable action within a connector version (e.g., "list_channels"
+      in the Slack connector). Operations have defined input and output JSON
+      schemas and are invoked via the Call Connector endpoint.
+    tags:
+      - Core Concept
+      - API
+    related:
+      - Connector
+      - CallConnector
+
+  - term: Authentication
+    definition: >-
+      A stored set of credentials or OAuth tokens that authorize a connector
+      to interact with a third-party service on behalf of a user. Identified
+      by an authId used when calling connector operations.
+    tags:
+      - Security
+      - Credentials
+    related:
+      - Connector
+      - ServiceEnvironment
+
+  - term: Trigger
+    definition: >-
+      A real-time event listener that pushes data from a third-party service
+      into Tray.ai workflows. Triggers are associated with connectors and
+      require a subscription to activate.
+    tags:
+      - Event Driven
+      - Real Time
+    related:
+      - Subscription
+      - Connector
+
+  - term: Subscription
+    definition: >-
+      An active trigger registration that listens for events from a third-party
+      service. Created via the /subscriptions endpoint using a trigger operation
+      and authentication ID.
+    tags:
+      - Event Driven
+      - Real Time
+    related:
+      - Trigger
+
+  - term: Solution
+    definition: >-
+      A packaged integration workflow built on the Tray platform that can be
+      deployed as instances for end users. Solutions are composed of one or more
+      workflows and define configuration and authentication slots.
+    tags:
+      - Embedded
+      - Workflow
+    related:
+      - SolutionInstance
+      - Workflow
+
+  - term: SolutionInstance
+    definition: >-
+      A deployed copy of a Solution for a specific end user in an embedded
+      application. Instances can be enabled, disabled, reconfigured, and
+      deleted. Each instance has its own trigger URLs.
+    tags:
+      - Embedded
+      - Workflow
+    related:
+      - Solution
+      - ExternalUser
+
+  - term: ExternalUser
+    definition: >-
+      An end user of an embedded application that is managed via the Tray.ai
+      Embedded API. External users can have their own solution instances and
+      authentications. Test users are excluded from billing.
+    tags:
+      - Embedded
+      - Users
+    related:
+      - SolutionInstance
+      - MasterToken
+      - UserToken
+
+  - term: MasterToken
+    definition: >-
+      An admin-level Bearer token issued by Tray.ai for use in the Embedded API.
+      Required for admin operations like creating external users, managing
+      all solution instances, and exporting/importing workflows.
+    tags:
+      - Security
+      - Authentication
+    related:
+      - UserToken
+      - ExternalUser
+
+  - term: UserToken
+    definition: >-
+      A user-scoped Bearer token generated via the authorize mutation in the
+      Embedded API. Required for user-scoped operations like creating solution
+      instances and managing user authentications.
+    tags:
+      - Security
+      - Authentication
+    related:
+      - MasterToken
+      - SolutionInstance
+
+  - term: Workspace
+    definition: >-
+      An organizational subdivision within a Tray.ai organization, used to
+      separate environments (e.g., dev/staging/prod) or departments. Users
+      and projects are assigned to workspaces.
+    tags:
+      - Organization
+      - Administration
+    related:
+      - Project
+      - User
+
+  - term: Project
+    definition: >-
+      A collection of solutions and workflows that can be exported and imported
+      between workspaces for environment promotion workflows.
+    tags:
+      - DevOps
+      - Environment Promotion
+    related:
+      - Workspace
+
+  - term: iPaaS
+    definition: >-
+      Integration Platform as a Service. The class of cloud-based platforms
+      that Tray.ai belongs to, providing tools for connecting applications,
+      data, and processes without requiring custom code.
+    tags:
+      - Platform Category
+      - Integration
+
+  - term: CDK
+    definition: >-
+      Connector Development Kit. Tray.ai's SDK for building custom connectors
+      that can be deployed to the Tray platform via the /deploy endpoint.
+    tags:
+      - Developer Tools
+      - Extensibility
+
+  - term: ServiceEnvironment
+    definition: >-
+      A specific environment for a third-party service (e.g., Salesforce
+      production vs sandbox). Authentications are scoped to a service
+      environment and referenced by serviceEnvironmentId.
+    tags:
+      - Integration
+      - Configuration
+    related:
+      - Authentication
+      - Connector
+
+  - term: GraphQL
+    definition: >-
+      The query language used by the Tray.ai Embedded API. All Embedded API
+      calls are made via HTTP POST to the /graphql endpoint with GraphQL
+      queries and mutations in the request body.
+    tags:
+      - API Technology
+      - Embedded

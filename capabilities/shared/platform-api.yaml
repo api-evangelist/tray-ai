@@ -1,0 +1,392 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Tray.ai Platform API"
+  description: >-
+    The Tray.ai Platform API provides direct programmatic REST access to Tray's
+    700+ pre-built service connectors, authentication management, trigger
+    subscriptions, user and workspace administration, and project lifecycle
+    operations.
+  tags:
+    - Automation
+    - Connectors
+    - Integration
+    - iPaaS
+    - Platform
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      TRAY_PLATFORM_BEARER_TOKEN: TRAY_PLATFORM_BEARER_TOKEN
+
+capability:
+  consumes:
+    - type: http
+      namespace: tray-platform
+      baseUri: https://api.tray.io/core/v1
+      description: "Tray.ai Platform REST API for connectors, authentications, triggers, users, workspaces, and projects."
+      authentication:
+        type: bearer
+        token: "{{TRAY_PLATFORM_BEARER_TOKEN}}"
+      resources:
+        - name: connectors
+          path: /connectors
+          description: "Access and invoke Tray.ai service connectors"
+          operations:
+            - name: list-connectors
+              method: GET
+              description: "Returns a list of all available connectors from Tray's connector library"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: get-connector-version
+              method: GET
+              description: "Retrieves details of a specific connector version including operations"
+              inputParameters:
+                - name: connectorName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The name of the connector (e.g., salesforce, slack)"
+                - name: connectorVersion
+                  in: path
+                  type: string
+                  required: true
+                  description: "The version of the connector (e.g., 2.1)"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: call-connector
+              method: POST
+              description: "Executes a connector operation against a third-party service"
+              inputParameters:
+                - name: connectorName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The name of the connector"
+                - name: connectorVersion
+                  in: path
+                  type: string
+                  required: true
+                  description: "The version of the connector"
+              body:
+                type: json
+                data:
+                  operation: "{{tools.operation}}"
+                  authId: "{{tools.authId}}"
+                  input: "{{tools.input}}"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: authentications
+          path: /authentications
+          description: "Manage third-party service authentications"
+          operations:
+            - name: list-authentications
+              method: GET
+              description: "Retrieves a list of authentications associated with the user or organization"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: create-authentication
+              method: POST
+              description: "Creates a new user authentication for a third-party service"
+              body:
+                type: json
+                data:
+                  name: "{{tools.name}}"
+                  serviceEnvironmentId: "{{tools.serviceEnvironmentId}}"
+                  userData: "{{tools.userData}}"
+                  credentials: "{{tools.credentials}}"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: get-authentication
+              method: GET
+              description: "Retrieves metadata for a user authentication by ID"
+              inputParameters:
+                - name: authenticationId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The unique identifier for the authentication"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: delete-authentication
+              method: DELETE
+              description: "Deletes a user authentication"
+              inputParameters:
+                - name: authenticationId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The unique identifier for the authentication"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: triggers
+          path: /triggers
+          description: "Manage trigger subscriptions for real-time data"
+          operations:
+            - name: list-triggers
+              method: GET
+              description: "Returns a list of all available triggers from Tray's trigger library"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: create-subscription
+              method: POST
+              description: "Creates a new trigger subscription using a trigger operation"
+              body:
+                type: json
+                data:
+                  triggerName: "{{tools.triggerName}}"
+                  connectorName: "{{tools.connectorName}}"
+                  connectorVersion: "{{tools.connectorVersion}}"
+                  authId: "{{tools.authId}}"
+                  input: "{{tools.input}}"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: delete-subscription
+              method: DELETE
+              description: "Deletes a trigger subscription by ID"
+              inputParameters:
+                - name: subscriptionId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The unique identifier for the subscription"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: users
+          path: /users
+          description: "Manage users and roles within the Tray organization"
+          operations:
+            - name: list-users
+              method: GET
+              description: "Retrieves a list of users within the organization"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: invite-user
+              method: POST
+              description: "Invites a user to the organization by email address"
+              body:
+                type: json
+                data:
+                  email: "{{tools.email}}"
+                  role: "{{tools.role}}"
+                  workspaceId: "{{tools.workspaceId}}"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: workspaces
+          path: /workspaces
+          description: "Manage workspaces within the Tray organization"
+          operations:
+            - name: list-workspaces
+              method: GET
+              description: "Retrieves a list of workspaces in the organization"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: get-workspace
+              method: GET
+              description: "Retrieves details for a specific workspace by ID"
+              inputParameters:
+                - name: workspaceId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The unique identifier for the workspace"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: list-workspace-users
+              method: GET
+              description: "Retrieves a list of users belonging to a specific workspace"
+              inputParameters:
+                - name: workspaceId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The unique identifier for the workspace"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+        - name: projects
+          path: /projects
+          description: "Manage project lifecycle and environment promotion"
+          operations:
+            - name: export-project
+              method: POST
+              description: "Exports a project version for environment promotion"
+              inputParameters:
+                - name: projectId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The unique identifier for the project"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: import-project
+              method: POST
+              description: "Imports a project version from exported data into the target workspace"
+              body:
+                type: json
+                data:
+                  exportedData: "{{tools.exportedData}}"
+                  workspaceId: "{{tools.workspaceId}}"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deploy-connector
+              method: POST
+              description: "Deploys a CDK connector to the Tray platform"
+              inputParameters:
+                - name: connectorName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The name of the CDK connector to deploy"
+                - name: connectorVersion
+                  in: path
+                  type: string
+                  required: true
+                  description: "The version of the CDK connector to deploy"
+              body:
+                type: json
+                data:
+                  connectorBundle: "{{tools.connectorBundle}}"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+  exposes:
+    - type: rest
+      port: 8100
+      namespace: tray-platform-rest
+      resources:
+        - path: /v1/connectors
+          name: connectors
+          description: "List available connectors"
+          operations:
+            - method: GET
+              name: list-connectors
+              description: "List all available Tray.ai connectors"
+              call: "tray-platform.list-connectors"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/connectors/{connectorName}/versions/{connectorVersion}
+          name: connector-version
+          description: "Get connector version details"
+          operations:
+            - method: GET
+              name: get-connector-version
+              description: "Get details of a specific connector version"
+              call: "tray-platform.get-connector-version"
+              with:
+                connectorName: "rest.connectorName"
+                connectorVersion: "rest.connectorVersion"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/authentications
+          name: authentications
+          description: "Manage authentications"
+          operations:
+            - method: GET
+              name: list-authentications
+              description: "List all authentications"
+              call: "tray-platform.list-authentications"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9100
+      namespace: tray-platform-mcp
+      transport: http
+      tools:
+        - name: list-connectors
+          description: "List all available Tray.ai connectors"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "tray-platform.list-connectors"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: call-connector
+          description: "Execute a Tray.ai connector operation against a third-party service"
+          hints:
+            readOnly: false
+            openWorld: true
+          call: "tray-platform.call-connector"
+          with:
+            connectorName: "tools.connectorName"
+            connectorVersion: "tools.connectorVersion"
+            operation: "tools.operation"
+            authId: "tools.authId"
+            input: "tools.input"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-authentications
+          description: "List all Tray.ai third-party service authentications"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "tray-platform.list-authentications"
+          outputParameters:
+            - type: object
+              mapping: "$."

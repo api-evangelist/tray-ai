@@ -28,6 +28,12 @@ apis:
         type: JSONSchema
       - url: json-ld/tray-ai-context.jsonld
         type: JSONLD
+      - url: json-structure/tray-ai-solution-instance-structure.json
+        type: JSONStructure
+      - url: examples/tray-ai-create-solution-instance-example.json
+        type: Example
+      - url: capabilities/shared/embedded-api.yaml
+        type: NaftikoCapability
     description: >-
       The Tray.ai Embedded API is a GraphQL-based API that allows partners
       and customers to present in-app embedded integration experiences.
@@ -60,6 +66,18 @@ apis:
         type: JSONSchema
       - url: json-ld/tray-ai-context.jsonld
         type: JSONLD
+      - url: json-structure/tray-ai-connector-structure.json
+        type: JSONStructure
+      - url: examples/tray-ai-list-connectors-example.json
+        type: Example
+      - url: examples/tray-ai-call-connector-example.json
+        type: Example
+      - url: examples/tray-ai-create-authentication-example.json
+        type: Example
+      - url: rules/tray-ai-rules.yml
+        type: SpectralRuleset
+      - url: capabilities/shared/platform-api.yaml
+        type: NaftikoCapability
     description: >-
       The Tray.ai Platform API (also known as the Connectivity API) provides
       direct programmatic REST access to Tray's 700+ pre-built service
@@ -76,7 +94,7 @@ type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
 created: '2025-06-05'
-modified: '2026-03-16'
+modified: '2026-05-03'
 position: Consumer
 description: >-
   Tray.ai is an AI-ready integration and automation platform that helps
@@ -88,6 +106,12 @@ maintainers:
     email: kin@apievangelist.com
 specificationVersion: '0.19'
 common:
+  - name: Tray.ai Integration Automation Capability
+    url: capabilities/integration-automation.yaml
+    type: NaftikoCapability
+  - name: Tray.ai Vocabulary
+    url: vocabulary/tray-ai-vocabulary.yml
+    type: Vocabulary
   - name: Tray.ai Pricing | Compare AI agent & iPaaS plans
     description: 'null'
     url: https://tray.ai/packages

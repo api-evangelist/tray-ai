@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.tray.io/core/v1/connectors",
+    "headers": {
+      "Authorization": "Bearer {master_token}",
+      "Content-Type": "application/json"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "elements": [
+        {
+          "name": "salesforce",
+          "title": "Salesforce",
+          "description": "Connect to Salesforce CRM to manage leads, opportunities, and accounts.",
+          "icon": "https://tray.io/icons/salesforce.png",
+          "versions": [
+            { "version": "10.1", "isLatest": true },
+            { "version": "9.0", "isLatest": false }
+          ]
+        },
+        {
+          "name": "slack",
+          "title": "Slack",
+          "description": "Send messages, manage channels, and interact with Slack workspaces.",
+          "icon": "https://tray.io/icons/slack.png",
+          "versions": [
+            { "version": "4.0", "isLatest": true }
+          ]
+        },
+        {
+          "name": "hubspot",
+          "title": "HubSpot",
+          "description": "Access HubSpot CRM, marketing, and service hub features.",
+          "icon": "https://tray.io/icons/hubspot.png",
+          "versions": [
+            { "version": "5.2", "isLatest": true }
+          ]
+        }
+      ]
+    }
+  }
+}
