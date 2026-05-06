@@ -1,387 +1,860 @@
-naftiko: "1.0.0-alpha1"
-
+naftiko: 1.0.0-alpha2
 info:
-  label: "Tray.ai Integration Automation"
-  description: >-
-    Unified workflow capability combining the Tray.ai Platform API and Embedded API
-    for building and managing automated integrations. Covers connector discovery and
-    invocation, embedded user lifecycle, solution instance management, authentication
-    provisioning, and workflow promotion across environments. Designed for integration
-    developers, embedded ISV partners, and automation engineers building on Tray.ai.
+  label: Tray.ai Integration Automation
+  description: Unified workflow capability combining the Tray.ai Platform API and Embedded API for building and managing automated
+    integrations. Covers connector discovery and invocation, embedded user lifecycle, solution instance management, authentication
+    provisioning, and workflow promotion across environments. Designed for integration developers, embedded ISV partners,
+    and automation engineers building on Tray.ai.
   tags:
-    - Automation
-    - Connectors
-    - Embedded Integration
-    - Integration
-    - iPaaS
-    - Platform
-    - Workflow Automation
-  created: "2026-05-03"
-  modified: "2026-05-03"
-
+  - Automation
+  - Connectors
+  - Embedded Integration
+  - Integration
+  - iPaaS
+  - Platform
+  - Workflow Automation
+  created: '2026-05-03'
+  modified: '2026-05-06'
 binds:
-  - namespace: env
-    keys:
-      TRAY_PLATFORM_BEARER_TOKEN: TRAY_PLATFORM_BEARER_TOKEN
-      TRAY_EMBEDDED_MASTER_TOKEN: TRAY_EMBEDDED_MASTER_TOKEN
-      TRAY_EMBEDDED_USER_TOKEN: TRAY_EMBEDDED_USER_TOKEN
-
+- namespace: env
+  keys:
+    TRAY_PLATFORM_BEARER_TOKEN: TRAY_PLATFORM_BEARER_TOKEN
+    TRAY_EMBEDDED_MASTER_TOKEN: TRAY_EMBEDDED_MASTER_TOKEN
+    TRAY_EMBEDDED_USER_TOKEN: TRAY_EMBEDDED_USER_TOKEN
 capability:
   consumes:
-    - import: tray-platform
-      location: ./shared/platform-api.yaml
-    - import: tray-embedded
-      location: ./shared/embedded-api.yaml
-
+  - type: http
+    namespace: tray-platform
+    baseUri: https://api.tray.io/core/v1
+    description: Tray.ai Platform REST API for connectors, authentications, triggers, users, workspaces, and projects.
+    authentication:
+      type: bearer
+      token: '{{TRAY_PLATFORM_BEARER_TOKEN}}'
+    resources:
+    - name: connectors
+      path: /connectors
+      description: Access and invoke Tray.ai service connectors
+      operations:
+      - name: list-connectors
+        method: GET
+        description: Returns a list of all available connectors from Tray's connector library
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: get-connector-version
+        method: GET
+        description: Retrieves details of a specific connector version including operations
+        inputParameters:
+        - name: connectorName
+          in: path
+          type: string
+          required: true
+          description: The name of the connector (e.g., salesforce, slack)
+        - name: connectorVersion
+          in: path
+          type: string
+          required: true
+          description: The version of the connector (e.g., 2.1)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: call-connector
+        method: POST
+        description: Executes a connector operation against a third-party service
+        inputParameters:
+        - name: connectorName
+          in: path
+          type: string
+          required: true
+          description: The name of the connector
+        - name: connectorVersion
+          in: path
+          type: string
+          required: true
+          description: The version of the connector
+        body:
+          type: json
+          data:
+            operation: '{{tools.operation}}'
+            authId: '{{tools.authId}}'
+            input: '{{tools.input}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: authentications
+      path: /authentications
+      description: Manage third-party service authentications
+      operations:
+      - name: list-authentications
+        method: GET
+        description: Retrieves a list of authentications associated with the user or organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: create-authentication
+        method: POST
+        description: Creates a new user authentication for a third-party service
+        body:
+          type: json
+          data:
+            name: '{{tools.name}}'
+            serviceEnvironmentId: '{{tools.serviceEnvironmentId}}'
+            userData: '{{tools.userData}}'
+            credentials: '{{tools.credentials}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: get-authentication
+        method: GET
+        description: Retrieves metadata for a user authentication by ID
+        inputParameters:
+        - name: authenticationId
+          in: path
+          type: string
+          required: true
+          description: The unique identifier for the authentication
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: delete-authentication
+        method: DELETE
+        description: Deletes a user authentication
+        inputParameters:
+        - name: authenticationId
+          in: path
+          type: string
+          required: true
+          description: The unique identifier for the authentication
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: triggers
+      path: /triggers
+      description: Manage trigger subscriptions for real-time data
+      operations:
+      - name: list-triggers
+        method: GET
+        description: Returns a list of all available triggers from Tray's trigger library
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: create-subscription
+        method: POST
+        description: Creates a new trigger subscription using a trigger operation
+        body:
+          type: json
+          data:
+            triggerName: '{{tools.triggerName}}'
+            connectorName: '{{tools.connectorName}}'
+            connectorVersion: '{{tools.connectorVersion}}'
+            authId: '{{tools.authId}}'
+            input: '{{tools.input}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: delete-subscription
+        method: DELETE
+        description: Deletes a trigger subscription by ID
+        inputParameters:
+        - name: subscriptionId
+          in: path
+          type: string
+          required: true
+          description: The unique identifier for the subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users
+      path: /users
+      description: Manage users and roles within the Tray organization
+      operations:
+      - name: list-users
+        method: GET
+        description: Retrieves a list of users within the organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: invite-user
+        method: POST
+        description: Invites a user to the organization by email address
+        body:
+          type: json
+          data:
+            email: '{{tools.email}}'
+            role: '{{tools.role}}'
+            workspaceId: '{{tools.workspaceId}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: workspaces
+      path: /workspaces
+      description: Manage workspaces within the Tray organization
+      operations:
+      - name: list-workspaces
+        method: GET
+        description: Retrieves a list of workspaces in the organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: get-workspace
+        method: GET
+        description: Retrieves details for a specific workspace by ID
+        inputParameters:
+        - name: workspaceId
+          in: path
+          type: string
+          required: true
+          description: The unique identifier for the workspace
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: list-workspace-users
+        method: GET
+        description: Retrieves a list of users belonging to a specific workspace
+        inputParameters:
+        - name: workspaceId
+          in: path
+          type: string
+          required: true
+          description: The unique identifier for the workspace
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: projects
+      path: /projects
+      description: Manage project lifecycle and environment promotion
+      operations:
+      - name: export-project
+        method: POST
+        description: Exports a project version for environment promotion
+        inputParameters:
+        - name: projectId
+          in: path
+          type: string
+          required: true
+          description: The unique identifier for the project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: import-project
+        method: POST
+        description: Imports a project version from exported data into the target workspace
+        body:
+          type: json
+          data:
+            exportedData: '{{tools.exportedData}}'
+            workspaceId: '{{tools.workspaceId}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deploy-connector
+        method: POST
+        description: Deploys a CDK connector to the Tray platform
+        inputParameters:
+        - name: connectorName
+          in: path
+          type: string
+          required: true
+          description: The name of the CDK connector to deploy
+        - name: connectorVersion
+          in: path
+          type: string
+          required: true
+          description: The version of the CDK connector to deploy
+        body:
+          type: json
+          data:
+            connectorBundle: '{{tools.connectorBundle}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  - type: http
+    namespace: tray-embedded
+    baseUri: https://tray.io
+    description: Tray.ai Embedded GraphQL API for in-app integration experiences.
+    authentication:
+      type: bearer
+      token: '{{TRAY_EMBEDDED_MASTER_TOKEN}}'
+    resources:
+    - name: users
+      path: /graphql
+      description: Manage embedded external users
+      operations:
+      - name: create-external-user
+        method: POST
+        description: Creates a new external user for the embedded application
+        body:
+          type: json
+          data:
+            query: '{{tools.query}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: get-users
+        method: POST
+        description: Retrieves a list of external users with pagination support
+        body:
+          type: json
+          data:
+            query: '{{tools.query}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: update-external-user
+        method: POST
+        description: Updates an external user's properties
+        body:
+          type: json
+          data:
+            query: '{{tools.query}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: remove-user
+        method: POST
+        description: Removes an external user from the embedded application
+        body:
+          type: json
+          data:
+            query: '{{tools.query}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: authorize
+        method: POST
+        description: Generates a user access token from a master token
+        body:
+          type: json
+          data:
+            query: '{{tools.query}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: solutions
+      path: /graphql
+      description: Manage published solutions
+      operations:
+      - name: get-solutions
+        method: POST
+        description: Retrieves a list of published solutions available in the embedded application
+        body:
+          type: json
+          data:
+            query: '{{tools.query}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: solution-instances
+      path: /graphql
+      description: Manage solution instances for end users
+      operations:
+      - name: create-solution-instance
+        method: POST
+        description: Creates a new solution instance from a published solution for an end user
+        body:
+          type: json
+          data:
+            query: '{{tools.query}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: get-solution-instances
+        method: POST
+        description: Retrieves solution instances for a user or all users
+        body:
+          type: json
+          data:
+            query: '{{tools.query}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: update-solution-instance
+        method: POST
+        description: Updates an existing solution instance
+        body:
+          type: json
+          data:
+            query: '{{tools.query}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: delete-solution-instance
+        method: POST
+        description: Deletes a solution instance and all associated data
+        body:
+          type: json
+          data:
+            query: '{{tools.query}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: authentications
+      path: /graphql
+      description: Manage third-party service authentications for embedded users
+      operations:
+      - name: create-user-authentication
+        method: POST
+        description: Creates a new authentication for a third-party service for a user
+        body:
+          type: json
+          data:
+            query: '{{tools.query}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: get-authentications
+        method: POST
+        description: Retrieves a list of authentications for third-party services
+        body:
+          type: json
+          data:
+            query: '{{tools.query}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: delete-authentication
+        method: POST
+        description: Deletes a third-party service authentication
+        body:
+          type: json
+          data:
+            query: '{{tools.query}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: workflows
+      path: /graphql
+      description: Export and import workflows between embedded accounts
+      operations:
+      - name: export-workflows
+        method: POST
+        description: Exports workflows from the embedded account
+        body:
+          type: json
+          data:
+            query: '{{tools.query}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: import-workflows
+        method: POST
+        description: Imports workflows into the embedded account from exported data
+        body:
+          type: json
+          data:
+            query: '{{tools.query}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
   exposes:
-    - type: rest
-      port: 8080
-      namespace: tray-automation-api
-      description: "Unified REST API for Tray.ai integration automation workflows."
-      resources:
-        - path: /v1/connectors
-          name: connectors
-          description: "Discover and invoke Tray.ai service connectors"
-          operations:
-            - method: GET
-              name: list-connectors
-              description: "List all available Tray.ai service connectors"
-              call: "tray-platform.list-connectors"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/connectors/{connectorName}/versions/{connectorVersion}
-          name: connector-version
-          description: "Get connector version with available operations"
-          operations:
-            - method: GET
-              name: get-connector-version
-              description: "Get operations and schemas for a specific connector version"
-              call: "tray-platform.get-connector-version"
-              with:
-                connectorName: "rest.connectorName"
-                connectorVersion: "rest.connectorVersion"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/connectors/{connectorName}/versions/{connectorVersion}/call
-          name: connector-call
-          description: "Execute a connector operation"
-          operations:
-            - method: POST
-              name: call-connector
-              description: "Execute a Tray.ai connector operation against a third-party service"
-              call: "tray-platform.call-connector"
-              with:
-                connectorName: "rest.connectorName"
-                connectorVersion: "rest.connectorVersion"
-                operation: "rest.operation"
-                authId: "rest.authId"
-                input: "rest.input"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/authentications
-          name: authentications
-          description: "Manage third-party service authentications"
-          operations:
-            - method: GET
-              name: list-authentications
-              description: "List all platform authentications"
-              call: "tray-platform.list-authentications"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: POST
-              name: create-authentication
-              description: "Create a new platform authentication"
-              call: "tray-platform.create-authentication"
-              with:
-                name: "rest.name"
-                serviceEnvironmentId: "rest.serviceEnvironmentId"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/authentications/{authenticationId}
-          name: authentication
-          description: "Get or delete a specific authentication"
-          operations:
-            - method: GET
-              name: get-authentication
-              description: "Get a specific authentication by ID"
-              call: "tray-platform.get-authentication"
-              with:
-                authenticationId: "rest.authenticationId"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: DELETE
-              name: delete-authentication
-              description: "Delete a platform authentication"
-              call: "tray-platform.delete-authentication"
-              with:
-                authenticationId: "rest.authenticationId"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/triggers
-          name: triggers
-          description: "Manage trigger subscriptions for real-time events"
-          operations:
-            - method: GET
-              name: list-triggers
-              description: "List all available triggers"
-              call: "tray-platform.list-triggers"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/subscriptions
-          name: subscriptions
-          description: "Manage trigger subscriptions"
-          operations:
-            - method: POST
-              name: create-subscription
-              description: "Create a trigger subscription"
-              call: "tray-platform.create-subscription"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/users
-          name: platform-users
-          description: "Manage platform organization users"
-          operations:
-            - method: GET
-              name: list-users
-              description: "List all organization users"
-              call: "tray-platform.list-users"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/workspaces
-          name: workspaces
-          description: "Manage platform workspaces"
-          operations:
-            - method: GET
-              name: list-workspaces
-              description: "List all workspaces in the organization"
-              call: "tray-platform.list-workspaces"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/embedded/users
-          name: embedded-users
-          description: "Manage embedded external users"
-          operations:
-            - method: POST
-              name: create-embedded-user
-              description: "Create an external user in the embedded application"
-              call: "tray-embedded.create-external-user"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/embedded/solutions
-          name: embedded-solutions
-          description: "Get published solutions for embedding"
-          operations:
-            - method: GET
-              name: get-solutions
-              description: "Get all published solutions available for embedding"
-              call: "tray-embedded.get-solutions"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/embedded/solution-instances
-          name: embedded-solution-instances
-          description: "Manage solution instances for embedded users"
-          operations:
-            - method: POST
-              name: create-solution-instance
-              description: "Create a solution instance for an embedded end user"
-              call: "tray-embedded.create-solution-instance"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: GET
-              name: get-solution-instances
-              description: "Get solution instances for embedded users"
-              call: "tray-embedded.get-solution-instances"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-    - type: mcp
-      port: 9090
-      namespace: tray-automation-mcp
-      transport: http
-      description: "MCP server for AI-assisted Tray.ai integration automation."
-      tools:
-        # Connector discovery and invocation
-        - name: list-connectors
-          description: "List all available Tray.ai service connectors (700+ integrations)"
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "tray-platform.list-connectors"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-connector-version
-          description: "Get operations and input/output schemas for a specific connector version"
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "tray-platform.get-connector-version"
-          with:
-            connectorName: "tools.connectorName"
-            connectorVersion: "tools.connectorVersion"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: call-connector
-          description: "Execute a Tray.ai connector operation to interact with a third-party service"
-          hints:
-            readOnly: false
-            openWorld: true
-          call: "tray-platform.call-connector"
-          with:
-            connectorName: "tools.connectorName"
-            connectorVersion: "tools.connectorVersion"
-            operation: "tools.operation"
-            authId: "tools.authId"
-            input: "tools.input"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        # Authentication management
-        - name: list-platform-authentications
-          description: "List all platform authentications for third-party services"
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "tray-platform.list-authentications"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: create-platform-authentication
-          description: "Create a new platform authentication for a third-party service"
-          hints:
-            readOnly: false
-            openWorld: false
-          call: "tray-platform.create-authentication"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: delete-platform-authentication
-          description: "Delete a platform authentication by ID"
-          hints:
-            readOnly: false
-            destructive: true
-            idempotent: true
-          call: "tray-platform.delete-authentication"
-          with:
-            authenticationId: "tools.authenticationId"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        # Trigger management
-        - name: list-triggers
-          description: "List all available Tray.ai triggers for real-time data from third-party services"
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "tray-platform.list-triggers"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: create-subscription
-          description: "Create a trigger subscription to receive real-time data from a third-party service"
-          hints:
-            readOnly: false
-            openWorld: false
-          call: "tray-platform.create-subscription"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        # Organization management
-        - name: list-users
-          description: "List all users in the Tray.ai organization"
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "tray-platform.list-users"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: list-workspaces
-          description: "List all workspaces in the Tray.ai organization"
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "tray-platform.list-workspaces"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        # Embedded integration management
-        - name: create-embedded-user
-          description: "Create an external embedded user in the Tray.ai application"
-          hints:
-            readOnly: false
-            openWorld: false
-          call: "tray-embedded.create-external-user"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-embedded-solutions
-          description: "Get all published solutions available in the embedded application"
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "tray-embedded.get-solutions"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: create-solution-instance
-          description: "Create a solution instance from a published solution for an embedded end user"
-          hints:
-            readOnly: false
-            openWorld: false
-          call: "tray-embedded.create-solution-instance"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-solution-instances
-          description: "Get solution instances for embedded users"
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "tray-embedded.get-solution-instances"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: update-solution-instance
-          description: "Update an existing solution instance (enable, disable, reconfigure)"
-          hints:
-            readOnly: false
-            idempotent: true
-          call: "tray-embedded.update-solution-instance"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: export-workflows
-          description: "Export Tray.ai workflows for environment promotion (staging to production)"
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "tray-embedded.export-workflows"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: import-workflows
-          description: "Import Tray.ai workflows from exported data into the embedded account"
-          hints:
-            readOnly: false
-            openWorld: false
-          call: "tray-embedded.import-workflows"
-          outputParameters:
-            - type: object
-              mapping: "$."
+  - type: rest
+    port: 8080
+    namespace: tray-automation-api
+    description: Unified REST API for Tray.ai integration automation workflows.
+    resources:
+    - path: /v1/connectors
+      name: connectors
+      description: Discover and invoke Tray.ai service connectors
+      operations:
+      - method: GET
+        name: list-connectors
+        description: List all available Tray.ai service connectors
+        call: tray-platform.list-connectors
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/connectors/{connectorName}/versions/{connectorVersion}
+      name: connector-version
+      description: Get connector version with available operations
+      operations:
+      - method: GET
+        name: get-connector-version
+        description: Get operations and schemas for a specific connector version
+        call: tray-platform.get-connector-version
+        with:
+          connectorName: rest.connectorName
+          connectorVersion: rest.connectorVersion
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/connectors/{connectorName}/versions/{connectorVersion}/call
+      name: connector-call
+      description: Execute a connector operation
+      operations:
+      - method: POST
+        name: call-connector
+        description: Execute a Tray.ai connector operation against a third-party service
+        call: tray-platform.call-connector
+        with:
+          connectorName: rest.connectorName
+          connectorVersion: rest.connectorVersion
+          operation: rest.operation
+          authId: rest.authId
+          input: rest.input
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/authentications
+      name: authentications
+      description: Manage third-party service authentications
+      operations:
+      - method: GET
+        name: list-authentications
+        description: List all platform authentications
+        call: tray-platform.list-authentications
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: create-authentication
+        description: Create a new platform authentication
+        call: tray-platform.create-authentication
+        with:
+          name: rest.name
+          serviceEnvironmentId: rest.serviceEnvironmentId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/authentications/{authenticationId}
+      name: authentication
+      description: Get or delete a specific authentication
+      operations:
+      - method: GET
+        name: get-authentication
+        description: Get a specific authentication by ID
+        call: tray-platform.get-authentication
+        with:
+          authenticationId: rest.authenticationId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: delete-authentication
+        description: Delete a platform authentication
+        call: tray-platform.delete-authentication
+        with:
+          authenticationId: rest.authenticationId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/triggers
+      name: triggers
+      description: Manage trigger subscriptions for real-time events
+      operations:
+      - method: GET
+        name: list-triggers
+        description: List all available triggers
+        call: tray-platform.list-triggers
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/subscriptions
+      name: subscriptions
+      description: Manage trigger subscriptions
+      operations:
+      - method: POST
+        name: create-subscription
+        description: Create a trigger subscription
+        call: tray-platform.create-subscription
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users
+      name: platform-users
+      description: Manage platform organization users
+      operations:
+      - method: GET
+        name: list-users
+        description: List all organization users
+        call: tray-platform.list-users
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/workspaces
+      name: workspaces
+      description: Manage platform workspaces
+      operations:
+      - method: GET
+        name: list-workspaces
+        description: List all workspaces in the organization
+        call: tray-platform.list-workspaces
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/embedded/users
+      name: embedded-users
+      description: Manage embedded external users
+      operations:
+      - method: POST
+        name: create-embedded-user
+        description: Create an external user in the embedded application
+        call: tray-embedded.create-external-user
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/embedded/solutions
+      name: embedded-solutions
+      description: Get published solutions for embedding
+      operations:
+      - method: GET
+        name: get-solutions
+        description: Get all published solutions available for embedding
+        call: tray-embedded.get-solutions
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/embedded/solution-instances
+      name: embedded-solution-instances
+      description: Manage solution instances for embedded users
+      operations:
+      - method: POST
+        name: create-solution-instance
+        description: Create a solution instance for an embedded end user
+        call: tray-embedded.create-solution-instance
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: get-solution-instances
+        description: Get solution instances for embedded users
+        call: tray-embedded.get-solution-instances
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: tray-automation-mcp
+    transport: http
+    description: MCP server for AI-assisted Tray.ai integration automation.
+    tools:
+    - name: list-connectors
+      description: List all available Tray.ai service connectors (700+ integrations)
+      hints:
+        readOnly: true
+        openWorld: true
+      call: tray-platform.list-connectors
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-connector-version
+      description: Get operations and input/output schemas for a specific connector version
+      hints:
+        readOnly: true
+        openWorld: false
+      call: tray-platform.get-connector-version
+      with:
+        connectorName: tools.connectorName
+        connectorVersion: tools.connectorVersion
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: call-connector
+      description: Execute a Tray.ai connector operation to interact with a third-party service
+      hints:
+        readOnly: false
+        openWorld: true
+      call: tray-platform.call-connector
+      with:
+        connectorName: tools.connectorName
+        connectorVersion: tools.connectorVersion
+        operation: tools.operation
+        authId: tools.authId
+        input: tools.input
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-platform-authentications
+      description: List all platform authentications for third-party services
+      hints:
+        readOnly: true
+        openWorld: false
+      call: tray-platform.list-authentications
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-platform-authentication
+      description: Create a new platform authentication for a third-party service
+      hints:
+        readOnly: false
+        openWorld: false
+      call: tray-platform.create-authentication
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-platform-authentication
+      description: Delete a platform authentication by ID
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: tray-platform.delete-authentication
+      with:
+        authenticationId: tools.authenticationId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-triggers
+      description: List all available Tray.ai triggers for real-time data from third-party services
+      hints:
+        readOnly: true
+        openWorld: true
+      call: tray-platform.list-triggers
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-subscription
+      description: Create a trigger subscription to receive real-time data from a third-party service
+      hints:
+        readOnly: false
+        openWorld: false
+      call: tray-platform.create-subscription
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-users
+      description: List all users in the Tray.ai organization
+      hints:
+        readOnly: true
+        openWorld: false
+      call: tray-platform.list-users
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-workspaces
+      description: List all workspaces in the Tray.ai organization
+      hints:
+        readOnly: true
+        openWorld: false
+      call: tray-platform.list-workspaces
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-embedded-user
+      description: Create an external embedded user in the Tray.ai application
+      hints:
+        readOnly: false
+        openWorld: false
+      call: tray-embedded.create-external-user
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-embedded-solutions
+      description: Get all published solutions available in the embedded application
+      hints:
+        readOnly: true
+        openWorld: false
+      call: tray-embedded.get-solutions
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-solution-instance
+      description: Create a solution instance from a published solution for an embedded end user
+      hints:
+        readOnly: false
+        openWorld: false
+      call: tray-embedded.create-solution-instance
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-solution-instances
+      description: Get solution instances for embedded users
+      hints:
+        readOnly: true
+        openWorld: false
+      call: tray-embedded.get-solution-instances
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-solution-instance
+      description: Update an existing solution instance (enable, disable, reconfigure)
+      hints:
+        readOnly: false
+        idempotent: true
+      call: tray-embedded.update-solution-instance
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: export-workflows
+      description: Export Tray.ai workflows for environment promotion (staging to production)
+      hints:
+        readOnly: true
+        openWorld: false
+      call: tray-embedded.export-workflows
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: import-workflows
+      description: Import Tray.ai workflows from exported data into the embedded account
+      hints:
+        readOnly: false
+        openWorld: false
+      call: tray-embedded.import-workflows
+      outputParameters:
+      - type: object
+        mapping: $.
