@@ -101,6 +101,20 @@ description: >-
   enterprises connect systems, teams, and data. It provides 700+ pre-built
   connectors, a visual workflow builder, embedded integration capabilities,
   and programmatic APIs for building and managing integrations at scale.
+integrations:
+  - name: Tray
+  - name: auctane
+  - name: avid property group
+  - name: eventbrite
+  - name: Life360
+  - name: Hackerone
+  - name: Headway
+  - name: IBM
+  - name: Mixpanel
+  - name: netapp
+  - name: outreach
+  - name: Udemy
+  - name: Zuora
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
