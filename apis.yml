@@ -278,7 +278,7 @@ common:
   - name: Tray.ai Status
     description: 'null'
     url: https://status.tray.ai/
-    type: Status
+    type: StatusPage
   - name: AI-ready integration & automation platform
     description: 'null'
     url: https://tray.ai/
