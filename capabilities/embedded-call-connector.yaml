@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Tray.ai Embedded API — Call Connector
+  description: 'Tray.ai Embedded API — Call Connector. 1 operations. Lead operation: Tray.ai Call Connector. Self-contained
+    Naftiko capability covering one Tray Ai business surface.'
+  tags:
+  - Tray Ai
+  - Call Connector
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TRAY_AI_API_KEY: TRAY_AI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: embedded-call-connector
+    baseUri: https://tray.io
+    description: Tray.ai Embedded API — Call Connector business capability. Self-contained, no shared references.
+    resources:
+    - name: graphql#callConnector
+      path: /graphql#callConnector
+      operations:
+      - name: callconnector
+        method: POST
+        description: Tray.ai Call Connector
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.TRAY_AI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: embedded-call-connector-rest
+    port: 8080
+    description: REST adapter for Tray.ai Embedded API — Call Connector. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/graphql-callconnector
+      name: graphql-callconnector
+      description: REST surface for graphql#callConnector.
+      operations:
+      - method: POST
+        name: callconnector
+        description: Tray.ai Call Connector
+        call: embedded-call-connector.callconnector
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: embedded-call-connector-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Tray.ai Embedded API — Call Connector. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: tray-ai-call-connector
+      description: Tray.ai Call Connector
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: embedded-call-connector.callconnector
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

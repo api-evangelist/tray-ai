@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Tray.ai Embedded API — Solutions
+  description: 'Tray.ai Embedded API — Solutions. 1 operations. Lead operation: Tray.ai Get Solutions. Self-contained Naftiko
+    capability covering one Tray Ai business surface.'
+  tags:
+  - Tray Ai
+  - Solutions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TRAY_AI_API_KEY: TRAY_AI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: embedded-solutions
+    baseUri: https://tray.io
+    description: Tray.ai Embedded API — Solutions business capability. Self-contained, no shared references.
+    resources:
+    - name: graphql#getSolutions
+      path: /graphql#getSolutions
+      operations:
+      - name: getsolutions
+        method: POST
+        description: Tray.ai Get Solutions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.TRAY_AI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: embedded-solutions-rest
+    port: 8080
+    description: REST adapter for Tray.ai Embedded API — Solutions. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/graphql-getsolutions
+      name: graphql-getsolutions
+      description: REST surface for graphql#getSolutions.
+      operations:
+      - method: POST
+        name: getsolutions
+        description: Tray.ai Get Solutions
+        call: embedded-solutions.getsolutions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: embedded-solutions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Tray.ai Embedded API — Solutions. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: tray-ai-get-solutions
+      description: Tray.ai Get Solutions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: embedded-solutions.getsolutions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

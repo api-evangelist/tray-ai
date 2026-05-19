@@ -1,0 +1,122 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Tray.ai Embedded API — Workflows
+  description: 'Tray.ai Embedded API — Workflows. 2 operations. Lead operation: Tray.ai Export Workflows. Self-contained Naftiko
+    capability covering one Tray Ai business surface.'
+  tags:
+  - Tray Ai
+  - Workflows
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TRAY_AI_API_KEY: TRAY_AI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: embedded-workflows
+    baseUri: https://tray.io
+    description: Tray.ai Embedded API — Workflows business capability. Self-contained, no shared references.
+    resources:
+    - name: graphql#exportWorkflows
+      path: /graphql#exportWorkflows
+      operations:
+      - name: exportworkflows
+        method: POST
+        description: Tray.ai Export Workflows
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: graphql#importWorkflows
+      path: /graphql#importWorkflows
+      operations:
+      - name: importworkflows
+        method: POST
+        description: Tray.ai Import Workflows
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.TRAY_AI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: embedded-workflows-rest
+    port: 8080
+    description: REST adapter for Tray.ai Embedded API — Workflows. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/graphql-exportworkflows
+      name: graphql-exportworkflows
+      description: REST surface for graphql#exportWorkflows.
+      operations:
+      - method: POST
+        name: exportworkflows
+        description: Tray.ai Export Workflows
+        call: embedded-workflows.exportworkflows
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/graphql-importworkflows
+      name: graphql-importworkflows
+      description: REST surface for graphql#importWorkflows.
+      operations:
+      - method: POST
+        name: importworkflows
+        description: Tray.ai Import Workflows
+        call: embedded-workflows.importworkflows
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: embedded-workflows-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Tray.ai Embedded API — Workflows. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: tray-ai-export-workflows
+      description: Tray.ai Export Workflows
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: embedded-workflows.exportworkflows
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: tray-ai-import-workflows
+      description: Tray.ai Import Workflows
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: embedded-workflows.importworkflows
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

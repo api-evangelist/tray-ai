@@ -1,0 +1,206 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Tray.ai Embedded API — Users
+  description: 'Tray.ai Embedded API — Users. 4 operations. Lead operation: Tray.ai Create External User. Self-contained Naftiko
+    capability covering one Tray Ai business surface.'
+  tags:
+  - Tray Ai
+  - Users
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TRAY_AI_API_KEY: TRAY_AI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: embedded-users
+    baseUri: https://tray.io
+    description: Tray.ai Embedded API — Users business capability. Self-contained, no shared references.
+    resources:
+    - name: graphql
+      path: /graphql
+      operations:
+      - name: createexternaluser
+        method: POST
+        description: Tray.ai Create External User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: graphql#getUsers
+      path: /graphql#getUsers
+      operations:
+      - name: getusers
+        method: POST
+        description: Tray.ai Get Users
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: graphql#removeUser
+      path: /graphql#removeUser
+      operations:
+      - name: removeuser
+        method: POST
+        description: Tray.ai Remove User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: graphql#updateExternalUser
+      path: /graphql#updateExternalUser
+      operations:
+      - name: updateexternaluser
+        method: POST
+        description: Tray.ai Update External User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.TRAY_AI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: embedded-users-rest
+    port: 8080
+    description: REST adapter for Tray.ai Embedded API — Users. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/graphql
+      name: graphql
+      description: REST surface for graphql.
+      operations:
+      - method: POST
+        name: createexternaluser
+        description: Tray.ai Create External User
+        call: embedded-users.createexternaluser
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/graphql-getusers
+      name: graphql-getusers
+      description: REST surface for graphql#getUsers.
+      operations:
+      - method: POST
+        name: getusers
+        description: Tray.ai Get Users
+        call: embedded-users.getusers
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/graphql-removeuser
+      name: graphql-removeuser
+      description: REST surface for graphql#removeUser.
+      operations:
+      - method: POST
+        name: removeuser
+        description: Tray.ai Remove User
+        call: embedded-users.removeuser
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/graphql-updateexternaluser
+      name: graphql-updateexternaluser
+      description: REST surface for graphql#updateExternalUser.
+      operations:
+      - method: POST
+        name: updateexternaluser
+        description: Tray.ai Update External User
+        call: embedded-users.updateexternaluser
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: embedded-users-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Tray.ai Embedded API — Users. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: tray-ai-create-external-user
+      description: Tray.ai Create External User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: embedded-users.createexternaluser
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: tray-ai-get-users
+      description: Tray.ai Get Users
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: embedded-users.getusers
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: tray-ai-remove-user
+      description: Tray.ai Remove User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: embedded-users.removeuser
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: tray-ai-update-external-user
+      description: Tray.ai Update External User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: embedded-users.updateexternaluser
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

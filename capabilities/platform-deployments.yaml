@@ -1,0 +1,94 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Tray.ai Platform API — Deployments
+  description: 'Tray.ai Platform API — Deployments. 1 operations. Lead operation: Tray.ai Deploy CDK Connector. Self-contained
+    Naftiko capability covering one Tray Ai business surface.'
+  tags:
+  - Tray Ai
+  - Deployments
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TRAY_AI_API_KEY: TRAY_AI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: platform-deployments
+    baseUri: https://api.tray.io/core/v1
+    description: Tray.ai Platform API — Deployments business capability. Self-contained, no shared references.
+    resources:
+    - name: connectors-connectorName-versions-connectorVersion-deploy
+      path: /connectors/{connectorName}/versions/{connectorVersion}/deploy
+      operations:
+      - name: deployconnector
+        method: POST
+        description: Tray.ai Deploy CDK Connector
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: connectorName
+          in: path
+          type: string
+          description: The name of the CDK connector to deploy
+          required: true
+        - name: connectorVersion
+          in: path
+          type: string
+          description: The version of the CDK connector to deploy
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.TRAY_AI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: platform-deployments-rest
+    port: 8080
+    description: REST adapter for Tray.ai Platform API — Deployments. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/connectors/{connectorname}/versions/{connectorversion}/deploy
+      name: connectors-connectorname-versions-connectorversion-deploy
+      description: REST surface for connectors-connectorName-versions-connectorVersion-deploy.
+      operations:
+      - method: POST
+        name: deployconnector
+        description: Tray.ai Deploy CDK Connector
+        call: platform-deployments.deployconnector
+        with:
+          connectorName: rest.connectorName
+          connectorVersion: rest.connectorVersion
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: platform-deployments-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Tray.ai Platform API — Deployments. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: tray-ai-deploy-cdk-connector
+      description: Tray.ai Deploy CDK Connector
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: platform-deployments.deployconnector
+      with:
+        connectorName: tools.connectorName
+        connectorVersion: tools.connectorVersion
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

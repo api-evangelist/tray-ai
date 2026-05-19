@@ -1,0 +1,206 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Tray.ai Embedded API — Solution Instances
+  description: 'Tray.ai Embedded API — Solution Instances. 4 operations. Lead operation: Tray.ai Create Solution Instance.
+    Self-contained Naftiko capability covering one Tray Ai business surface.'
+  tags:
+  - Tray Ai
+  - Solution Instances
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TRAY_AI_API_KEY: TRAY_AI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: embedded-solution-instances
+    baseUri: https://tray.io
+    description: Tray.ai Embedded API — Solution Instances business capability. Self-contained, no shared references.
+    resources:
+    - name: graphql#createSolutionInstance
+      path: /graphql#createSolutionInstance
+      operations:
+      - name: createsolutioninstance
+        method: POST
+        description: Tray.ai Create Solution Instance
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: graphql#deleteSolutionInstance
+      path: /graphql#deleteSolutionInstance
+      operations:
+      - name: deletesolutioninstance
+        method: POST
+        description: Tray.ai Delete Solution Instance
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: graphql#getSolutionInstances
+      path: /graphql#getSolutionInstances
+      operations:
+      - name: getsolutioninstances
+        method: POST
+        description: Tray.ai Get Solution Instances
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: graphql#updateSolutionInstance
+      path: /graphql#updateSolutionInstance
+      operations:
+      - name: updatesolutioninstance
+        method: POST
+        description: Tray.ai Update Solution Instance
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.TRAY_AI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: embedded-solution-instances-rest
+    port: 8080
+    description: REST adapter for Tray.ai Embedded API — Solution Instances. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/graphql-createsolutioninstance
+      name: graphql-createsolutioninstance
+      description: REST surface for graphql#createSolutionInstance.
+      operations:
+      - method: POST
+        name: createsolutioninstance
+        description: Tray.ai Create Solution Instance
+        call: embedded-solution-instances.createsolutioninstance
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/graphql-deletesolutioninstance
+      name: graphql-deletesolutioninstance
+      description: REST surface for graphql#deleteSolutionInstance.
+      operations:
+      - method: POST
+        name: deletesolutioninstance
+        description: Tray.ai Delete Solution Instance
+        call: embedded-solution-instances.deletesolutioninstance
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/graphql-getsolutioninstances
+      name: graphql-getsolutioninstances
+      description: REST surface for graphql#getSolutionInstances.
+      operations:
+      - method: POST
+        name: getsolutioninstances
+        description: Tray.ai Get Solution Instances
+        call: embedded-solution-instances.getsolutioninstances
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/graphql-updatesolutioninstance
+      name: graphql-updatesolutioninstance
+      description: REST surface for graphql#updateSolutionInstance.
+      operations:
+      - method: POST
+        name: updatesolutioninstance
+        description: Tray.ai Update Solution Instance
+        call: embedded-solution-instances.updatesolutioninstance
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: embedded-solution-instances-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Tray.ai Embedded API — Solution Instances. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: tray-ai-create-solution-instance
+      description: Tray.ai Create Solution Instance
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: embedded-solution-instances.createsolutioninstance
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: tray-ai-delete-solution-instance
+      description: Tray.ai Delete Solution Instance
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: embedded-solution-instances.deletesolutioninstance
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: tray-ai-get-solution-instances
+      description: Tray.ai Get Solution Instances
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: embedded-solution-instances.getsolutioninstances
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: tray-ai-update-solution-instance
+      description: Tray.ai Update Solution Instance
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: embedded-solution-instances.updatesolutioninstance
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

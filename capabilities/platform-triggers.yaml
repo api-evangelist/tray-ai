@@ -1,0 +1,154 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Tray.ai Platform API — Triggers
+  description: 'Tray.ai Platform API — Triggers. 3 operations. Lead operation: Tray.ai Create Subscription. Self-contained
+    Naftiko capability covering one Tray Ai business surface.'
+  tags:
+  - Tray Ai
+  - Triggers
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TRAY_AI_API_KEY: TRAY_AI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: platform-triggers
+    baseUri: https://api.tray.io/core/v1
+    description: Tray.ai Platform API — Triggers business capability. Self-contained, no shared references.
+    resources:
+    - name: subscriptions
+      path: /subscriptions
+      operations:
+      - name: createsubscription
+        method: POST
+        description: Tray.ai Create Subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: subscriptions-subscriptionId
+      path: /subscriptions/{subscriptionId}
+      operations:
+      - name: deletesubscription
+        method: DELETE
+        description: Tray.ai Delete Subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: subscriptionId
+          in: path
+          type: string
+          description: The unique identifier for the subscription
+          required: true
+    - name: triggers
+      path: /triggers
+      operations:
+      - name: listtriggers
+        method: GET
+        description: Tray.ai List Triggers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.TRAY_AI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: platform-triggers-rest
+    port: 8080
+    description: REST adapter for Tray.ai Platform API — Triggers. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/subscriptions
+      name: subscriptions
+      description: REST surface for subscriptions.
+      operations:
+      - method: POST
+        name: createsubscription
+        description: Tray.ai Create Subscription
+        call: platform-triggers.createsubscription
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/subscriptions/{subscriptionid}
+      name: subscriptions-subscriptionid
+      description: REST surface for subscriptions-subscriptionId.
+      operations:
+      - method: DELETE
+        name: deletesubscription
+        description: Tray.ai Delete Subscription
+        call: platform-triggers.deletesubscription
+        with:
+          subscriptionId: rest.subscriptionId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/triggers
+      name: triggers
+      description: REST surface for triggers.
+      operations:
+      - method: GET
+        name: listtriggers
+        description: Tray.ai List Triggers
+        call: platform-triggers.listtriggers
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: platform-triggers-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Tray.ai Platform API — Triggers. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: tray-ai-create-subscription
+      description: Tray.ai Create Subscription
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: platform-triggers.createsubscription
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: tray-ai-delete-subscription
+      description: Tray.ai Delete Subscription
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: platform-triggers.deletesubscription
+      with:
+        subscriptionId: tools.subscriptionId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: tray-ai-list-triggers
+      description: Tray.ai List Triggers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: platform-triggers.listtriggers
+      outputParameters:
+      - type: object
+        mapping: $.

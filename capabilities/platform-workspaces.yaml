@@ -1,0 +1,154 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Tray.ai Platform API — Workspaces
+  description: 'Tray.ai Platform API — Workspaces. 3 operations. Lead operation: Tray.ai List Workspaces. Self-contained Naftiko
+    capability covering one Tray Ai business surface.'
+  tags:
+  - Tray Ai
+  - Workspaces
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TRAY_AI_API_KEY: TRAY_AI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: platform-workspaces
+    baseUri: https://api.tray.io/core/v1
+    description: Tray.ai Platform API — Workspaces business capability. Self-contained, no shared references.
+    resources:
+    - name: workspaces
+      path: /workspaces
+      operations:
+      - name: listworkspaces
+        method: GET
+        description: Tray.ai List Workspaces
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: workspaces-workspaceId
+      path: /workspaces/{workspaceId}
+      operations:
+      - name: getworkspace
+        method: GET
+        description: Tray.ai Get Workspace
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: workspaceId
+          in: path
+          type: string
+          description: The unique identifier for the workspace
+          required: true
+    - name: workspaces-workspaceId-users
+      path: /workspaces/{workspaceId}/users
+      operations:
+      - name: listworkspaceusers
+        method: GET
+        description: Tray.ai List Workspace Users
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: workspaceId
+          in: path
+          type: string
+          description: The unique identifier for the workspace
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.TRAY_AI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: platform-workspaces-rest
+    port: 8080
+    description: REST adapter for Tray.ai Platform API — Workspaces. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/workspaces
+      name: workspaces
+      description: REST surface for workspaces.
+      operations:
+      - method: GET
+        name: listworkspaces
+        description: Tray.ai List Workspaces
+        call: platform-workspaces.listworkspaces
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/workspaces/{workspaceid}
+      name: workspaces-workspaceid
+      description: REST surface for workspaces-workspaceId.
+      operations:
+      - method: GET
+        name: getworkspace
+        description: Tray.ai Get Workspace
+        call: platform-workspaces.getworkspace
+        with:
+          workspaceId: rest.workspaceId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/workspaces/{workspaceid}/users
+      name: workspaces-workspaceid-users
+      description: REST surface for workspaces-workspaceId-users.
+      operations:
+      - method: GET
+        name: listworkspaceusers
+        description: Tray.ai List Workspace Users
+        call: platform-workspaces.listworkspaceusers
+        with:
+          workspaceId: rest.workspaceId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: platform-workspaces-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Tray.ai Platform API — Workspaces. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: tray-ai-list-workspaces
+      description: Tray.ai List Workspaces
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: platform-workspaces.listworkspaces
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: tray-ai-get-workspace
+      description: Tray.ai Get Workspace
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: platform-workspaces.getworkspace
+      with:
+        workspaceId: tools.workspaceId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: tray-ai-list-workspace-users
+      description: Tray.ai List Workspace Users
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: platform-workspaces.listworkspaceusers
+      with:
+        workspaceId: tools.workspaceId
+      outputParameters:
+      - type: object
+        mapping: $.

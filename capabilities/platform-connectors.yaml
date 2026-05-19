@@ -1,0 +1,175 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Tray.ai Platform API — Connectors
+  description: 'Tray.ai Platform API — Connectors. 3 operations. Lead operation: Tray.ai List Connectors. Self-contained Naftiko
+    capability covering one Tray Ai business surface.'
+  tags:
+  - Tray Ai
+  - Connectors
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TRAY_AI_API_KEY: TRAY_AI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: platform-connectors
+    baseUri: https://api.tray.io/core/v1
+    description: Tray.ai Platform API — Connectors business capability. Self-contained, no shared references.
+    resources:
+    - name: connectors
+      path: /connectors
+      operations:
+      - name: listconnectors
+        method: GET
+        description: Tray.ai List Connectors
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: connectors-connectorName-versions-connectorVersion
+      path: /connectors/{connectorName}/versions/{connectorVersion}
+      operations:
+      - name: getconnectorversion
+        method: GET
+        description: Tray.ai Get Connector Version
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: connectorName
+          in: path
+          type: string
+          description: The name of the connector (e.g., salesforce, slack)
+          required: true
+        - name: connectorVersion
+          in: path
+          type: string
+          description: The version of the connector (e.g., 2.1)
+          required: true
+    - name: connectors-connectorName-versions-connectorVersion-call
+      path: /connectors/{connectorName}/versions/{connectorVersion}/call
+      operations:
+      - name: callconnector
+        method: POST
+        description: Tray.ai Call Connector
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: connectorName
+          in: path
+          type: string
+          description: The name of the connector (e.g., twilio-output)
+          required: true
+        - name: connectorVersion
+          in: path
+          type: string
+          description: The version of the connector (e.g., 2.1)
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.TRAY_AI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: platform-connectors-rest
+    port: 8080
+    description: REST adapter for Tray.ai Platform API — Connectors. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/connectors
+      name: connectors
+      description: REST surface for connectors.
+      operations:
+      - method: GET
+        name: listconnectors
+        description: Tray.ai List Connectors
+        call: platform-connectors.listconnectors
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/connectors/{connectorname}/versions/{connectorversion}
+      name: connectors-connectorname-versions-connectorversion
+      description: REST surface for connectors-connectorName-versions-connectorVersion.
+      operations:
+      - method: GET
+        name: getconnectorversion
+        description: Tray.ai Get Connector Version
+        call: platform-connectors.getconnectorversion
+        with:
+          connectorName: rest.connectorName
+          connectorVersion: rest.connectorVersion
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/connectors/{connectorname}/versions/{connectorversion}/call
+      name: connectors-connectorname-versions-connectorversion-call
+      description: REST surface for connectors-connectorName-versions-connectorVersion-call.
+      operations:
+      - method: POST
+        name: callconnector
+        description: Tray.ai Call Connector
+        call: platform-connectors.callconnector
+        with:
+          connectorName: rest.connectorName
+          connectorVersion: rest.connectorVersion
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: platform-connectors-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Tray.ai Platform API — Connectors. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: tray-ai-list-connectors
+      description: Tray.ai List Connectors
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: platform-connectors.listconnectors
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: tray-ai-get-connector-version
+      description: Tray.ai Get Connector Version
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: platform-connectors.getconnectorversion
+      with:
+        connectorName: tools.connectorName
+        connectorVersion: tools.connectorVersion
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: tray-ai-call-connector
+      description: Tray.ai Call Connector
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: platform-connectors.callconnector
+      with:
+        connectorName: tools.connectorName
+        connectorVersion: tools.connectorVersion
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
