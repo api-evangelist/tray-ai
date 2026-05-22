@@ -4,153 +4,230 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Tray.ai
 providerId: tray-ai
 created: '2026-05-04'
-modified: '2026-05-04'
+modified: '2026-05-22'
 tags:
   - Automation
   - Integration
   - iPaaS
-description: Machine-readable plans and pricing scaffold for this API provider. Conforms to the API Commons
-  Plans schema. Tier limits and prices are scaffold defaults; replace with provider-published values.
+  - AI Agents
+  - MCP
+sourceUrl: https://tray.ai/packages
+publishedPricing: false
+description: >-
+  Machine-readable plans definition for Tray.ai. Tray publishes three packages — Pro, Team, and
+  Enterprise — but does not list dollar amounts. Pricing is usage-based, feature-based, and quoted
+  by sales. Verbatim from tray.ai/packages: "Our pricing is based on your usage and the features
+  you need. Contact our sales team for a customized quote based on your specific requirements and
+  expected usage." All entries below reflect the published feature set; price fields are intentionally
+  set to "contact-sales" to avoid inventing dollar values that Tray does not publish.
 plans:
-  - id: tray-ai-free
-    name: Free
-    type: freemium
-    description: Free entry tier for the Tray.ai API surface. Intended for evaluation, prototyping, and
-      low-volume integrations. Real limits and pricing must be reconciled with the provider's published
-      plan documentation.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota across all included endpoints
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 1000
-        timeFrame: month
-        geo: global
-        domains:
-          - https://tray.io/graphql
-          - https://api.tray.io/core/v1
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the free tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 10
-        timeFrame: minute
-        geo: global
-        domains:
-          - https://tray.io/graphql
-          - https://api.tray.io/core/v1
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-    elements:
-      - name: Public Documentation
-      - name: Community Support
-      - name: Sandbox Access
-      - name: Tray.ai Embedded API
-      - name: Tray.ai Platform API
   - id: tray-ai-pro
-    name: Professional
+    name: Pro
     type: paid
-    description: Production tier for Tray.ai. Provides higher quotas, priority support, and access to
-      the broader API portfolio. Pricing placeholder; align with the provider's pricing page.
+    description: >-
+      For specific use cases. Includes 3 workspaces, 7-day insights, 7-day log retention, and access
+      to 700+ connectors. List price is not published; contact sales for a quote.
+    sourceUrl: https://tray.ai/packages
     entries:
-      - label: API Requests
-        description: Monthly API request quota
-        name: api_requests
+      - label: Workspaces
+        description: Maximum number of workspaces included in the Pro package.
+        name: workspaces
         type: quota
-        metric: requests
-        limit: 100000
+        metric: workspaces
+        limit: 3
         timeFrame: month
         geo: global
         domains:
           - https://tray.io/graphql
           - https://api.tray.io/core/v1
         unit: 1
-        price: TBD
+        price: contact-sales
         userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the professional tier
+      - label: Insights Retention
+        description: Insights / analytics retention window for Pro.
+        name: insights_retention
+        type: feature
+        metric: days
+        limit: 7
+        timeFrame: day
+        geo: global
+        unit: 1
+        price: contact-sales
+        userMultiplied: false
+      - label: Log Retention
+        description: Workflow log retention window for Pro.
+        name: log_retention
+        type: feature
+        metric: days
+        limit: 7
+        timeFrame: day
+        geo: global
+        unit: 1
+        price: contact-sales
+        userMultiplied: false
+      - label: API Rate Limit
+        description: Documented per-second rate limit on Platform and Embedded APIs.
         name: rate_limit
         type: rate
-        metric: requests_per_minute
-        limit: 100
-        timeFrame: minute
+        metric: requests_per_second
+        limit: 30
+        burst: 50
+        timeFrame: second
         geo: global
         domains:
           - https://tray.io/graphql
           - https://api.tray.io/core/v1
         unit: 1
-        price: '0.00'
+        price: contact-sales
         userMultiplied: false
-      - label: Overage
-        description: Per-request price after monthly quota is exceeded
-        name: overage
-        type: metered
-        metric: requests
-        limit: -1
+    elements:
+      - name: 700+ Connectors
+      - name: 3 Workspaces
+      - name: 7-day Insights
+      - name: 7-day Log Retention
+      - name: Tray.ai Platform API
+      - name: Tray.ai Embedded API
+      - name: Merlin Agent Builder (entry level)
+  - id: tray-ai-team
+    name: Team
+    type: paid
+    description: >-
+      For multiple use cases within a department. Includes 20 workspaces, 30-day insights, 7-day
+      expandable log retention, and all add-ons available for purchase. Marked as the "Popular" tier
+      on tray.ai/packages. List price is not published; contact sales for a quote.
+    sourceUrl: https://tray.ai/packages
+    popular: true
+    entries:
+      - label: Workspaces
+        description: Maximum number of workspaces included in the Team package.
+        name: workspaces
+        type: quota
+        metric: workspaces
+        limit: 20
         timeFrame: month
+        geo: global
+        unit: 1
+        price: contact-sales
+        userMultiplied: false
+      - label: Insights Retention
+        description: Insights / analytics retention window for Team.
+        name: insights_retention
+        type: feature
+        metric: days
+        limit: 30
+        timeFrame: day
+        geo: global
+        unit: 1
+        price: contact-sales
+        userMultiplied: false
+      - label: Log Retention
+        description: Workflow log retention window for Team. Expandable via add-on.
+        name: log_retention
+        type: feature
+        metric: days
+        limit: 7
+        timeFrame: day
+        geo: global
+        unit: 1
+        price: contact-sales
+        userMultiplied: false
+      - label: API Rate Limit
+        description: Documented per-second rate limit on Platform and Embedded APIs.
+        name: rate_limit
+        type: rate
+        metric: requests_per_second
+        limit: 30
+        burst: 50
+        timeFrame: second
         geo: global
         domains:
           - https://tray.io/graphql
           - https://api.tray.io/core/v1
-        unit: 1000
-        price: TBD
+        unit: 1
+        price: contact-sales
         userMultiplied: false
     elements:
-      - name: All Production Endpoints
-      - name: Email Support
-      - name: SLA Targets
-      - name: Webhook Subscriptions
-      - name: Tray.ai Embedded API
+      - name: 700+ Connectors
+      - name: 20 Workspaces
+      - name: 30-day Insights
+      - name: 7-day Expandable Log Retention
+      - name: Log Retention Management
+      - name: All Add-ons Available for Purchase
       - name: Tray.ai Platform API
+      - name: Tray.ai Embedded API
+      - name: Merlin Agent Builder
   - id: tray-ai-enterprise
     name: Enterprise
     type: enterprise
-    description: Custom-negotiated tier for Tray.ai. Includes dedicated capacity, contractual SLAs, security
-      review, data residency options, and named technical account management.
+    description: >-
+      For multiple departments and partner integrations. Includes unlimited workspaces, 180-day
+      insights, Advanced on-premise, SSO, HIPAA, Regional hosting, Log streaming, and Data
+      engineering. List price is not published; contracted by Tray sales with negotiated terms.
+    sourceUrl: https://tray.ai/packages
     entries:
-      - label: API Requests
-        description: Negotiated request volume; -1 indicates uncapped subject to fair use
-        name: api_requests
+      - label: Workspaces
+        description: Workspaces included in the Enterprise package; published as unlimited.
+        name: workspaces
         type: quota
-        metric: requests
+        metric: workspaces
         limit: -1
         timeFrame: month
         geo: configurable
-        domains:
-          - https://tray.io/graphql
-          - https://api.tray.io/core/v1
         unit: 1
-        price: custom
+        price: contact-sales
         userMultiplied: false
-      - label: Rate Limit
-        description: Negotiated burst and steady-state rate
+      - label: Insights Retention
+        description: Insights / analytics retention window for Enterprise.
+        name: insights_retention
+        type: feature
+        metric: days
+        limit: 180
+        timeFrame: day
+        geo: configurable
+        unit: 1
+        price: contact-sales
+        userMultiplied: false
+      - label: API Rate Limit
+        description: Documented per-second rate limit on Platform and Embedded APIs; negotiable
+          on Enterprise contracts.
         name: rate_limit
         type: rate
-        metric: requests_per_minute
-        limit: 1000
-        timeFrame: minute
+        metric: requests_per_second
+        limit: 30
+        burst: 50
+        timeFrame: second
         geo: configurable
         domains:
           - https://tray.io/graphql
           - https://api.tray.io/core/v1
         unit: 1
-        price: custom
+        price: contact-sales
         userMultiplied: false
     elements:
-      - name: Unlimited / Negotiated Volume
-      - name: 24/7 Dedicated Support
-      - name: Contractual SLA
-      - name: Security & Compliance Review
-      - name: Dedicated Account Manager
-      - name: Custom Data Residency
-      - name: Tray.ai Embedded API
+      - name: 700+ Connectors
+      - name: Unlimited Workspaces
+      - name: 180-day Insights
+      - name: Advanced On-Premise
+      - name: Static IP for On-Prem
+      - name: SSO
+      - name: HIPAA
+      - name: Regional Hosting (US, EU, APAC)
+      - name: Log Streaming
+      - name: Data Engineering
+      - name: Account Audit Log Streaming
       - name: Tray.ai Platform API
+      - name: Tray.ai Embedded API
+      - name: Merlin Agent Builder
+      - name: Agent Gateway for MCP
+addOns:
+  - name: HIPAA
+  - name: SSO
+  - name: Regional Hosting
+  - name: 30-day Log Retention
+  - name: 180-day Insights Visibility
+  - name: Tray IDP (Intelligent Document Processing)
+  - name: Data Engineering
+  - name: Log Streaming
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

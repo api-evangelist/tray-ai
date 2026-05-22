@@ -4,7 +4,7 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Tray.ai
 providerId: tray-ai
 created: '2026-05-04'
-modified: '2026-05-04'
+modified: '2026-05-22'
 tags:
   - Automation
   - Integration
@@ -12,9 +12,16 @@ tags:
   - Rate Limiting
   - Quotas
   - Throttling
-description: Machine-readable rate limit definitions for the Tray.ai API surface. Captures per-tier quotas,
-  burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to be replaced
-  with published provider limits.
+sourceUrls:
+  - https://tray.ai/documentation/developer/platform-apis/rate-limits
+  - https://tray.ai/documentation/developer/embedded-apis/rate-limits
+description: >-
+  Machine-readable rate limit definitions for Tray.ai's Platform API and Embedded API. Values
+  reflect the limits documented in Tray's developer portal. Verbatim from the Platform API docs:
+  "all endpoints are rate limited at 30 requests per second or 1800 requests per minute." The
+  Embedded API docs match: "All endpoints are rate limited to 30 requests per second." The Call
+  Connector endpoint is additionally capped at 1,000 concurrent requests. Trigger API event
+  delivery is not rate limited.
 headers:
   limit: X-RateLimit-Limit
   remaining: X-RateLimit-Remaining
@@ -26,67 +33,87 @@ responseCodes:
   quotaExceeded: 429
   serviceUnavailable: 503
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
+  - name: Platform API Steady-State
+    description: All Tray Platform API (Connectivity API) endpoints are rate limited at 30 requests
+      per second, equivalent to 1,800 requests per minute.
+    api: Tray.ai Platform API
+    scope: account
+    metric: requests_per_second
+    limit: 30
+    timeFrame: second
     applies:
-      - Tray.ai Embedded API
-      - Tray.ai Platform API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
+      - https://api.tray.io/core/v1
+      - https://api.eu1.tray.io/core/v1
+      - https://api.ap1.tray.io/core/v1
+  - name: Platform API Burst
+    description: Short bursts up to 50 requests per second are tolerated before throttling engages.
+    api: Tray.ai Platform API
+    scope: account
+    metric: requests_per_second
+    limit: 50
+    timeFrame: second
+    burst: true
+  - name: Platform API Per-Minute Equivalent
+    description: 30 RPS expressed as a per-minute ceiling per the published documentation.
+    api: Tray.ai Platform API
+    scope: account
+    metric: requests_per_minute
+    limit: 1800
+    timeFrame: minute
+  - name: Call Connector Concurrency
+    description: The Call Connector endpoint has a 1,000 concurrent-requests ceiling in addition to
+      the per-second rate limit.
+    api: Tray.ai Platform API
+    scope: account
+    metric: concurrent_requests
     limit: 1000
-    timeFrame: month
+    timeFrame: instant
     applies:
-      - Tray.ai Embedded API
-      - Tray.ai Platform API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
+      - POST /connectors/{connector-name}/versions/{connector-version}/call
+  - name: Trigger Event Delivery
+    description: Trigger API event delivery is not rate limited; events are delivered as quickly as
+      possible.
+    api: Tray.ai Platform API
+    scope: account
+    metric: events
+    limit: -1
+    timeFrame: instant
+  - name: Embedded API Steady-State
+    description: All Tray Embedded GraphQL API endpoints are rate limited to 30 requests per second.
+    api: Tray.ai Embedded API
+    scope: account
+    metric: requests_per_second
+    limit: 30
+    timeFrame: second
     applies:
-      - Tray.ai Embedded API
-      - Tray.ai Platform API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Tray.ai Embedded API
-      - Tray.ai Platform API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - Tray.ai Embedded API
-      - Tray.ai Platform API
+      - https://tray.io/graphql
+      - https://eu1.tray.io/graphql
+      - https://ap1.tray.io/graphql
+  - name: Embedded API Burst
+    description: Short bursts up to 50 requests per second are tolerated on the Embedded API before
+      throttling engages.
+    api: Tray.ai Embedded API
+    scope: account
+    metric: requests_per_second
+    limit: 50
+    timeFrame: second
+    burst: true
 policies:
   - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
+    description: Clients should implement exponential backoff with jitter and honor the Retry-After
+      header when present in a 429 response.
   - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
+    description: Short bursts up to 50 RPS are tolerated before steady-state throttling engages on
+      both the Platform and Embedded APIs.
+  - name: Concurrency
+    description: The Call Connector endpoint enforces a 1,000-concurrent-request ceiling; long-running
+      connector calls should be parallelized within that ceiling.
+  - name: Event Delivery
+    description: Trigger event delivery is not rate limited and is best-effort real-time. Consumers
+      must size webhook receivers accordingly.
   - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+    description: Even though Trigger event delivery is uncapped, sustained patterns that materially
+      impact shared infrastructure may be subject to fair-use review by Tray.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
