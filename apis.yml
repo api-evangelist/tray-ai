@@ -329,3 +329,5 @@ common:
     - name: Enterprise
       description: For multiple departments and partner integrations. Unlimited workspaces, 180-day insights,
         Advanced on-premise, SSO, HIPAA, Regional hosting, Log streaming, Data engineering.
+  - type: LLMsTxt
+    url: https://tray.ai/llms.txt
