@@ -1,0 +1,384 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tray.ai Platform API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Connectors",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai List Connectors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tray.io/core/v1/connectors"
+          },
+          "docs": "Returns a list of all available connectors from Tray's connector library. A connector can have multiple versions. Each connector exposes the API operations of a third-party service."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Get Connector Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tray.io/core/v1/connectors/:connectorName/versions/:connectorVersion",
+            "params": [
+              {
+                "name": "connectorName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the connector (e.g., salesforce, slack)"
+              },
+              {
+                "name": "connectorVersion",
+                "value": "",
+                "type": "path",
+                "description": "The version of the connector (e.g., 2.1)"
+              }
+            ]
+          },
+          "docs": "Retrieves details of a specific connector version, including its available operations, input schemas, and output schemas."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Call Connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tray.io/core/v1/connectors/:connectorName/versions/:connectorVersion/call",
+            "params": [
+              {
+                "name": "connectorName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the connector (e.g., twilio-output)"
+              },
+              {
+                "name": "connectorVersion",
+                "value": "",
+                "type": "path",
+                "description": "The version of the connector (e.g., 2.1)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Executes an operation of a connector and returns the result. This is a billable endpoint. The input must conform to the input schema of the specified operation. An authId for a previously created authentication is required for most operations."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Authentications",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai List Authentications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tray.io/core/v1/authentications"
+          },
+          "docs": "Retrieves a list of authentications associated with the authenticated user or organization."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Create Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tray.io/core/v1/authentications",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new user authentication for a third-party service in Tray. Requires the serviceEnvironmentId, user data, and credentials. Returns an authentication ID that can be used with the Call Connector endpoint."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Get Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tray.io/core/v1/authentications/:authenticationId",
+            "params": [
+              {
+                "name": "authenticationId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the authentication"
+              }
+            ]
+          },
+          "docs": "Retrieves metadata associated with a user authentication by its ID, including auth id, serviceEnvironmentId, name, and scopes."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Delete Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.tray.io/core/v1/authentications/:authenticationId",
+            "params": [
+              {
+                "name": "authenticationId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the authentication"
+              }
+            ]
+          },
+          "docs": "Deletes a user authentication using the authentication ID."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Triggers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai List Triggers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tray.io/core/v1/triggers"
+          },
+          "docs": "Returns a list of all available triggers from Tray's trigger library. Triggers allow you to receive data from third-party services in real time."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Create Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tray.io/core/v1/subscriptions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new trigger subscription using a trigger operation. The input must conform to the input schema of the trigger operation."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Delete Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.tray.io/core/v1/subscriptions/:subscriptionId",
+            "params": [
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the subscription"
+              }
+            ]
+          },
+          "docs": "Deletes a trigger subscription by its ID. Requires a user token."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai List Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tray.io/core/v1/users"
+          },
+          "docs": "Retrieves a list of users within the organization. Returns user details including name, email, and role information."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Invite User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tray.io/core/v1/users/invite",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Invites a user to the organization by email address. The invited user will receive an email with instructions to join."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Workspaces",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai List Workspaces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tray.io/core/v1/workspaces"
+          },
+          "docs": "Retrieves a list of workspaces in the organization. Workspaces divide the organization into sub-categories such as departments or dev/prod environments for environment promotion."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Get Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tray.io/core/v1/workspaces/:workspaceId",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the workspace"
+              }
+            ]
+          },
+          "docs": "Retrieves details for a specific workspace by its ID."
+        },
+        {
+          "info": {
+            "name": "Tray.ai List Workspace Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.tray.io/core/v1/workspaces/:workspaceId/users",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the workspace"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of users belonging to a specific workspace."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai Export Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tray.io/core/v1/projects/:projectId/export",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the project"
+              }
+            ]
+          },
+          "docs": "Exports a project version for environment promotion, such as moving from staging to production workspaces."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Import Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tray.io/core/v1/projects/import",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Imports a project version from exported data into the target workspace for environment promotion."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Deployments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai Deploy CDK Connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.tray.io/core/v1/connectors/:connectorName/versions/:connectorVersion/deploy",
+            "params": [
+              {
+                "name": "connectorName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the CDK connector to deploy"
+              },
+              {
+                "name": "connectorVersion",
+                "value": "",
+                "type": "path",
+                "description": "The version of the CDK connector to deploy"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deploys a CDK (Connector Development Kit) connector to the Tray platform. The connector name and version must match those defined in connector.json."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

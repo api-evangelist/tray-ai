@@ -1,0 +1,323 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tray.ai Embedded API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai GraphQL Playground",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://tray.io/graphql"
+          },
+          "docs": "Access the GraphQL Playground interface for exploring the Tray Embedded API interactively. This is only available for development and testing purposes."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Create User Token (Authorize)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#authorize",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generates a user access token from a master token for a specific user. The returned token is used as a Bearer token for user-scoped API calls such as managing solution instances and authentications. Requires a master token."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai Create External User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new external user for your embedded application. Accepts a name, externalUserId, and optional isTestUser flag. Test users are excluded from billing. Requires a master token."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Get Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#getUsers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves a list of external users with pagination support. Returns user details including name, id, externalUserId, and pagination cursor information. Requires a master token."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Update External User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#updateExternalUser",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an external user's properties, such as marking them as a test user to exclude from billing. Requires a master token."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Remove User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#removeUser",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Removes an external user from your embedded application. This will also remove all associated solution instances and authentications. Requires a master token."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Solutions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai Get Solutions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#getSolutions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves a list of published solutions (integrations) available in your embedded application. Solutions represent integrations built on the Tray platform. Supports pagination. Requires a master token or user token."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Solution Instances",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai Create Solution Instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#createSolutionInstance",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new solution instance from a published solution for a specific end user. Accepts the solutionId, instanceName, and optional authValues and configValues. Requires a user token."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Get Solution Instances",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#getSolutionInstances",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves solution instances. When called with a master token, returns instances for all end users. When called with a user token, returns only instances owned by that user. Supports pagination."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Update Solution Instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#updateSolutionInstance",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an existing solution instance. Can update the instance name, enable/disable status, auth values, and config values. Setting errorOnEnablingWithMissingValues to true is recommended to catch configuration issues. Requires a user token."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Delete Solution Instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#deleteSolutionInstance",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deletes a solution instance and all associated data. This action is irreversible. Requires a user token."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Authentications",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai Create User Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#createUserAuthentication",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new authentication for a third-party service (e.g., Salesforce, Slack) for a specific user. Returns an authId that can be used when creating or updating solution instances. Note that OAuth-based authentications cannot be created via API unless you own the service. Requires a user token."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Get Authentications",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#getAuthentications",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves a list of authentications for third-party services. Supports both master token (returns all authentications) and user token (returns user-scoped authentications)."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Delete Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#deleteAuthentication",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deletes a third-party service authentication. Requires a user token."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Workflows",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai Export Workflows",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#exportWorkflows",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Exports workflows from your embedded account. Useful for promoting workflows from staging to production environments. Requires a master token."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Import Workflows",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#importWorkflows",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Imports workflows into your embedded account from exported data. Useful for promoting workflows from staging to production environments. Requires a master token."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Call Connector",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai Call Connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#callConnector",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Calls any Tray connector operation to pull data from a particular third-party service. Used in combination with a user token and authentication ID to interact with service connector operations (e.g., list Salesforce objects, get Slack channels). Returns a promise that resolves to the output of the connector call. Requires a user token."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

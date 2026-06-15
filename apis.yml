@@ -1,333 +1,318 @@
 aid: tray-ai
 url: https://raw.githubusercontent.com/api-evangelist/tray-ai/refs/heads/main/apis.yml
 apis:
-  - aid: tray-ai:embedded-api
-    name: Tray.ai Embedded API
-    tags:
-    - Automation
-    - Embedded
-    - GraphQL
-    - Integration
-    humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
-    baseURL: https://tray.io/graphql
-    properties:
-    - url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
-      type: Documentation
-    - url: openapi/tray-ai-embedded-api-openapi.yml
-      type: OpenAPI
-    - url: https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
-      type: PostmanCollection
-    - url: json-schema/user.json
-      type: JSONSchema
-    - url: json-schema/solution.json
-      type: JSONSchema
-    - url: json-schema/solution-instance.json
-      type: JSONSchema
-    - url: json-schema/authentication.json
-      type: JSONSchema
-    - url: json-ld/tray-ai-context.jsonld
-      type: JSONLD
-    - url: json-structure/tray-ai-solution-instance-structure.json
-      type: JSONStructure
-    - url: examples/tray-ai-create-solution-instance-example.json
-      type: Example
-    - type: NaftikoCapability
-      url: capabilities/embedded-authentication.yaml
-    - type: NaftikoCapability
-      url: capabilities/embedded-authentications.yaml
-    - type: NaftikoCapability
-      url: capabilities/embedded-call-connector.yaml
-    - type: NaftikoCapability
-      url: capabilities/embedded-solution-instances.yaml
-    - type: NaftikoCapability
-      url: capabilities/embedded-solutions.yaml
-    - type: NaftikoCapability
-      url: capabilities/embedded-users.yaml
-    - type: NaftikoCapability
-      url: capabilities/embedded-workflows.yaml
-    description: The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded
-      integration experiences. It provides programmatic access to manage users, solutions, solution instances, authentications,
-      workflows, and connector operations via HTTP POST to the GraphQL endpoint with Bearer token authentication. Two token
-      types are supported, master tokens for admin operations and user tokens generated via the authorize mutation for
-      user-scoped operations. All endpoints are rate limited to 30 requests per second.
-  - aid: tray-ai:platform-api
-    name: Tray.ai Platform API
-    tags:
-    - Automation
-    - Connectors
-    - Integration
-    - iPaaS
-    humanURL: https://tray.ai/documentation/developer/openapi/trayapi/overview/
-    baseURL: https://api.tray.io/core/v1
-    properties:
-    - url: https://tray.ai/documentation/developer/openapi/trayapi/overview/
-      type: Documentation
-    - url: openapi/tray-ai-platform-api-openapi.yml
-      type: OpenAPI
-    - url: json-schema/connector.json
-      type: JSONSchema
-    - url: json-schema/authentication.json
-      type: JSONSchema
-    - url: json-schema/subscription.json
-      type: JSONSchema
-    - url: json-schema/user.json
-      type: JSONSchema
-    - url: json-schema/workspace.json
-      type: JSONSchema
-    - url: json-ld/tray-ai-context.jsonld
-      type: JSONLD
-    - url: json-structure/tray-ai-connector-structure.json
-      type: JSONStructure
-    - url: examples/tray-ai-list-connectors-example.json
-      type: Example
-    - url: examples/tray-ai-call-connector-example.json
-      type: Example
-    - url: examples/tray-ai-create-authentication-example.json
-      type: Example
-    - url: rules/tray-ai-rules.yml
-      type: SpectralRuleset
-    - type: NaftikoCapability
-      url: capabilities/platform-authentications.yaml
-    - type: NaftikoCapability
-      url: capabilities/platform-connectors.yaml
-    - type: NaftikoCapability
-      url: capabilities/platform-deployments.yaml
-    - type: NaftikoCapability
-      url: capabilities/platform-projects.yaml
-    - type: NaftikoCapability
-      url: capabilities/platform-triggers.yaml
-    - type: NaftikoCapability
-      url: capabilities/platform-users.yaml
-    - type: NaftikoCapability
-      url: capabilities/platform-workspaces.yaml
-    description: The Tray.ai Platform API (also known as the Connectivity API) provides direct programmatic REST access to
-      Tray's 700+ pre-built service connectors, authentication management, trigger subscriptions, user and workspace administration,
-      and project/solution lifecycle operations. It is grouped into Core, CDK (Connector Development Kit), and On Premise
-      endpoint families served from the US, EU, and APAC regions. All endpoints require a Bearer token and are rate limited
-      to 30 requests per second (burst 50), with the Call Connector endpoint additionally capped at 1,000 concurrent requests.
-name: Tray.ai
-tags:
+- aid: tray-ai:embedded-api
+  name: Tray.ai Embedded API
+  tags:
   - Automation
+  - Embedded
+  - GraphQL
+  - Integration
+  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  baseURL: https://tray.io/graphql
+  properties:
+  - url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+    type: Documentation
+  - url: openapi/tray-ai-embedded-api-openapi.yml
+    type: OpenAPI
+  - url: https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
+    type: PostmanCollection
+  - url: json-schema/user.json
+    type: JSONSchema
+  - url: json-schema/solution.json
+    type: JSONSchema
+  - url: json-schema/solution-instance.json
+    type: JSONSchema
+  - url: json-schema/authentication.json
+    type: JSONSchema
+  - url: json-ld/tray-ai-context.jsonld
+    type: JSONLD
+  - url: json-structure/tray-ai-solution-instance-structure.json
+    type: JSONStructure
+  - url: examples/tray-ai-create-solution-instance-example.json
+    type: Example
+  - url: graphql/tray-ai-graphql.md
+    type: GraphQL
+  description: >-
+    The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded
+    integration experiences. It provides programmatic access to manage users, solutions, solution instances,
+    authentications, workflows, and connector operations via HTTP POST to the GraphQL endpoint with Bearer token
+    authentication. Two token types are supported, master tokens for admin operations and user tokens generated via
+    the authorize mutation for user-scoped operations. All endpoints are rate limited to 30 requests per second.
+- aid: tray-ai:platform-api
+  name: Tray.ai Platform API
+  tags:
+  - Automation
+  - Connectors
   - Integration
   - iPaaS
-  - AI Agents
-  - MCP
+  humanURL: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  baseURL: https://api.tray.io/core/v1
+  properties:
+  - url: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+    type: Documentation
+  - url: openapi/tray-ai-platform-api-openapi.yml
+    type: OpenAPI
+  - url: json-schema/connector.json
+    type: JSONSchema
+  - url: json-schema/authentication.json
+    type: JSONSchema
+  - url: json-schema/subscription.json
+    type: JSONSchema
+  - url: json-schema/user.json
+    type: JSONSchema
+  - url: json-schema/workspace.json
+    type: JSONSchema
+  - url: json-ld/tray-ai-context.jsonld
+    type: JSONLD
+  - url: json-structure/tray-ai-connector-structure.json
+    type: JSONStructure
+  - url: examples/tray-ai-list-connectors-example.json
+    type: Example
+  - url: examples/tray-ai-call-connector-example.json
+    type: Example
+  - url: examples/tray-ai-create-authentication-example.json
+    type: Example
+  - url: rules/tray-ai-rules.yml
+    type: SpectralRuleset
+  description: >-
+    The Tray.ai Platform API (also known as the Connectivity API) provides direct programmatic REST access to Tray's
+    700+ pre-built service connectors, authentication management, trigger subscriptions, user and workspace
+    administration, and project/solution lifecycle operations. It is grouped into Core, CDK (Connector Development
+    Kit), and On Premise endpoint families served from the US, EU, and APAC regions. All endpoints require a Bearer
+    token and are rate limited to 30 requests per second (burst 50), with the Call Connector endpoint additionally
+    capped at 1,000 concurrent requests.
+name: Tray.ai
+tags:
+- Automation
+- Integration
+- iPaaS
+- AI Agents
+- MCP
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
 created: '2025-06-05'
 modified: '2026-05-22'
 position: Consumer
-description: Tray.ai (formerly Tray.io) is an AI-ready enterprise orchestration platform for data and AI, combining a
-  Merlin Agent Builder for no-code AI agent creation, an Agent Gateway for governed MCP server management, and an
-  intelligent iPaaS with 700+ pre-built connectors. It exposes a REST Platform API (Connectivity API) and a GraphQL
-  Embedded API for building, embedding, and operating AI agents and integration automations at enterprise scale.
+description: >-
+  Tray.ai (formerly Tray.io) is an AI-ready enterprise orchestration platform for data and AI, combining a Merlin Agent
+  Builder for no-code AI agent creation, an Agent Gateway for governed MCP server management, and an intelligent iPaaS
+  with 700+ pre-built connectors. It exposes a REST Platform API (Connectivity API) and a GraphQL Embedded API for
+  building, embedding, and operating AI agents and integration automations at enterprise scale.
 integrations:
-  - name: Cisco
-  - name: Airbnb
-  - name: FedEx
-  - name: Notion
-  - name: NetApp
-  - name: CrowdStrike
-  - name: Capital One
-  - name: Apollo.io
-  - name: Life360
-  - name: GitHub
-  - name: Ramp
-  - name: Zendesk
-  - name: Mixpanel
-  - name: New Relic
-  - name: Hackerone
-  - name: Headway
-  - name: IBM
-  - name: outreach
-  - name: Udemy
-  - name: Zuora
-  - name: auctane
-  - name: avid property group
-  - name: eventbrite
+- name: Cisco
+- name: Airbnb
+- name: FedEx
+- name: Notion
+- name: NetApp
+- name: CrowdStrike
+- name: Capital One
+- name: Apollo.io
+- name: Life360
+- name: GitHub
+- name: Ramp
+- name: Zendesk
+- name: Mixpanel
+- name: New Relic
+- name: Hackerone
+- name: Headway
+- name: IBM
+- name: outreach
+- name: Udemy
+- name: Zuora
+- name: auctane
+- name: avid property group
+- name: eventbrite
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
 specificationVersion: '0.19'
 common:
-  - type: GitHubOrganization
-    url: https://github.com/trayio
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/tray-ai
-  - name: Tray.ai Vocabulary
-    url: vocabulary/tray-ai-vocabulary.yml
-    type: Vocabulary
-  - name: Tray.ai Plans & Pricing
-    description: Pro, Team, and Enterprise packages. Tray does not publish list prices; quotes are usage- and feature-based
-      and require contacting sales.
-    url: https://tray.ai/packages
-    type: Plans
-  - name: Tray.ai Plans (machine-readable)
-    url: plans/tray-ai-plans-pricing.yml
-    type: PlansSpec
-  - name: Tray.ai Rate Limits
-    url: rate-limits/tray-ai-rate-limits.yml
-    type: RateLimits
-  - name: Tray.ai FinOps Profile
-    url: finops/tray-ai-finops.yml
-    type: FinOps
-  - name: Connector Hub
-    description: Browsable catalog of 700+ pre-built service connectors organized into Marketing, Databases, Finance,
-      Digital product design, Human resources, LLMs, Security and compliance, and General automation categories.
-    url: https://tray.ai/connectors?sort=alphabetical
-    type: Integrations
-  - name: Tray.ai Login
-    description: End-user login portal for Tray.io workspaces.
-    url: https://app.tray.io/login
-    type: Login
-  - name: Blogs - All
-    description: Tray.ai blog covering Merlin AI agents, MCP governance, iPaaS, and AI orchestration product updates.
-    url: https://tray.ai/blog
-    type: Blog
-  - name: Customers
-    description: Customer case studies featuring Cisco, FedEx, Notion, NetApp, CrowdStrike, Capital One, and others.
-    url: https://tray.ai/customers
-    type: CaseStudies
-  - name: Privacy Policy
-    url: https://tray.ai/privacy
-    type: PrivacyPolicy
-  - name: Master Subscription Agreement
-    url: https://tray.ai/terms
-    type: TermsOfService
-  - name: Tray.ai Status
-    description: Atlassian Statuspage with Atom and RSS feeds covering Workflow Execution, Builder, Connectivity API,
-      Connectors API, Triggers API, Embedded API, Merlin Agent Builder, and related services.
-    url: https://status.tray.ai/
-    type: StatusPage
-  - name: Tray.ai Status Atom Feed
-    url: https://status.tray.ai/history.atom
-    type: AtomFeed
-  - name: Tray.ai Status RSS Feed
-    url: https://status.tray.ai/history.rss
-    type: RSSFeed
-  - name: Tray.ai Homepage
-    description: 'Enterprise orchestration for data and AI. Tagline: "Stop wrangling AI. Start orchestrating it."'
-    url: https://tray.ai/
-    type: Website
-  - name: Developer Portal
-    description: Tray.ai developer documentation hub covering Platform APIs, Embedded APIs, the Connector Development
-      Kit, and developer tools.
-    url: https://tray.ai/documentation/developer/
-    type: Portal
+- type: GitHubOrganization
+  url: https://github.com/trayio
+- type: LinkedIn
+  url: https://www.linkedin.com/company/tray-ai
+- name: Tray.ai Vocabulary
+  url: vocabulary/tray-ai-vocabulary.yml
+  type: Vocabulary
+- name: Tray.ai Plans & Pricing
+  description: >-
+    Pro, Team, and Enterprise packages. Tray does not publish list prices; quotes are usage- and feature-based and
+    require contacting sales.
+  url: https://tray.ai/packages
+  type: Plans
+- name: Tray.ai Plans (machine-readable)
+  url: plans/tray-ai-plans-pricing.yml
+  type: PlansSpec
+- name: Tray.ai Rate Limits
+  url: rate-limits/tray-ai-rate-limits.yml
+  type: RateLimits
+- name: Tray.ai FinOps Profile
+  url: finops/tray-ai-finops.yml
+  type: FinOps
+- name: Connector Hub
+  description: >-
+    Browsable catalog of 700+ pre-built service connectors organized into Marketing, Databases, Finance, Digital
+    product design, Human resources, LLMs, Security and compliance, and General automation categories.
+  url: https://tray.ai/connectors?sort=alphabetical
+  type: Integrations
+- name: Tray.ai Login
+  description: End-user login portal for Tray.io workspaces.
+  url: https://app.tray.io/login
+  type: Login
+- name: Blogs - All
+  description: Tray.ai blog covering Merlin AI agents, MCP governance, iPaaS, and AI orchestration product updates.
+  url: https://tray.ai/blog
+  type: Blog
+- name: Customers
+  description: Customer case studies featuring Cisco, FedEx, Notion, NetApp, CrowdStrike, Capital One, and others.
+  url: https://tray.ai/customers
+  type: CaseStudies
+- name: Privacy Policy
+  url: https://tray.ai/privacy
+  type: PrivacyPolicy
+- name: Master Subscription Agreement
+  url: https://tray.ai/terms
+  type: TermsOfService
+- name: Tray.ai Status
+  description: >-
+    Atlassian Statuspage with Atom and RSS feeds covering Workflow Execution, Builder, Connectivity API, Connectors
+    API, Triggers API, Embedded API, Merlin Agent Builder, and related services.
+  url: https://status.tray.ai/
+  type: StatusPage
+- name: Tray.ai Status Atom Feed
+  url: https://status.tray.ai/history.atom
+  type: AtomFeed
+- name: Tray.ai Status RSS Feed
+  url: https://status.tray.ai/history.rss
+  type: RSSFeed
+- name: Tray.ai Homepage
+  description: 'Enterprise orchestration for data and AI. Tagline: "Stop wrangling AI. Start orchestrating it."'
+  url: https://tray.ai/
+  type: Website
+- name: Developer Portal
+  description: >-
+    Tray.ai developer documentation hub covering Platform APIs, Embedded APIs, the Connector Development Kit, and
+    developer tools.
+  url: https://tray.ai/documentation/developer/
+  type: Portal
+- name: Merlin Agent Builder
+  description: No-code AI agent builder with reasoning, guardrails, and a composable hub of 700+ connectors as agent tools.
+  url: https://tray.ai/documentation/agent-builder/
+  type: Product
+- name: Agent Hub
+  description: >-
+    Catalog of agent tools, accelerators, and data sources used to build intelligent agents on Tray's orchestration
+    platform.
+  url: https://tray.ai/documentation/agent-hub/
+  type: Product
+- name: Agent Gateway for MCP
+  description: Managed MCP server gateway exposing Tray's 700+ connectors as governed MCP tools with audit and observability.
+  url: https://tray.ai/
+  type: Product
+- name: Universal Automation Cloud / Intelligent iPaaS
+  description: >-
+    Tray's underlying integration and automation platform spanning process automation, data integration, and API
+    management.
+  url: https://tray.ai/
+  type: Product
+- name: Tray.ai Embedded
+  description: Embedded iPaaS offering for SaaS vendors to ship in-app integration experiences powered by Tray.
+  url: https://tray.ai/products/embedded
+  type: Product
+- name: Falafel SDK
+  description: Node.js framework for building connectors on the Tray platform.
+  url: https://github.com/trayio/falafel
+  type: SDK
+- name: Threadneedle
+  description: ORM-style abstraction layer for interacting with third-party HTTP-based APIs, used by Tray connectors.
+  url: https://github.com/trayio/threadneedle
+  type: SDK
+- name: CDK Examples
+  description: Collection of example connectors built using the Tray.io Connector Development Kit (TypeScript).
+  url: https://github.com/trayio/CDK-examples-public
+  type: Samples
+- name: Embedded Edition Sample App
+  description: Sample application demonstrating Tray Embedded integration.
+  url: https://github.com/trayio/embedded-edition-sample-app
+  type: Samples
+- name: Connector Tester
+  description: Tray developer tool for testing connectors locally.
+  url: https://github.com/trayio/connector-tester-public
+  type: Tools
+- name: Script Connector Tester
+  description: Testing utility for Tray script connectors.
+  url: https://github.com/trayio/script-connector-tester
+  type: Tools
+- name: Embedded CustomJS
+  description: Public custom JavaScript helpers for the Tray Embedded edition.
+  url: https://github.com/trayio/embedded-customjs-public
+  type: Tools
+- name: Tray.ai Postman Workspace
+  description: Public Postman workspace with collections for the Embedded GraphQL and Platform REST APIs.
+  url: https://www.postman.com/tray-docs/tray-io-s-public-workspace
+  type: PostmanCollection
+- name: Use Cases
+  type: UseCases
+  data:
+  - name: AI Agent Orchestration
+  - name: MCP Governance
+  - name: E-commerce
+  - name: Embedded integrations
+  - name: IT Onboarding
+  - name: Lead lifecycle
+  - name: Order-to-cash
+- name: Features
+  type: Features
+  data:
+  - name: 700+ Connectors
   - name: Merlin Agent Builder
-    description: No-code AI agent builder with reasoning, guardrails, and a composable hub of 700+ connectors as
-      agent tools.
-    url: https://tray.ai/documentation/agent-builder/
-    type: Product
-  - name: Agent Hub
-    description: Catalog of agent tools, accelerators, and data sources used to build intelligent agents on Tray's
-      orchestration platform.
-    url: https://tray.ai/documentation/agent-hub/
-    type: Product
   - name: Agent Gateway for MCP
-    description: Managed MCP server gateway exposing Tray's 700+ connectors as governed MCP tools with audit and
-      observability.
-    url: https://tray.ai/
-    type: Product
-  - name: Universal Automation Cloud / Intelligent iPaaS
-    description: Tray's underlying integration and automation platform spanning process automation, data integration,
-      and API management.
-    url: https://tray.ai/
-    type: Product
-  - name: Tray.ai Embedded
-    description: Embedded iPaaS offering for SaaS vendors to ship in-app integration experiences powered by Tray.
-    url: https://tray.ai/products/embedded
-    type: Product
-  - name: Falafel SDK
-    description: Node.js framework for building connectors on the Tray platform.
-    url: https://github.com/trayio/falafel
-    type: SDK
-  - name: Threadneedle
-    description: ORM-style abstraction layer for interacting with third-party HTTP-based APIs, used by Tray connectors.
-    url: https://github.com/trayio/threadneedle
-    type: SDK
-  - name: CDK Examples
-    description: Collection of example connectors built using the Tray.io Connector Development Kit (TypeScript).
-    url: https://github.com/trayio/CDK-examples-public
-    type: Samples
-  - name: Embedded Edition Sample App
-    description: Sample application demonstrating Tray Embedded integration.
-    url: https://github.com/trayio/embedded-edition-sample-app
-    type: Samples
-  - name: Connector Tester
-    description: Tray developer tool for testing connectors locally.
-    url: https://github.com/trayio/connector-tester-public
-    type: Tools
-  - name: Script Connector Tester
-    description: Testing utility for Tray script connectors.
-    url: https://github.com/trayio/script-connector-tester
-    type: Tools
-  - name: Embedded CustomJS
-    description: Public custom JavaScript helpers for the Tray Embedded edition.
-    url: https://github.com/trayio/embedded-customjs-public
-    type: Tools
-  - name: Tray.ai Postman Workspace
-    description: Public Postman workspace with collections for the Embedded GraphQL and Platform REST APIs.
-    url: https://www.postman.com/tray-docs/tray-io-s-public-workspace
-    type: PostmanCollection
-  - name: Use Cases
-    type: UseCases
-    data:
-    - name: AI Agent Orchestration
-    - name: MCP Governance
-    - name: E-commerce
-    - name: Embedded integrations
-    - name: IT Onboarding
-    - name: Lead lifecycle
-    - name: Order-to-cash
-  - name: Features
-    type: Features
-    data:
-    - name: 700+ Connectors
-    - name: Merlin Agent Builder
-    - name: Agent Gateway for MCP
-    - name: Agent Hub
-    - name: Universal Automation Cloud
-    - name: Connectivity API
-    - name: Embedded Bundle
-    - name: Connector Development Kit (CDK)
-    - name: Connector Builder
-    - name: Composable Templates
-    - name: Auth API
-    - name: Auth Collector
-    - name: Management API
-    - name: Trigger API
-    - name: Workflows
-    - name: Workspaces
-    - name: Insights
-    - name: Intelligent Document Processing
-    - name: Log Streaming
-    - name: Log Retention
-    - name: Account Audit Log Streaming
-    - name: Advanced On-Prem
-    - name: Static IP for On-Prem
-    - name: HIPAA
-    - name: Multi-Factor Authentication
-    - name: Role-Based Access Control
-    - name: SSO
-    - name: Regional Hosting (US, EU, APAC)
-    - name: Tray Academy
-    - name: Tray Community
-    - name: In-App Support
-    - name: Dedicated Slack Channel
-  - name: Plan Tiers
-    type: PlanTiers
-    description: Tray.ai offers Pro, Team, and Enterprise packages. List prices are not published; all tiers require
-      contacting sales for a quote.
-    data:
-    - name: Pro
-      description: For specific use cases. 3 workspaces, 7-day insights, 7-day log retention, 700+ connectors.
-    - name: Team
-      description: For multiple use cases within a department. 20 workspaces, 30-day insights, 7-day expandable log
-        retention, all add-ons available for purchase.
-    - name: Enterprise
-      description: For multiple departments and partner integrations. Unlimited workspaces, 180-day insights,
-        Advanced on-premise, SSO, HIPAA, Regional hosting, Log streaming, Data engineering.
-  - type: LLMsTxt
-    url: https://tray.ai/llms.txt
+  - name: Agent Hub
+  - name: Universal Automation Cloud
+  - name: Connectivity API
+  - name: Embedded Bundle
+  - name: Connector Development Kit (CDK)
+  - name: Connector Builder
+  - name: Composable Templates
+  - name: Auth API
+  - name: Auth Collector
+  - name: Management API
+  - name: Trigger API
+  - name: Workflows
+  - name: Workspaces
+  - name: Insights
+  - name: Intelligent Document Processing
+  - name: Log Streaming
+  - name: Log Retention
+  - name: Account Audit Log Streaming
+  - name: Advanced On-Prem
+  - name: Static IP for On-Prem
+  - name: HIPAA
+  - name: Multi-Factor Authentication
+  - name: Role-Based Access Control
+  - name: SSO
+  - name: Regional Hosting (US, EU, APAC)
+  - name: Tray Academy
+  - name: Tray Community
+  - name: In-App Support
+  - name: Dedicated Slack Channel
+- name: Plan Tiers
+  type: PlanTiers
+  description: >-
+    Tray.ai offers Pro, Team, and Enterprise packages. List prices are not published; all tiers require contacting
+    sales for a quote.
+  data:
+  - name: Pro
+    description: For specific use cases. 3 workspaces, 7-day insights, 7-day log retention, 700+ connectors.
+  - name: Team
+    description: >-
+      For multiple use cases within a department. 20 workspaces, 30-day insights, 7-day expandable log retention,
+      all add-ons available for purchase.
+  - name: Enterprise
+    description: >-
+      For multiple departments and partner integrations. Unlimited workspaces, 180-day insights, Advanced
+      on-premise, SSO, HIPAA, Regional hosting, Log streaming, Data engineering.
+- type: LLMsTxt
+  url: https://tray.ai/llms.txt
