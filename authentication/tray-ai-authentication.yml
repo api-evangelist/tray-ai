@@ -1,0 +1,18 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/tray-ai-embedded-api-openapi.yml, openapi/tray-ai-platform-api-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: Use either a master token (obtained from Tray Embedded UI settings) or a user
+    token (obtained via the authorize mutation). Master tokens are required for admin operations
+    like managing users. User tokens are required for user-scoped operations like managing solution
+    instances.
+  sources:
+  - openapi/tray-ai-embedded-api-openapi.yml
+  - openapi/tray-ai-platform-api-openapi.yml

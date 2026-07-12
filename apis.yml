@@ -129,6 +129,12 @@ maintainers:
   email: kin@apievangelist.com
 specificationVersion: '0.19'
 common:
+- type: TrustCenter
+  url: security/tray-ai-trust-center.yml
+- type: DomainSecurity
+  url: security/tray-ai-domain-security.yml
+- type: Authentication
+  url: authentication/tray-ai-authentication.yml
 - type: GitHubOrganization
   url: https://github.com/trayio
 - type: LinkedIn
