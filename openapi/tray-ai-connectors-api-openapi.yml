@@ -1,0 +1,217 @@
+openapi: 3.1.0
+info:
+  title: Tray.ai Embedded Authentication Connectors API
+  description: 'The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray''s UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.'
+  version: 1.0.0
+  contact:
+    name: Tray.ai Support
+    url: https://tray.ai
+  termsOfService: https://tray.ai/terms
+  license:
+    name: Proprietary
+    url: https://tray.ai/terms
+servers:
+- url: https://tray.io
+  description: US Region (Default)
+- url: https://eu1.tray.io
+  description: EU Region
+- url: https://ap1.tray.io
+  description: APAC Region
+security:
+- bearerAuth: []
+tags:
+- name: Connectors
+  description: List available connectors and their operations, and call connector operations to interact with third-party services programmatically.
+paths:
+  /connectors:
+    get:
+      operationId: listConnectors
+      summary: Tray.ai List Connectors
+      description: Returns a list of all available connectors from Tray's connector library. A connector can have multiple versions. Each connector exposes the API operations of a third-party service.
+      tags:
+      - Connectors
+      responses:
+        '200':
+          description: List of connectors returned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  elements:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Connector'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /connectors/{connectorName}/versions/{connectorVersion}:
+    get:
+      operationId: getConnectorVersion
+      summary: Tray.ai Get Connector Version
+      description: Retrieves details of a specific connector version, including its available operations, input schemas, and output schemas.
+      tags:
+      - Connectors
+      parameters:
+      - name: connectorName
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The name of the connector (e.g., salesforce, slack)
+      - name: connectorVersion
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The version of the connector (e.g., 2.1)
+      responses:
+        '200':
+          description: Connector version details returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectorVersion'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Connector or version not found
+  /connectors/{connectorName}/versions/{connectorVersion}/call:
+    post:
+      operationId: callConnector
+      summary: Tray.ai Call Connector
+      description: Executes an operation of a connector and returns the result. This is a billable endpoint. The input must conform to the input schema of the specified operation. An authId for a previously created authentication is required for most operations.
+      tags:
+      - Connectors
+      parameters:
+      - name: connectorName
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The name of the connector (e.g., twilio-output)
+      - name: connectorVersion
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The version of the connector (e.g., 2.1)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CallConnectorRequest'
+      responses:
+        '200':
+          description: Connector operation executed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Output from the connector operation. Structure varies by connector and operation.
+        '400':
+          description: Invalid input or operation
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Connector or version not found
+components:
+  schemas:
+    CallConnectorRequest:
+      type: object
+      required:
+      - operation
+      properties:
+        operation:
+          type: string
+          description: The name of the connector operation to execute
+        authId:
+          type: string
+          description: The ID of a previously created authentication to use for the connector call
+        input:
+          type: object
+          description: Input data for the operation. Must conform to the operation's input schema.
+    Operation:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The operation name identifier
+        title:
+          type: string
+          description: Display name of the operation
+        description:
+          type: string
+          description: Description of what the operation does
+        inputSchema:
+          type: object
+          description: JSON Schema defining the operation input
+        outputSchema:
+          type: object
+          description: JSON Schema defining the operation output
+    Connector:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The connector name identifier
+        title:
+          type: string
+          description: Display name of the connector
+        description:
+          type: string
+          description: Description of the connector
+        icon:
+          type: string
+          format: uri
+          description: URL to the connector icon
+        versions:
+          type: array
+          items:
+            type: object
+            properties:
+              version:
+                type: string
+              isLatest:
+                type: boolean
+    ConnectorVersion:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The connector name identifier
+        version:
+          type: string
+          description: The connector version
+        title:
+          type: string
+          description: Display name of the connector
+        operations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Operation'
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type
+        message:
+          type: string
+          description: Human-readable error message
+        statusCode:
+          type: integer
+          description: HTTP status code
+  responses:
+    Unauthorized:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Use either a master token (obtained from Tray Embedded UI settings) or a user token (obtained via the authorize mutation). Master tokens are required for admin operations like managing users. User tokens are required for user-scoped operations like managing solution instances.

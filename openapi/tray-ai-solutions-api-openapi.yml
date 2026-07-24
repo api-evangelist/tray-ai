@@ -1,0 +1,155 @@
+openapi: 3.1.0
+info:
+  title: Tray.ai Embedded Authentication Solutions API
+  description: 'The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray''s UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.'
+  version: 1.0.0
+  contact:
+    name: Tray.ai Support
+    url: https://tray.ai
+  termsOfService: https://tray.ai/terms
+  license:
+    name: Proprietary
+    url: https://tray.ai/terms
+servers:
+- url: https://tray.io
+  description: US Region (Default)
+- url: https://eu1.tray.io
+  description: EU Region
+- url: https://ap1.tray.io
+  description: APAC Region
+security:
+- bearerAuth: []
+tags:
+- name: Solutions
+  description: Retrieve solutions (integrations) that have been built and published on the Tray platform.
+paths:
+  /graphql#getSolutions:
+    post:
+      operationId: getSolutions
+      summary: Tray.ai Get Solutions
+      description: Retrieves a list of published solutions (integrations) available in your embedded application. Solutions represent integrations built on the Tray platform. Supports pagination. Requires a master token or user token.
+      tags:
+      - Solutions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GraphQLRequest'
+            example:
+              query: "query {\n  viewer {\n    solutions {\n      edges {\n        node {\n          id\n          title\n          description\n          tags\n        }\n        cursor\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n}"
+      responses:
+        '200':
+          description: Solutions returned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      viewer:
+                        type: object
+                        properties:
+                          solutions:
+                            type: object
+                            properties:
+                              edges:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    node:
+                                      $ref: '#/components/schemas/Solution'
+                                    cursor:
+                                      type: string
+                              pageInfo:
+                                $ref: '#/components/schemas/PageInfo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    GraphQLRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+          description: The GraphQL query or mutation string
+        variables:
+          type: object
+          description: Variables to pass to the GraphQL query or mutation
+        operationName:
+          type: string
+          description: The name of the operation to execute if the query contains multiple operations
+    PageInfo:
+      type: object
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Whether there are more results after the current page
+        endCursor:
+          type: string
+          description: Cursor for fetching the next page
+        hasPreviousPage:
+          type: boolean
+          description: Whether there are results before the current page
+        startCursor:
+          type: string
+          description: Cursor for fetching the previous page
+    Solution:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique solution identifier
+        title:
+          type: string
+          description: Title of the solution
+        description:
+          type: string
+          description: Description of the solution
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags associated with the solution
+    GraphQLError:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              locations:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    line:
+                      type: integer
+                    column:
+                      type: integer
+              path:
+                type: array
+                items:
+                  type: string
+  responses:
+    Unauthorized:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GraphQLError'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Use either a master token (obtained from Tray Embedded UI settings) or a user token (obtained via the authorize mutation). Master tokens are required for admin operations like managing users. User tokens are required for user-scoped operations like managing solution instances.

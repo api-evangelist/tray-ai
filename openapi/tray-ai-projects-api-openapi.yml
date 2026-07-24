@@ -1,0 +1,118 @@
+openapi: 3.1.0
+info:
+  title: Tray.ai Embedded Authentication Projects API
+  description: 'The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray''s UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.'
+  version: 1.0.0
+  contact:
+    name: Tray.ai Support
+    url: https://tray.ai
+  termsOfService: https://tray.ai/terms
+  license:
+    name: Proprietary
+    url: https://tray.ai/terms
+servers:
+- url: https://tray.io
+  description: US Region (Default)
+- url: https://eu1.tray.io
+  description: EU Region
+- url: https://ap1.tray.io
+  description: APAC Region
+security:
+- bearerAuth: []
+tags:
+- name: Projects
+  description: Manage projects and solutions for environment promotion, including creating, exporting, and importing project versions.
+paths:
+  /projects/{projectId}/export:
+    post:
+      operationId: exportProject
+      summary: Tray.ai Export Project
+      description: Exports a project version for environment promotion, such as moving from staging to production workspaces.
+      tags:
+      - Projects
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier for the project
+      responses:
+        '200':
+          description: Project exported successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  exportedData:
+                    type: string
+                    description: Serialized project data for import
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Project not found
+  /projects/import:
+    post:
+      operationId: importProject
+      summary: Tray.ai Import Project
+      description: Imports a project version from exported data into the target workspace for environment promotion.
+      tags:
+      - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - exportedData
+              properties:
+                exportedData:
+                  type: string
+                  description: Serialized project data from export
+                workspaceId:
+                  type: string
+                  description: Target workspace ID for the import
+      responses:
+        '200':
+          description: Project imported successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projectId:
+                    type: string
+                    description: The ID of the imported project
+        '400':
+          description: Invalid import data
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  responses:
+    Unauthorized:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type
+        message:
+          type: string
+          description: Human-readable error message
+        statusCode:
+          type: integer
+          description: HTTP status code
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Use either a master token (obtained from Tray Embedded UI settings) or a user token (obtained via the authorize mutation). Master tokens are required for admin operations like managing users. User tokens are required for user-scoped operations like managing solution instances.

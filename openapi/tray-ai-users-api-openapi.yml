@@ -1,0 +1,347 @@
+openapi: 3.1.0
+info:
+  title: Tray.ai Embedded Authentication Users API
+  description: 'The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray''s UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.'
+  version: 1.0.0
+  contact:
+    name: Tray.ai Support
+    url: https://tray.ai
+  termsOfService: https://tray.ai/terms
+  license:
+    name: Proprietary
+    url: https://tray.ai/terms
+servers:
+- url: https://tray.io
+  description: US Region (Default)
+- url: https://eu1.tray.io
+  description: EU Region
+- url: https://ap1.tray.io
+  description: APAC Region
+security:
+- bearerAuth: []
+tags:
+- name: Users
+  description: Manage external users of your embedded application. Requires a master token for most operations.
+paths:
+  /graphql:
+    post:
+      operationId: createExternalUser
+      summary: Tray.ai Create External User
+      description: Creates a new external user for your embedded application. Accepts a name, externalUserId, and optional isTestUser flag. Test users are excluded from billing. Requires a master token.
+      tags:
+      - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GraphQLRequest'
+            example:
+              query: "mutation {\n  createExternalUser(input: {\n    name: \"Jane Doe\",\n    externalUserId: \"user-123\",\n    isTestUser: false\n  }) {\n    userId\n  }\n}"
+      responses:
+        '200':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      createExternalUser:
+                        type: object
+                        properties:
+                          userId:
+                            type: string
+                            description: The unique identifier for the created user
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /graphql#getUsers:
+    post:
+      operationId: getUsers
+      summary: Tray.ai Get Users
+      description: Retrieves a list of external users with pagination support. Returns user details including name, id, externalUserId, and pagination cursor information. Requires a master token.
+      tags:
+      - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GraphQLRequest'
+            example:
+              query: "query {\n  users {\n    edges {\n      node {\n        id\n        name\n        externalUserId\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n      hasPreviousPage\n      startCursor\n    }\n  }\n}"
+      responses:
+        '200':
+          description: List of users returned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: object
+                        properties:
+                          edges:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                node:
+                                  $ref: '#/components/schemas/User'
+                                cursor:
+                                  type: string
+                          pageInfo:
+                            $ref: '#/components/schemas/PageInfo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /graphql#updateExternalUser:
+    post:
+      operationId: updateExternalUser
+      summary: Tray.ai Update External User
+      description: Updates an external user's properties, such as marking them as a test user to exclude from billing. Requires a master token.
+      tags:
+      - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GraphQLRequest'
+            example:
+              query: "mutation {\n  updateExternalUser(input: {\n    userId: \"user-uuid-here\",\n    isTestUser: true\n  }) {\n    userId\n  }\n}"
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      updateExternalUser:
+                        type: object
+                        properties:
+                          userId:
+                            type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /graphql#removeUser:
+    post:
+      operationId: removeUser
+      summary: Tray.ai Remove User
+      description: Removes an external user from your embedded application. This will also remove all associated solution instances and authentications. Requires a master token.
+      tags:
+      - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GraphQLRequest'
+            example:
+              query: "mutation {\n  removeUser(input: {\n    userId: \"user-uuid-here\"\n  }) {\n    clientMutationId\n  }\n}"
+      responses:
+        '200':
+          description: User removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      removeUser:
+                        type: object
+                        properties:
+                          clientMutationId:
+                            type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /users:
+    get:
+      operationId: listUsers
+      summary: Tray.ai List Users
+      description: Retrieves a list of users within the organization. Returns user details including name, email, and role information.
+      tags:
+      - Users
+      responses:
+        '200':
+          description: Users returned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  elements:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PlatformUser'
+        '401':
+          $ref: '#/components/responses/Unauthorized_2'
+  /users/invite:
+    post:
+      operationId: inviteUser
+      summary: Tray.ai Invite User
+      description: Invites a user to the organization by email address. The invited user will receive an email with instructions to join.
+      tags:
+      - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InviteUserRequest'
+      responses:
+        '200':
+          description: User invited successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformUser'
+        '400':
+          description: Invalid request
+        '401':
+          $ref: '#/components/responses/Unauthorized_2'
+components:
+  schemas:
+    InviteUserRequest:
+      type: object
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          format: email
+          description: Email address to send the invitation to
+        role:
+          type: string
+          description: Role to assign to the invited user
+        workspaceId:
+          type: string
+          description: Optional workspace to assign the user to
+    GraphQLRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+          description: The GraphQL query or mutation string
+        variables:
+          type: object
+          description: Variables to pass to the GraphQL query or mutation
+        operationName:
+          type: string
+          description: The name of the operation to execute if the query contains multiple operations
+    PageInfo:
+      type: object
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Whether there are more results after the current page
+        endCursor:
+          type: string
+          description: Cursor for fetching the next page
+        hasPreviousPage:
+          type: boolean
+          description: Whether there are results before the current page
+        startCursor:
+          type: string
+          description: Cursor for fetching the previous page
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Tray internal user identifier
+        name:
+          type: string
+          description: Display name of the user
+        externalUserId:
+          type: string
+          description: External user identifier set during creation
+        isTestUser:
+          type: boolean
+          description: Whether the user is marked as a test user (excluded from billing)
+    GraphQLError:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              locations:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    line:
+                      type: integer
+                    column:
+                      type: integer
+              path:
+                type: array
+                items:
+                  type: string
+    PlatformUser:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique user identifier
+        name:
+          type: string
+          description: Display name of the user
+        email:
+          type: string
+          format: email
+          description: Email address of the user
+        role:
+          type: string
+          description: Role of the user in the organization
+        status:
+          type: string
+          description: Account status (active, invited, etc.)
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type
+        message:
+          type: string
+          description: Human-readable error message
+        statusCode:
+          type: integer
+          description: HTTP status code
+  responses:
+    Unauthorized:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GraphQLError'
+    Unauthorized_2:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Use either a master token (obtained from Tray Embedded UI settings) or a user token (obtained via the authorize mutation). Master tokens are required for admin operations like managing users. User tokens are required for user-scoped operations like managing solution instances.

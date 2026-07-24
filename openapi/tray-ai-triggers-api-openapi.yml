@@ -1,0 +1,179 @@
+openapi: 3.1.0
+info:
+  title: Tray.ai Embedded Authentication Triggers API
+  description: 'The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray''s UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.'
+  version: 1.0.0
+  contact:
+    name: Tray.ai Support
+    url: https://tray.ai
+  termsOfService: https://tray.ai/terms
+  license:
+    name: Proprietary
+    url: https://tray.ai/terms
+servers:
+- url: https://tray.io
+  description: US Region (Default)
+- url: https://eu1.tray.io
+  description: EU Region
+- url: https://ap1.tray.io
+  description: APAC Region
+security:
+- bearerAuth: []
+tags:
+- name: Triggers
+  description: List available triggers and manage trigger subscriptions to receive real-time data from third-party services.
+paths:
+  /triggers:
+    get:
+      operationId: listTriggers
+      summary: Tray.ai List Triggers
+      description: Returns a list of all available triggers from Tray's trigger library. Triggers allow you to receive data from third-party services in real time.
+      tags:
+      - Triggers
+      responses:
+        '200':
+          description: List of triggers returned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  elements:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Trigger'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /subscriptions:
+    post:
+      operationId: createSubscription
+      summary: Tray.ai Create Subscription
+      description: Creates a new trigger subscription using a trigger operation. The input must conform to the input schema of the trigger operation.
+      tags:
+      - Triggers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubscriptionRequest'
+      responses:
+        '200':
+          description: Subscription created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '400':
+          description: Invalid input
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /subscriptions/{subscriptionId}:
+    delete:
+      operationId: deleteSubscription
+      summary: Tray.ai Delete Subscription
+      description: Deletes a trigger subscription by its ID. Requires a user token.
+      tags:
+      - Triggers
+      parameters:
+      - name: subscriptionId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier for the subscription
+      responses:
+        '204':
+          description: Subscription deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Subscription not found
+components:
+  responses:
+    Unauthorized:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Subscription:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique subscription identifier
+        triggerName:
+          type: string
+          description: The trigger operation name
+        connectorName:
+          type: string
+          description: The connector name
+        status:
+          type: string
+          description: Current subscription status
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the subscription was created
+    CreateSubscriptionRequest:
+      type: object
+      required:
+      - triggerName
+      - connectorName
+      - connectorVersion
+      - authId
+      - input
+      properties:
+        triggerName:
+          type: string
+          description: The name of the trigger operation
+        connectorName:
+          type: string
+          description: The connector associated with the trigger
+        connectorVersion:
+          type: string
+          description: The version of the connector
+        authId:
+          type: string
+          description: The authentication ID to use
+        input:
+          type: object
+          description: Input data for the subscription. Must conform to the trigger's input schema.
+    Trigger:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The trigger name identifier
+        title:
+          type: string
+          description: Display name of the trigger
+        description:
+          type: string
+          description: Description of what the trigger does
+        connectorName:
+          type: string
+          description: The connector this trigger is associated with
+        inputSchema:
+          type: object
+          description: JSON Schema defining the trigger input
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type
+        message:
+          type: string
+          description: Human-readable error message
+        statusCode:
+          type: integer
+          description: HTTP status code
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Use either a master token (obtained from Tray Embedded UI settings) or a user token (obtained via the authorize mutation). Master tokens are required for admin operations like managing users. User tokens are required for user-scoped operations like managing solution instances.

@@ -1,0 +1,163 @@
+openapi: 3.1.0
+info:
+  title: Tray.ai Embedded Authentication Workspaces API
+  description: 'The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray''s UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.'
+  version: 1.0.0
+  contact:
+    name: Tray.ai Support
+    url: https://tray.ai
+  termsOfService: https://tray.ai/terms
+  license:
+    name: Proprietary
+    url: https://tray.ai/terms
+servers:
+- url: https://tray.io
+  description: US Region (Default)
+- url: https://eu1.tray.io
+  description: EU Region
+- url: https://ap1.tray.io
+  description: APAC Region
+security:
+- bearerAuth: []
+tags:
+- name: Workspaces
+  description: Manage workspaces and workspace users. Workspaces divide your organization into sub-categories such as departments or dev/prod environments.
+paths:
+  /workspaces:
+    get:
+      operationId: listWorkspaces
+      summary: Tray.ai List Workspaces
+      description: Retrieves a list of workspaces in the organization. Workspaces divide the organization into sub-categories such as departments or dev/prod environments for environment promotion.
+      tags:
+      - Workspaces
+      responses:
+        '200':
+          description: Workspaces returned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  elements:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Workspace'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /workspaces/{workspaceId}:
+    get:
+      operationId: getWorkspace
+      summary: Tray.ai Get Workspace
+      description: Retrieves details for a specific workspace by its ID.
+      tags:
+      - Workspaces
+      parameters:
+      - name: workspaceId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier for the workspace
+      responses:
+        '200':
+          description: Workspace returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Workspace not found
+  /workspaces/{workspaceId}/users:
+    get:
+      operationId: listWorkspaceUsers
+      summary: Tray.ai List Workspace Users
+      description: Retrieves a list of users belonging to a specific workspace.
+      tags:
+      - Workspaces
+      parameters:
+      - name: workspaceId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier for the workspace
+      responses:
+        '200':
+          description: Workspace users returned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  elements:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PlatformUser'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Workspace not found
+components:
+  responses:
+    Unauthorized:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    PlatformUser:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique user identifier
+        name:
+          type: string
+          description: Display name of the user
+        email:
+          type: string
+          format: email
+          description: Email address of the user
+        role:
+          type: string
+          description: Role of the user in the organization
+        status:
+          type: string
+          description: Account status (active, invited, etc.)
+    Workspace:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique workspace identifier
+        name:
+          type: string
+          description: Display name of the workspace
+        description:
+          type: string
+          description: Description of the workspace
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the workspace was created
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type
+        message:
+          type: string
+          description: Human-readable error message
+        statusCode:
+          type: integer
+          description: HTTP status code
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Use either a master token (obtained from Tray Embedded UI settings) or a user token (obtained via the authorize mutation). Master tokens are required for admin operations like managing users. User tokens are required for user-scoped operations like managing solution instances.
