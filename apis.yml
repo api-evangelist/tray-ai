@@ -1,87 +1,613 @@
 aid: tray-ai
 url: https://raw.githubusercontent.com/api-evangelist/tray-ai/refs/heads/main/apis.yml
 apis:
-- aid: tray-ai:embedded-api
-  name: Tray.ai Embedded API
-  tags:
-  - Automation
-  - Embedded
-  - GraphQL
-  - Integration
+- aid: tray-ai:tray-ai-authentication-api
+  name: Tray.ai Authentication API
+  description: >-
+    Generate and manage user tokens for authenticating API calls. The authorize mutation generates a user
+    token from a master token.
   humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   baseURL: https://tray.io/graphql
-  properties:
-  - url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
-    type: Documentation
-  - url: openapi/tray-ai-embedded-api-openapi.yml
-    type: OpenAPI
-  - url: https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
-    type: PostmanCollection
-  - url: json-schema/user.json
-    type: JSONSchema
-  - url: json-schema/solution.json
-    type: JSONSchema
-  - url: json-schema/solution-instance.json
-    type: JSONSchema
-  - url: json-schema/authentication.json
-    type: JSONSchema
-  - url: json-ld/tray-ai-context.jsonld
-    type: JSONLD
-  - url: json-structure/tray-ai-solution-instance-structure.json
-    type: JSONStructure
-  - url: examples/tray-ai-create-solution-instance-example.json
-    type: Examples
-  - url: graphql/tray-ai-graphql.md
-    type: GraphQL
-  description: >-
-    The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded
-    integration experiences. It provides programmatic access to manage users, solutions, solution instances,
-    authentications, workflows, and connector operations via HTTP POST to the GraphQL endpoint with Bearer token
-    authentication. Two token types are supported, master tokens for admin operations and user tokens generated via
-    the authorize mutation for user-scoped operations. All endpoints are rate limited to 30 requests per second.
-- aid: tray-ai:platform-api
-  name: Tray.ai Platform API
   tags:
-  - Automation
-  - Connectors
-  - Integration
-  - iPaaS
-  humanURL: https://tray.ai/documentation/developer/openapi/trayapi/overview/
-  baseURL: https://api.tray.io/core/v1
+  - Authentication
   properties:
-  - url: https://tray.ai/documentation/developer/openapi/trayapi/overview/
-    type: Documentation
-  - url: openapi/tray-ai-platform-api-openapi.yml
-    type: OpenAPI
-  - url: json-schema/connector.json
-    type: JSONSchema
-  - url: json-schema/authentication.json
-    type: JSONSchema
-  - url: json-schema/subscription.json
-    type: JSONSchema
-  - url: json-schema/user.json
-    type: JSONSchema
-  - url: json-schema/workspace.json
-    type: JSONSchema
-  - url: json-ld/tray-ai-context.jsonld
-    type: JSONLD
-  - url: json-structure/tray-ai-connector-structure.json
-    type: JSONStructure
-  - url: examples/tray-ai-list-connectors-example.json
-    type: Examples
-  - url: examples/tray-ai-call-connector-example.json
-    type: Examples
-  - url: examples/tray-ai-create-authentication-example.json
-    type: Examples
-  - url: rules/tray-ai-rules.yml
-    type: SpectralRuleset
+  - type: OpenAPI
+    url: openapi/tray-ai-authentication-api-openapi.yml
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  - type: PostmanCollection
+    url: >-
+      https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
+  - type: JSONSchema
+    url: json-schema/user.json
+  - type: JSONSchema
+    url: json-schema/solution.json
+  - type: JSONSchema
+    url: json-schema/solution-instance.json
+  - type: JSONSchema
+    url: json-schema/authentication.json
+  - type: JSONLD
+    url: json-ld/tray-ai-context.jsonld
+  - type: JSONStructure
+    url: json-structure/tray-ai-solution-instance-structure.json
+  - type: Examples
+    url: examples/tray-ai-create-solution-instance-example.json
+  - type: GraphQL
+    url: graphql/tray-ai-graphql.md
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  - type: JSONSchema
+    url: json-schema/connector.json
+  - type: JSONSchema
+    url: json-schema/subscription.json
+  - type: JSONSchema
+    url: json-schema/workspace.json
+  - type: JSONStructure
+    url: json-structure/tray-ai-connector-structure.json
+  - type: Examples
+    url: examples/tray-ai-list-connectors-example.json
+  - type: Examples
+    url: examples/tray-ai-call-connector-example.json
+  - type: Examples
+    url: examples/tray-ai-create-authentication-example.json
+  - type: SpectralRuleset
+    url: rules/tray-ai-rules.yml
+- aid: tray-ai:tray-ai-authentications-api
+  name: Tray.ai Authentications API
   description: >-
-    The Tray.ai Platform API (also known as the Connectivity API) provides direct programmatic REST access to Tray's
-    700+ pre-built service connectors, authentication management, trigger subscriptions, user and workspace
-    administration, and project/solution lifecycle operations. It is grouped into Core, CDK (Connector Development
-    Kit), and On Premise endpoint families served from the US, EU, and APAC regions. All endpoints require a Bearer
-    token and are rate limited to 30 requests per second (burst 50), with the Call Connector endpoint additionally
-    capped at 1,000 concurrent requests.
+    Create, retrieve, and delete third-party service authentications that power Tray connectors (e.g.,
+    Salesforce, Slack).
+  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  baseURL: https://tray.io/graphql
+  tags:
+  - Authentications
+  properties:
+  - type: OpenAPI
+    url: openapi/tray-ai-authentications-api-openapi.yml
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  - type: PostmanCollection
+    url: >-
+      https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
+  - type: JSONSchema
+    url: json-schema/user.json
+  - type: JSONSchema
+    url: json-schema/solution.json
+  - type: JSONSchema
+    url: json-schema/solution-instance.json
+  - type: JSONSchema
+    url: json-schema/authentication.json
+  - type: JSONLD
+    url: json-ld/tray-ai-context.jsonld
+  - type: JSONStructure
+    url: json-structure/tray-ai-solution-instance-structure.json
+  - type: Examples
+    url: examples/tray-ai-create-solution-instance-example.json
+  - type: GraphQL
+    url: graphql/tray-ai-graphql.md
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  - type: JSONSchema
+    url: json-schema/connector.json
+  - type: JSONSchema
+    url: json-schema/subscription.json
+  - type: JSONSchema
+    url: json-schema/workspace.json
+  - type: JSONStructure
+    url: json-structure/tray-ai-connector-structure.json
+  - type: Examples
+    url: examples/tray-ai-list-connectors-example.json
+  - type: Examples
+    url: examples/tray-ai-call-connector-example.json
+  - type: Examples
+    url: examples/tray-ai-create-authentication-example.json
+  - type: SpectralRuleset
+    url: rules/tray-ai-rules.yml
+- aid: tray-ai:tray-ai-call-connector-api
+  name: Tray.ai Call Connector API
+  description: >-
+    Call any Tray connector operation to pull data from a particular service and display it in your application.
+  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  baseURL: https://tray.io/graphql
+  tags:
+  - Call Connector
+  properties:
+  - type: OpenAPI
+    url: openapi/tray-ai-call-connector-api-openapi.yml
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  - type: PostmanCollection
+    url: >-
+      https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
+  - type: JSONSchema
+    url: json-schema/user.json
+  - type: JSONSchema
+    url: json-schema/solution.json
+  - type: JSONSchema
+    url: json-schema/solution-instance.json
+  - type: JSONSchema
+    url: json-schema/authentication.json
+  - type: JSONLD
+    url: json-ld/tray-ai-context.jsonld
+  - type: JSONStructure
+    url: json-structure/tray-ai-solution-instance-structure.json
+  - type: Examples
+    url: examples/tray-ai-create-solution-instance-example.json
+  - type: GraphQL
+    url: graphql/tray-ai-graphql.md
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  - type: JSONSchema
+    url: json-schema/connector.json
+  - type: JSONSchema
+    url: json-schema/subscription.json
+  - type: JSONSchema
+    url: json-schema/workspace.json
+  - type: JSONStructure
+    url: json-structure/tray-ai-connector-structure.json
+  - type: Examples
+    url: examples/tray-ai-list-connectors-example.json
+  - type: Examples
+    url: examples/tray-ai-call-connector-example.json
+  - type: Examples
+    url: examples/tray-ai-create-authentication-example.json
+  - type: SpectralRuleset
+    url: rules/tray-ai-rules.yml
+- aid: tray-ai:tray-ai-connectors-api
+  name: Tray.ai Connectors API
+  description: >-
+    List available connectors and their operations, and call connector operations to interact with third-party
+    services programmatically.
+  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  baseURL: https://tray.io/graphql
+  tags:
+  - Connectors
+  properties:
+  - type: OpenAPI
+    url: openapi/tray-ai-connectors-api-openapi.yml
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  - type: PostmanCollection
+    url: >-
+      https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
+  - type: JSONSchema
+    url: json-schema/user.json
+  - type: JSONSchema
+    url: json-schema/solution.json
+  - type: JSONSchema
+    url: json-schema/solution-instance.json
+  - type: JSONSchema
+    url: json-schema/authentication.json
+  - type: JSONLD
+    url: json-ld/tray-ai-context.jsonld
+  - type: JSONStructure
+    url: json-structure/tray-ai-solution-instance-structure.json
+  - type: Examples
+    url: examples/tray-ai-create-solution-instance-example.json
+  - type: GraphQL
+    url: graphql/tray-ai-graphql.md
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  - type: JSONSchema
+    url: json-schema/connector.json
+  - type: JSONSchema
+    url: json-schema/subscription.json
+  - type: JSONSchema
+    url: json-schema/workspace.json
+  - type: JSONStructure
+    url: json-structure/tray-ai-connector-structure.json
+  - type: Examples
+    url: examples/tray-ai-list-connectors-example.json
+  - type: Examples
+    url: examples/tray-ai-call-connector-example.json
+  - type: Examples
+    url: examples/tray-ai-create-authentication-example.json
+  - type: SpectralRuleset
+    url: rules/tray-ai-rules.yml
+- aid: tray-ai:tray-ai-deployments-api
+  name: Tray.ai Deployments API
+  description: Deploy CDK (Connector Development Kit) connectors to the Tray platform.
+  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  baseURL: https://tray.io/graphql
+  tags:
+  - Deployments
+  properties:
+  - type: OpenAPI
+    url: openapi/tray-ai-deployments-api-openapi.yml
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  - type: PostmanCollection
+    url: >-
+      https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
+  - type: JSONSchema
+    url: json-schema/user.json
+  - type: JSONSchema
+    url: json-schema/solution.json
+  - type: JSONSchema
+    url: json-schema/solution-instance.json
+  - type: JSONSchema
+    url: json-schema/authentication.json
+  - type: JSONLD
+    url: json-ld/tray-ai-context.jsonld
+  - type: JSONStructure
+    url: json-structure/tray-ai-solution-instance-structure.json
+  - type: Examples
+    url: examples/tray-ai-create-solution-instance-example.json
+  - type: GraphQL
+    url: graphql/tray-ai-graphql.md
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  - type: JSONSchema
+    url: json-schema/connector.json
+  - type: JSONSchema
+    url: json-schema/subscription.json
+  - type: JSONSchema
+    url: json-schema/workspace.json
+  - type: JSONStructure
+    url: json-structure/tray-ai-connector-structure.json
+  - type: Examples
+    url: examples/tray-ai-list-connectors-example.json
+  - type: Examples
+    url: examples/tray-ai-call-connector-example.json
+  - type: Examples
+    url: examples/tray-ai-create-authentication-example.json
+  - type: SpectralRuleset
+    url: rules/tray-ai-rules.yml
+- aid: tray-ai:tray-ai-projects-api
+  name: Tray.ai Projects API
+  description: >-
+    Manage projects and solutions for environment promotion, including creating, exporting, and importing
+    project versions.
+  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  baseURL: https://tray.io/graphql
+  tags:
+  - Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/tray-ai-projects-api-openapi.yml
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  - type: PostmanCollection
+    url: >-
+      https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
+  - type: JSONSchema
+    url: json-schema/user.json
+  - type: JSONSchema
+    url: json-schema/solution.json
+  - type: JSONSchema
+    url: json-schema/solution-instance.json
+  - type: JSONSchema
+    url: json-schema/authentication.json
+  - type: JSONLD
+    url: json-ld/tray-ai-context.jsonld
+  - type: JSONStructure
+    url: json-structure/tray-ai-solution-instance-structure.json
+  - type: Examples
+    url: examples/tray-ai-create-solution-instance-example.json
+  - type: GraphQL
+    url: graphql/tray-ai-graphql.md
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  - type: JSONSchema
+    url: json-schema/connector.json
+  - type: JSONSchema
+    url: json-schema/subscription.json
+  - type: JSONSchema
+    url: json-schema/workspace.json
+  - type: JSONStructure
+    url: json-structure/tray-ai-connector-structure.json
+  - type: Examples
+    url: examples/tray-ai-list-connectors-example.json
+  - type: Examples
+    url: examples/tray-ai-call-connector-example.json
+  - type: Examples
+    url: examples/tray-ai-create-authentication-example.json
+  - type: SpectralRuleset
+    url: rules/tray-ai-rules.yml
+- aid: tray-ai:tray-ai-solution-instances-api
+  name: Tray.ai Solution Instances API
+  description: >-
+    Create, update, enable, disable, and delete solution instances for end users. Requires a user token
+    for most operations.
+  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  baseURL: https://tray.io/graphql
+  tags:
+  - Solution Instances
+  properties:
+  - type: OpenAPI
+    url: openapi/tray-ai-solution-instances-api-openapi.yml
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  - type: PostmanCollection
+    url: >-
+      https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
+  - type: JSONSchema
+    url: json-schema/user.json
+  - type: JSONSchema
+    url: json-schema/solution.json
+  - type: JSONSchema
+    url: json-schema/solution-instance.json
+  - type: JSONSchema
+    url: json-schema/authentication.json
+  - type: JSONLD
+    url: json-ld/tray-ai-context.jsonld
+  - type: JSONStructure
+    url: json-structure/tray-ai-solution-instance-structure.json
+  - type: Examples
+    url: examples/tray-ai-create-solution-instance-example.json
+  - type: GraphQL
+    url: graphql/tray-ai-graphql.md
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  - type: JSONSchema
+    url: json-schema/connector.json
+  - type: JSONSchema
+    url: json-schema/subscription.json
+  - type: JSONSchema
+    url: json-schema/workspace.json
+  - type: JSONStructure
+    url: json-structure/tray-ai-connector-structure.json
+  - type: Examples
+    url: examples/tray-ai-list-connectors-example.json
+  - type: Examples
+    url: examples/tray-ai-call-connector-example.json
+  - type: Examples
+    url: examples/tray-ai-create-authentication-example.json
+  - type: SpectralRuleset
+    url: rules/tray-ai-rules.yml
+- aid: tray-ai:tray-ai-solutions-api
+  name: Tray.ai Solutions API
+  description: >-
+    Retrieve solutions (integrations) that have been built and published on the Tray platform.
+  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  baseURL: https://tray.io/graphql
+  tags:
+  - Solutions
+  properties:
+  - type: OpenAPI
+    url: openapi/tray-ai-solutions-api-openapi.yml
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  - type: PostmanCollection
+    url: >-
+      https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
+  - type: JSONSchema
+    url: json-schema/user.json
+  - type: JSONSchema
+    url: json-schema/solution.json
+  - type: JSONSchema
+    url: json-schema/solution-instance.json
+  - type: JSONSchema
+    url: json-schema/authentication.json
+  - type: JSONLD
+    url: json-ld/tray-ai-context.jsonld
+  - type: JSONStructure
+    url: json-structure/tray-ai-solution-instance-structure.json
+  - type: Examples
+    url: examples/tray-ai-create-solution-instance-example.json
+  - type: GraphQL
+    url: graphql/tray-ai-graphql.md
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  - type: JSONSchema
+    url: json-schema/connector.json
+  - type: JSONSchema
+    url: json-schema/subscription.json
+  - type: JSONSchema
+    url: json-schema/workspace.json
+  - type: JSONStructure
+    url: json-structure/tray-ai-connector-structure.json
+  - type: Examples
+    url: examples/tray-ai-list-connectors-example.json
+  - type: Examples
+    url: examples/tray-ai-call-connector-example.json
+  - type: Examples
+    url: examples/tray-ai-create-authentication-example.json
+  - type: SpectralRuleset
+    url: rules/tray-ai-rules.yml
+- aid: tray-ai:tray-ai-triggers-api
+  name: Tray.ai Triggers API
+  description: >-
+    List available triggers and manage trigger subscriptions to receive real-time data from third-party
+    services.
+  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  baseURL: https://tray.io/graphql
+  tags:
+  - Triggers
+  properties:
+  - type: OpenAPI
+    url: openapi/tray-ai-triggers-api-openapi.yml
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  - type: PostmanCollection
+    url: >-
+      https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
+  - type: JSONSchema
+    url: json-schema/user.json
+  - type: JSONSchema
+    url: json-schema/solution.json
+  - type: JSONSchema
+    url: json-schema/solution-instance.json
+  - type: JSONSchema
+    url: json-schema/authentication.json
+  - type: JSONLD
+    url: json-ld/tray-ai-context.jsonld
+  - type: JSONStructure
+    url: json-structure/tray-ai-solution-instance-structure.json
+  - type: Examples
+    url: examples/tray-ai-create-solution-instance-example.json
+  - type: GraphQL
+    url: graphql/tray-ai-graphql.md
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  - type: JSONSchema
+    url: json-schema/connector.json
+  - type: JSONSchema
+    url: json-schema/subscription.json
+  - type: JSONSchema
+    url: json-schema/workspace.json
+  - type: JSONStructure
+    url: json-structure/tray-ai-connector-structure.json
+  - type: Examples
+    url: examples/tray-ai-list-connectors-example.json
+  - type: Examples
+    url: examples/tray-ai-call-connector-example.json
+  - type: Examples
+    url: examples/tray-ai-create-authentication-example.json
+  - type: SpectralRuleset
+    url: rules/tray-ai-rules.yml
+- aid: tray-ai:tray-ai-users-api
+  name: Tray.ai Users API
+  description: >-
+    Manage external users of your embedded application. Requires a master token for most operations.
+  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  baseURL: https://tray.io/graphql
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/tray-ai-users-api-openapi.yml
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  - type: PostmanCollection
+    url: >-
+      https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
+  - type: JSONSchema
+    url: json-schema/user.json
+  - type: JSONSchema
+    url: json-schema/solution.json
+  - type: JSONSchema
+    url: json-schema/solution-instance.json
+  - type: JSONSchema
+    url: json-schema/authentication.json
+  - type: JSONLD
+    url: json-ld/tray-ai-context.jsonld
+  - type: JSONStructure
+    url: json-structure/tray-ai-solution-instance-structure.json
+  - type: Examples
+    url: examples/tray-ai-create-solution-instance-example.json
+  - type: GraphQL
+    url: graphql/tray-ai-graphql.md
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  - type: JSONSchema
+    url: json-schema/connector.json
+  - type: JSONSchema
+    url: json-schema/subscription.json
+  - type: JSONSchema
+    url: json-schema/workspace.json
+  - type: JSONStructure
+    url: json-structure/tray-ai-connector-structure.json
+  - type: Examples
+    url: examples/tray-ai-list-connectors-example.json
+  - type: Examples
+    url: examples/tray-ai-call-connector-example.json
+  - type: Examples
+    url: examples/tray-ai-create-authentication-example.json
+  - type: SpectralRuleset
+    url: rules/tray-ai-rules.yml
+- aid: tray-ai:tray-ai-workflows-api
+  name: Tray.ai Workflows API
+  description: >-
+    Import and export Tray workflows between embedded accounts, useful for promoting workflows from staging
+    to production.
+  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  baseURL: https://tray.io/graphql
+  tags:
+  - Workflows
+  properties:
+  - type: OpenAPI
+    url: openapi/tray-ai-workflows-api-openapi.yml
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  - type: PostmanCollection
+    url: >-
+      https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
+  - type: JSONSchema
+    url: json-schema/user.json
+  - type: JSONSchema
+    url: json-schema/solution.json
+  - type: JSONSchema
+    url: json-schema/solution-instance.json
+  - type: JSONSchema
+    url: json-schema/authentication.json
+  - type: JSONLD
+    url: json-ld/tray-ai-context.jsonld
+  - type: JSONStructure
+    url: json-structure/tray-ai-solution-instance-structure.json
+  - type: Examples
+    url: examples/tray-ai-create-solution-instance-example.json
+  - type: GraphQL
+    url: graphql/tray-ai-graphql.md
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  - type: JSONSchema
+    url: json-schema/connector.json
+  - type: JSONSchema
+    url: json-schema/subscription.json
+  - type: JSONSchema
+    url: json-schema/workspace.json
+  - type: JSONStructure
+    url: json-structure/tray-ai-connector-structure.json
+  - type: Examples
+    url: examples/tray-ai-list-connectors-example.json
+  - type: Examples
+    url: examples/tray-ai-call-connector-example.json
+  - type: Examples
+    url: examples/tray-ai-create-authentication-example.json
+  - type: SpectralRuleset
+    url: rules/tray-ai-rules.yml
+- aid: tray-ai:tray-ai-workspaces-api
+  name: Tray.ai Workspaces API
+  description: >-
+    Manage workspaces and workspace users. Workspaces divide your organization into sub-categories such
+    as departments or dev/prod environments.
+  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  baseURL: https://tray.io/graphql
+  tags:
+  - Workspaces
+  properties:
+  - type: OpenAPI
+    url: openapi/tray-ai-workspaces-api-openapi.yml
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  - type: PostmanCollection
+    url: >-
+      https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql
+  - type: JSONSchema
+    url: json-schema/user.json
+  - type: JSONSchema
+    url: json-schema/solution.json
+  - type: JSONSchema
+    url: json-schema/solution-instance.json
+  - type: JSONSchema
+    url: json-schema/authentication.json
+  - type: JSONLD
+    url: json-ld/tray-ai-context.jsonld
+  - type: JSONStructure
+    url: json-structure/tray-ai-solution-instance-structure.json
+  - type: Examples
+    url: examples/tray-ai-create-solution-instance-example.json
+  - type: GraphQL
+    url: graphql/tray-ai-graphql.md
+  - type: Documentation
+    url: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  - type: JSONSchema
+    url: json-schema/connector.json
+  - type: JSONSchema
+    url: json-schema/subscription.json
+  - type: JSONSchema
+    url: json-schema/workspace.json
+  - type: JSONStructure
+    url: json-structure/tray-ai-connector-structure.json
+  - type: Examples
+    url: examples/tray-ai-list-connectors-example.json
+  - type: Examples
+    url: examples/tray-ai-call-connector-example.json
+  - type: Examples
+    url: examples/tray-ai-create-authentication-example.json
+  - type: SpectralRuleset
+    url: rules/tray-ai-rules.yml
 name: Tray.ai
 tags:
 - Automation
@@ -90,7 +616,20 @@ tags:
 - AI Agents
 - MCP
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: paid
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Paid · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/tray-ai.png
 access: 3rd-Party
 created: '2025-06-05'
 modified: '2026-05-22'
@@ -129,6 +668,8 @@ maintainers:
   email: kin@apievangelist.com
 specificationVersion: '0.19'
 common:
+- type: PostmanWorkspace
+  url: https://www.postman.com/kinlaneapi/trayai/overview
 - type: AgenticAccess
   url: agentic-access/tray-ai-agentic-access.yml
 - type: TrustCenter
