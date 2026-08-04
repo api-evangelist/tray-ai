@@ -1,0 +1,705 @@
+{
+  "info": {
+    "_postman_id": "707640b1-88da-4710-9614-ea0c5153970e",
+    "name": "Tray.ai Embedded Authentication Connectors API",
+    "description": "The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray's UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.\n\nContact Support:\n Name: Tray.ai Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T03:17:54.000Z",
+    "updatedAt": "2026-07-28T03:17:54.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-707640b1-88da-4710-9614-ea0c5153970e"
+  },
+  "item": [
+    {
+      "name": "connectors",
+      "item": [
+        {
+          "name": "{connectorName}",
+          "item": [
+            {
+              "name": "versions",
+              "item": [
+                {
+                  "name": "{connectorVersion}",
+                  "item": [
+                    {
+                      "name": "call",
+                      "item": [
+                        {
+                          "name": "Tray.ai Call Connector",
+                          "id": "4d59cb1d-95fb-4aaf-8577-d7eee381d989",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"operation\": \"<string>\",\n  \"authId\": \"<string>\",\n  \"input\": {}\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/connectors/:connectorName/versions/:connectorVersion/call",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "connectors",
+                                ":connectorName",
+                                "versions",
+                                ":connectorVersion",
+                                "call"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "5c80dbe2-ecb5-44ee-a4af-41bf12ff2e1e",
+                                  "key": "connectorName",
+                                  "value": "<string>",
+                                  "description": "(Required) The name of the connector (e.g., twilio-output)"
+                                },
+                                {
+                                  "id": "a59c9bf7-49dd-4f82-96c7-4e7b4f660b6c",
+                                  "key": "connectorVersion",
+                                  "value": "<string>",
+                                  "description": "(Required) The version of the connector (e.g., 2.1)"
+                                }
+                              ]
+                            },
+                            "description": "Executes an operation of a connector and returns the result. This is a billable endpoint. The input must conform to the input schema of the specified operation. An authId for a previously created authentication is required for most operations."
+                          },
+                          "response": [
+                            {
+                              "id": "855a823a-f354-4e58-847d-cf20fe2d9935",
+                              "name": "Connector operation executed successfully",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"operation\": \"<string>\",\n  \"authId\": \"<string>\",\n  \"input\": {}\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/connectors/:connectorName/versions/:connectorVersion/call",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "connectors",
+                                    ":connectorName",
+                                    "versions",
+                                    ":connectorVersion",
+                                    "call"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectorName"
+                                    },
+                                    {
+                                      "key": "connectorVersion"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{}",
+                              "createdAt": "2026-07-28T03:17:54.000Z",
+                              "updatedAt": "2026-07-28T03:17:54.000Z",
+                              "uid": "35240-855a823a-f354-4e58-847d-cf20fe2d9935"
+                            },
+                            {
+                              "id": "b09d8684-f414-4e33-8ba5-ba6679328d6f",
+                              "name": "Invalid input or operation",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"operation\": \"<string>\",\n  \"authId\": \"<string>\",\n  \"input\": {}\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/connectors/:connectorName/versions/:connectorVersion/call",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "connectors",
+                                    ":connectorName",
+                                    "versions",
+                                    ":connectorVersion",
+                                    "call"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectorName"
+                                    },
+                                    {
+                                      "key": "connectorVersion"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-07-28T03:17:54.000Z",
+                              "updatedAt": "2026-07-28T03:17:54.000Z",
+                              "uid": "35240-b09d8684-f414-4e33-8ba5-ba6679328d6f"
+                            },
+                            {
+                              "id": "04facb1b-640d-42cf-909a-ce5f1ee37dca",
+                              "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"operation\": \"<string>\",\n  \"authId\": \"<string>\",\n  \"input\": {}\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/connectors/:connectorName/versions/:connectorVersion/call",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "connectors",
+                                    ":connectorName",
+                                    "versions",
+                                    ":connectorVersion",
+                                    "call"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectorName"
+                                    },
+                                    {
+                                      "key": "connectorVersion"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Unauthorized",
+                              "code": 401,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"statusCode\": \"<integer>\"\n}",
+                              "createdAt": "2026-07-28T03:17:54.000Z",
+                              "updatedAt": "2026-07-28T03:17:54.000Z",
+                              "uid": "35240-04facb1b-640d-42cf-909a-ce5f1ee37dca"
+                            },
+                            {
+                              "id": "da8b0a27-4d92-4788-80da-67e0fcc3dbb8",
+                              "name": "Connector or version not found",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"operation\": \"<string>\",\n  \"authId\": \"<string>\",\n  \"input\": {}\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/connectors/:connectorName/versions/:connectorVersion/call",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "connectors",
+                                    ":connectorName",
+                                    "versions",
+                                    ":connectorVersion",
+                                    "call"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectorName"
+                                    },
+                                    {
+                                      "key": "connectorVersion"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-07-28T03:17:54.000Z",
+                              "updatedAt": "2026-07-28T03:17:54.000Z",
+                              "uid": "35240-da8b0a27-4d92-4788-80da-67e0fcc3dbb8"
+                            }
+                          ],
+                          "createdAt": "2026-07-28T03:17:54.000Z",
+                          "updatedAt": "2026-07-28T03:17:54.000Z",
+                          "uid": "35240-4d59cb1d-95fb-4aaf-8577-d7eee381d989"
+                        }
+                      ],
+                      "id": "f46451c3-93d3-4f5a-b367-04a9435ac174",
+                      "createdAt": "2026-07-28T03:17:54.000Z",
+                      "updatedAt": "2026-07-28T03:17:54.000Z",
+                      "uid": "35240-f46451c3-93d3-4f5a-b367-04a9435ac174"
+                    },
+                    {
+                      "name": "Tray.ai Get Connector Version",
+                      "id": "6ded4a41-08f3-4383-b457-cd175725f5f6",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/connectors/:connectorName/versions/:connectorVersion",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "connectors",
+                            ":connectorName",
+                            "versions",
+                            ":connectorVersion"
+                          ],
+                          "variable": [
+                            {
+                              "id": "88df3838-3ec6-412d-ba19-d9ca3a6c8a70",
+                              "key": "connectorName",
+                              "value": "<string>",
+                              "description": "(Required) The name of the connector (e.g., salesforce, slack)"
+                            },
+                            {
+                              "id": "a51017db-04d1-46ea-a22d-6f7e17df542d",
+                              "key": "connectorVersion",
+                              "value": "<string>",
+                              "description": "(Required) The version of the connector (e.g., 2.1)"
+                            }
+                          ]
+                        },
+                        "description": "Retrieves details of a specific connector version, including its available operations, input schemas, and output schemas."
+                      },
+                      "response": [
+                        {
+                          "id": "3e37d69a-277b-4555-9e44-661ed6fb544d",
+                          "name": "Connector version details returned successfully",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/connectors/:connectorName/versions/:connectorVersion",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "connectors",
+                                ":connectorName",
+                                "versions",
+                                ":connectorVersion"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "connectorName"
+                                },
+                                {
+                                  "key": "connectorVersion"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"name\": \"<string>\",\n  \"version\": \"<string>\",\n  \"title\": \"<string>\",\n  \"operations\": [\n    {\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"description\": \"<string>\",\n      \"inputSchema\": {},\n      \"outputSchema\": {}\n    },\n    {\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"description\": \"<string>\",\n      \"inputSchema\": {},\n      \"outputSchema\": {}\n    }\n  ]\n}",
+                          "createdAt": "2026-07-28T03:17:54.000Z",
+                          "updatedAt": "2026-07-28T03:17:54.000Z",
+                          "uid": "35240-3e37d69a-277b-4555-9e44-661ed6fb544d"
+                        },
+                        {
+                          "id": "33e00fd7-3907-48b4-9e4c-f73000a966ba",
+                          "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/connectors/:connectorName/versions/:connectorVersion",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "connectors",
+                                ":connectorName",
+                                "versions",
+                                ":connectorVersion"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "connectorName"
+                                },
+                                {
+                                  "key": "connectorVersion"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"statusCode\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T03:17:54.000Z",
+                          "updatedAt": "2026-07-28T03:17:54.000Z",
+                          "uid": "35240-33e00fd7-3907-48b4-9e4c-f73000a966ba"
+                        },
+                        {
+                          "id": "8a131268-86cd-4282-bf4e-31daf88c7680",
+                          "name": "Connector or version not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/connectors/:connectorName/versions/:connectorVersion",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "connectors",
+                                ":connectorName",
+                                "versions",
+                                ":connectorVersion"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "connectorName"
+                                },
+                                {
+                                  "key": "connectorVersion"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-07-28T03:17:54.000Z",
+                          "updatedAt": "2026-07-28T03:17:54.000Z",
+                          "uid": "35240-8a131268-86cd-4282-bf4e-31daf88c7680"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T03:17:54.000Z",
+                      "updatedAt": "2026-07-28T03:17:54.000Z",
+                      "uid": "35240-6ded4a41-08f3-4383-b457-cd175725f5f6"
+                    }
+                  ],
+                  "id": "5bd5384e-5e6e-4677-a716-0936ceb92ab3",
+                  "createdAt": "2026-07-28T03:17:54.000Z",
+                  "updatedAt": "2026-07-28T03:17:54.000Z",
+                  "uid": "35240-5bd5384e-5e6e-4677-a716-0936ceb92ab3"
+                }
+              ],
+              "id": "35c649c3-a6eb-4c10-80c2-b797addfa29d",
+              "createdAt": "2026-07-28T03:17:54.000Z",
+              "updatedAt": "2026-07-28T03:17:54.000Z",
+              "uid": "35240-35c649c3-a6eb-4c10-80c2-b797addfa29d"
+            }
+          ],
+          "id": "7be129b5-5deb-4c2e-b0f5-e0caa5804642",
+          "createdAt": "2026-07-28T03:17:54.000Z",
+          "updatedAt": "2026-07-28T03:17:54.000Z",
+          "uid": "35240-7be129b5-5deb-4c2e-b0f5-e0caa5804642"
+        },
+        {
+          "name": "Tray.ai List Connectors",
+          "id": "7d577c99-8e2f-459c-97a5-1fbdc158aa73",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/connectors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "connectors"
+              ]
+            },
+            "description": "Returns a list of all available connectors from Tray's connector library. A connector can have multiple versions. Each connector exposes the API operations of a third-party service."
+          },
+          "response": [
+            {
+              "id": "238b5d14-fc03-46dc-bda2-a744a1d657d1",
+              "name": "List of connectors returned successfully",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/connectors",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "connectors"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"elements\": [\n    {\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"description\": \"<string>\",\n      \"icon\": \"<uri>\",\n      \"versions\": [\n        {\n          \"version\": \"<string>\",\n          \"isLatest\": \"<boolean>\"\n        },\n        {\n          \"version\": \"<string>\",\n          \"isLatest\": \"<boolean>\"\n        }\n      ]\n    },\n    {\n      \"name\": \"<string>\",\n      \"title\": \"<string>\",\n      \"description\": \"<string>\",\n      \"icon\": \"<uri>\",\n      \"versions\": [\n        {\n          \"version\": \"<string>\",\n          \"isLatest\": \"<boolean>\"\n        },\n        {\n          \"version\": \"<string>\",\n          \"isLatest\": \"<boolean>\"\n        }\n      ]\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T03:17:54.000Z",
+              "updatedAt": "2026-07-28T03:17:54.000Z",
+              "uid": "35240-238b5d14-fc03-46dc-bda2-a744a1d657d1"
+            },
+            {
+              "id": "7157eb1d-f4e1-46a7-b302-3eace01429ac",
+              "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/connectors",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "connectors"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"statusCode\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T03:17:54.000Z",
+              "updatedAt": "2026-07-28T03:17:54.000Z",
+              "uid": "35240-7157eb1d-f4e1-46a7-b302-3eace01429ac"
+            }
+          ],
+          "createdAt": "2026-07-28T03:17:54.000Z",
+          "updatedAt": "2026-07-28T03:17:54.000Z",
+          "uid": "35240-7d577c99-8e2f-459c-97a5-1fbdc158aa73"
+        }
+      ],
+      "id": "5e401cc2-dfe1-4fcd-82a9-558a7d7691d6",
+      "createdAt": "2026-07-28T03:17:54.000Z",
+      "updatedAt": "2026-07-28T03:17:54.000Z",
+      "uid": "35240-5e401cc2-dfe1-4fcd-82a9-558a7d7691d6"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://tray.io"
+    }
+  ]
+}

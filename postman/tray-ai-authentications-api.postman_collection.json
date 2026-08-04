@@ -1,0 +1,1215 @@
+{
+  "info": {
+    "_postman_id": "c43b025d-4ea7-46ef-915e-20fe8fded92f",
+    "name": "Tray.ai Embedded Authentication Authentications API",
+    "description": "The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray's UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.\n\nContact Support:\n Name: Tray.ai Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T03:17:52.000Z",
+    "updatedAt": "2026-07-28T03:17:52.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-c43b025d-4ea7-46ef-915e-20fe8fded92f"
+  },
+  "item": [
+    {
+      "name": "graphql#createUserAuthentication",
+      "item": [
+        {
+          "name": "Tray.ai Create User Authentication",
+          "id": "712b955e-c140-4812-8f7d-4702c9689c3c",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": {},\n  \"operationName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql#createUserAuthentication",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ],
+              "hash": "createUserAuthentication"
+            },
+            "description": "Creates a new authentication for a third-party service (e.g., Salesforce, Slack) for a specific user. Returns an authId that can be used when creating or updating solution instances. Note that OAuth-based authentications cannot be created via API unless you own the service. Requires a user token."
+          },
+          "response": [
+            {
+              "id": "a923b60f-8d21-413b-8065-fbce1763c57b",
+              "name": "Authentication created successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": {},\n  \"operationName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/graphql#createUserAuthentication",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "createUserAuthentication"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"data\": {\n    \"createUserAuthentication\": {\n      \"authenticationId\": \"<string>\"\n    }\n  }\n}",
+              "createdAt": "2026-07-28T03:17:52.000Z",
+              "updatedAt": "2026-07-28T03:17:52.000Z",
+              "uid": "35240-a923b60f-8d21-413b-8065-fbce1763c57b"
+            },
+            {
+              "id": "eba9000d-28a0-4dd2-ad30-1c08ef2fb9ff",
+              "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": {},\n  \"operationName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/graphql#createUserAuthentication",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "createUserAuthentication"
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"locations\": [\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        },\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        }\n      ],\n      \"path\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"locations\": [\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        },\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        }\n      ],\n      \"path\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T03:17:52.000Z",
+              "updatedAt": "2026-07-28T03:17:52.000Z",
+              "uid": "35240-eba9000d-28a0-4dd2-ad30-1c08ef2fb9ff"
+            }
+          ],
+          "createdAt": "2026-07-28T03:17:52.000Z",
+          "updatedAt": "2026-07-28T03:17:52.000Z",
+          "uid": "35240-712b955e-c140-4812-8f7d-4702c9689c3c"
+        }
+      ],
+      "id": "6eb200d8-d347-4072-856d-055f8973cc45",
+      "createdAt": "2026-07-28T03:17:52.000Z",
+      "updatedAt": "2026-07-28T03:17:52.000Z",
+      "uid": "35240-6eb200d8-d347-4072-856d-055f8973cc45"
+    },
+    {
+      "name": "graphql#getAuthentications",
+      "item": [
+        {
+          "name": "Tray.ai Get Authentications",
+          "id": "e35a2f30-675c-4b1c-9479-17c41abe8687",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": {},\n  \"operationName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql#getAuthentications",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ],
+              "hash": "getAuthentications"
+            },
+            "description": "Retrieves a list of authentications for third-party services. Supports both master token (returns all authentications) and user token (returns user-scoped authentications)."
+          },
+          "response": [
+            {
+              "id": "3711f901-9681-4206-b3bf-542ccc8be33a",
+              "name": "Authentications returned successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": {},\n  \"operationName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/graphql#getAuthentications",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "getAuthentications"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"data\": {\n    \"viewer\": {\n      \"authentications\": {\n        \"edges\": [\n          {\n            \"node\": {\n              \"id\": \"<string>\",\n              \"name\": \"<string>\",\n              \"service\": {\n                \"id\": \"<string>\",\n                \"name\": \"<string>\",\n                \"icon\": \"<uri>\"\n              },\n              \"serviceEnvironment\": {\n                \"id\": \"<string>\",\n                \"title\": \"<string>\"\n              }\n            },\n            \"cursor\": \"<string>\"\n          },\n          {\n            \"node\": {\n              \"id\": \"<string>\",\n              \"name\": \"<string>\",\n              \"service\": {\n                \"id\": \"<string>\",\n                \"name\": \"<string>\",\n                \"icon\": \"<uri>\"\n              },\n              \"serviceEnvironment\": {\n                \"id\": \"<string>\",\n                \"title\": \"<string>\"\n              }\n            },\n            \"cursor\": \"<string>\"\n          }\n        ],\n        \"pageInfo\": {\n          \"hasNextPage\": \"<boolean>\",\n          \"endCursor\": \"<string>\",\n          \"hasPreviousPage\": \"<boolean>\",\n          \"startCursor\": \"<string>\"\n        }\n      }\n    }\n  }\n}",
+              "createdAt": "2026-07-28T03:17:52.000Z",
+              "updatedAt": "2026-07-28T03:17:52.000Z",
+              "uid": "35240-3711f901-9681-4206-b3bf-542ccc8be33a"
+            },
+            {
+              "id": "28d0c28c-6b02-4f2f-8f1f-a1e0513877dc",
+              "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": {},\n  \"operationName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/graphql#getAuthentications",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "getAuthentications"
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"locations\": [\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        },\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        }\n      ],\n      \"path\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"locations\": [\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        },\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        }\n      ],\n      \"path\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T03:17:52.000Z",
+              "updatedAt": "2026-07-28T03:17:52.000Z",
+              "uid": "35240-28d0c28c-6b02-4f2f-8f1f-a1e0513877dc"
+            }
+          ],
+          "createdAt": "2026-07-28T03:17:52.000Z",
+          "updatedAt": "2026-07-28T03:17:52.000Z",
+          "uid": "35240-e35a2f30-675c-4b1c-9479-17c41abe8687"
+        }
+      ],
+      "id": "3f28e9a6-f149-46cd-9923-6cd5c0de4626",
+      "createdAt": "2026-07-28T03:17:52.000Z",
+      "updatedAt": "2026-07-28T03:17:52.000Z",
+      "uid": "35240-3f28e9a6-f149-46cd-9923-6cd5c0de4626"
+    },
+    {
+      "name": "graphql#deleteAuthentication",
+      "item": [
+        {
+          "name": "Tray.ai Delete Authentication",
+          "id": "4f6b26fb-c573-416d-a737-d73468c2ada3",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": {},\n  \"operationName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql#deleteAuthentication",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ],
+              "hash": "deleteAuthentication"
+            },
+            "description": "Deletes a third-party service authentication. Requires a user token."
+          },
+          "response": [
+            {
+              "id": "eb113fd3-0f45-462d-815c-7c49b83c74e5",
+              "name": "Authentication deleted successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": {},\n  \"operationName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/graphql#deleteAuthentication",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "deleteAuthentication"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"data\": {\n    \"removeAuthentication\": {\n      \"clientMutationId\": \"<string>\"\n    }\n  }\n}",
+              "createdAt": "2026-07-28T03:17:52.000Z",
+              "updatedAt": "2026-07-28T03:17:52.000Z",
+              "uid": "35240-eb113fd3-0f45-462d-815c-7c49b83c74e5"
+            },
+            {
+              "id": "1e2f398e-b3d1-4589-9f9c-5ac15110c629",
+              "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": {},\n  \"operationName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/graphql#deleteAuthentication",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "deleteAuthentication"
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"locations\": [\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        },\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        }\n      ],\n      \"path\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"locations\": [\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        },\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        }\n      ],\n      \"path\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T03:17:52.000Z",
+              "updatedAt": "2026-07-28T03:17:52.000Z",
+              "uid": "35240-1e2f398e-b3d1-4589-9f9c-5ac15110c629"
+            }
+          ],
+          "createdAt": "2026-07-28T03:17:52.000Z",
+          "updatedAt": "2026-07-28T03:17:52.000Z",
+          "uid": "35240-4f6b26fb-c573-416d-a737-d73468c2ada3"
+        }
+      ],
+      "id": "618ed4d0-c848-4994-b3e2-8318002c6d7e",
+      "createdAt": "2026-07-28T03:17:52.000Z",
+      "updatedAt": "2026-07-28T03:17:52.000Z",
+      "uid": "35240-618ed4d0-c848-4994-b3e2-8318002c6d7e"
+    },
+    {
+      "name": "authentications",
+      "item": [
+        {
+          "name": "{authenticationId}",
+          "item": [
+            {
+              "name": "Tray.ai Get Authentication",
+              "id": "57330b95-4cdf-41c8-aa6f-8b03489d31aa",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/authentications/:authenticationId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "authentications",
+                    ":authenticationId"
+                  ],
+                  "variable": [
+                    {
+                      "id": "83a813c6-d84d-44a4-8b0b-ab9e208c4de1",
+                      "key": "authenticationId",
+                      "value": "<string>",
+                      "description": "(Required) The unique identifier for the authentication"
+                    }
+                  ]
+                },
+                "description": "Retrieves metadata associated with a user authentication by its ID, including auth id, serviceEnvironmentId, name, and scopes."
+              },
+              "response": [
+                {
+                  "id": "eab058ce-5f8d-4788-ab2b-e74e3cbef685",
+                  "name": "Authentication details returned successfully",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/authentications/:authenticationId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "authentications",
+                        ":authenticationId"
+                      ],
+                      "variable": [
+                        {
+                          "key": "authenticationId"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"serviceEnvironmentId\": \"<string>\",\n  \"scopes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"createdAt\": \"<dateTime>\"\n}",
+                  "createdAt": "2026-07-28T03:17:52.000Z",
+                  "updatedAt": "2026-07-28T03:17:52.000Z",
+                  "uid": "35240-eab058ce-5f8d-4788-ab2b-e74e3cbef685"
+                },
+                {
+                  "id": "fba3acac-6525-4fe2-b8f2-68c029c775aa",
+                  "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/authentications/:authenticationId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "authentications",
+                        ":authenticationId"
+                      ],
+                      "variable": [
+                        {
+                          "key": "authenticationId"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"statusCode\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T03:17:52.000Z",
+                  "updatedAt": "2026-07-28T03:17:52.000Z",
+                  "uid": "35240-fba3acac-6525-4fe2-b8f2-68c029c775aa"
+                },
+                {
+                  "id": "c5aa4d77-b67e-4649-900a-94a5994636e3",
+                  "name": "Authentication not found",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/authentications/:authenticationId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "authentications",
+                        ":authenticationId"
+                      ],
+                      "variable": [
+                        {
+                          "key": "authenticationId"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-07-28T03:17:52.000Z",
+                  "updatedAt": "2026-07-28T03:17:52.000Z",
+                  "uid": "35240-c5aa4d77-b67e-4649-900a-94a5994636e3"
+                }
+              ],
+              "createdAt": "2026-07-28T03:17:52.000Z",
+              "updatedAt": "2026-07-28T03:17:52.000Z",
+              "uid": "35240-57330b95-4cdf-41c8-aa6f-8b03489d31aa"
+            },
+            {
+              "name": "Tray.ai Delete Authentication",
+              "id": "b2f8b70b-10f9-44b0-8917-894d0eb28a22",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/authentications/:authenticationId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "authentications",
+                    ":authenticationId"
+                  ],
+                  "variable": [
+                    {
+                      "id": "4a868cdd-0617-496b-94e9-3d4466f87ea7",
+                      "key": "authenticationId",
+                      "value": "<string>",
+                      "description": "(Required) The unique identifier for the authentication"
+                    }
+                  ]
+                },
+                "description": "Deletes a user authentication using the authentication ID."
+              },
+              "response": [
+                {
+                  "id": "603b0aa1-b936-4781-a7b8-afd6c82d6c00",
+                  "name": "Authentication deleted successfully",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/authentications/:authenticationId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "authentications",
+                        ":authenticationId"
+                      ],
+                      "variable": [
+                        {
+                          "key": "authenticationId"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "No Content",
+                  "code": 204,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-07-28T03:17:52.000Z",
+                  "updatedAt": "2026-07-28T03:17:52.000Z",
+                  "uid": "35240-603b0aa1-b936-4781-a7b8-afd6c82d6c00"
+                },
+                {
+                  "id": "df1409e7-dd89-4c8b-92b2-b37555027b8f",
+                  "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/authentications/:authenticationId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "authentications",
+                        ":authenticationId"
+                      ],
+                      "variable": [
+                        {
+                          "key": "authenticationId"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"statusCode\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T03:17:52.000Z",
+                  "updatedAt": "2026-07-28T03:17:52.000Z",
+                  "uid": "35240-df1409e7-dd89-4c8b-92b2-b37555027b8f"
+                },
+                {
+                  "id": "73cc4abb-a9e0-4ab3-aa03-b918195754d3",
+                  "name": "Authentication not found",
+                  "originalRequest": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/authentications/:authenticationId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "authentications",
+                        ":authenticationId"
+                      ],
+                      "variable": [
+                        {
+                          "key": "authenticationId"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-07-28T03:17:52.000Z",
+                  "updatedAt": "2026-07-28T03:17:52.000Z",
+                  "uid": "35240-73cc4abb-a9e0-4ab3-aa03-b918195754d3"
+                }
+              ],
+              "createdAt": "2026-07-28T03:17:52.000Z",
+              "updatedAt": "2026-07-28T03:17:52.000Z",
+              "uid": "35240-b2f8b70b-10f9-44b0-8917-894d0eb28a22"
+            }
+          ],
+          "id": "2588186e-410e-4143-bce4-d372f9d03559",
+          "createdAt": "2026-07-28T03:17:52.000Z",
+          "updatedAt": "2026-07-28T03:17:52.000Z",
+          "uid": "35240-2588186e-410e-4143-bce4-d372f9d03559"
+        },
+        {
+          "name": "Tray.ai List Authentications",
+          "id": "470a0741-d347-45ab-b132-f76a323b0486",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/authentications",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "authentications"
+              ]
+            },
+            "description": "Retrieves a list of authentications associated with the authenticated user or organization."
+          },
+          "response": [
+            {
+              "id": "6939ceaa-a734-43a0-8405-843bafb9bf38",
+              "name": "Authentications returned successfully",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/authentications",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "authentications"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"elements\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"serviceEnvironmentId\": \"<string>\",\n      \"scopes\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"createdAt\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"serviceEnvironmentId\": \"<string>\",\n      \"scopes\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"createdAt\": \"<dateTime>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T03:17:52.000Z",
+              "updatedAt": "2026-07-28T03:17:52.000Z",
+              "uid": "35240-6939ceaa-a734-43a0-8405-843bafb9bf38"
+            },
+            {
+              "id": "114110a0-4bcd-4636-aa2e-d0ef394bab7e",
+              "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/authentications",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "authentications"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"statusCode\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T03:17:52.000Z",
+              "updatedAt": "2026-07-28T03:17:52.000Z",
+              "uid": "35240-114110a0-4bcd-4636-aa2e-d0ef394bab7e"
+            }
+          ],
+          "createdAt": "2026-07-28T03:17:52.000Z",
+          "updatedAt": "2026-07-28T03:17:52.000Z",
+          "uid": "35240-470a0741-d347-45ab-b132-f76a323b0486"
+        },
+        {
+          "name": "Tray.ai Create Authentication",
+          "id": "ab486955-9577-44cb-b526-2b3fbdbae3f9",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"serviceEnvironmentId\": \"<string>\",\n  \"userData\": {},\n  \"credentials\": {}\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/authentications",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "authentications"
+              ]
+            },
+            "description": "Creates a new user authentication for a third-party service in Tray. Requires the serviceEnvironmentId, user data, and credentials. Returns an authentication ID that can be used with the Call Connector endpoint."
+          },
+          "response": [
+            {
+              "id": "a19e4bed-d830-44c1-942f-bf82b1e725b7",
+              "name": "Authentication created successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"serviceEnvironmentId\": \"<string>\",\n  \"userData\": {},\n  \"credentials\": {}\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/authentications",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "authentications"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"serviceEnvironmentId\": \"<string>\",\n  \"scopes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"createdAt\": \"<dateTime>\"\n}",
+              "createdAt": "2026-07-28T03:17:52.000Z",
+              "updatedAt": "2026-07-28T03:17:52.000Z",
+              "uid": "35240-a19e4bed-d830-44c1-942f-bf82b1e725b7"
+            },
+            {
+              "id": "6d660ede-dc97-4ea7-b240-f3a1cbb21546",
+              "name": "Invalid request",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"serviceEnvironmentId\": \"<string>\",\n  \"userData\": {},\n  \"credentials\": {}\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/authentications",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "authentications"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-07-28T03:17:52.000Z",
+              "updatedAt": "2026-07-28T03:17:52.000Z",
+              "uid": "35240-6d660ede-dc97-4ea7-b240-f3a1cbb21546"
+            },
+            {
+              "id": "bcce9d5a-1272-4632-b025-0c4629d3b01a",
+              "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"serviceEnvironmentId\": \"<string>\",\n  \"userData\": {},\n  \"credentials\": {}\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/authentications",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "authentications"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"statusCode\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T03:17:52.000Z",
+              "updatedAt": "2026-07-28T03:17:52.000Z",
+              "uid": "35240-bcce9d5a-1272-4632-b025-0c4629d3b01a"
+            }
+          ],
+          "createdAt": "2026-07-28T03:17:52.000Z",
+          "updatedAt": "2026-07-28T03:17:52.000Z",
+          "uid": "35240-ab486955-9577-44cb-b526-2b3fbdbae3f9"
+        }
+      ],
+      "id": "3695a5a2-0732-4015-b1fe-62aad37de9dc",
+      "createdAt": "2026-07-28T03:17:52.000Z",
+      "updatedAt": "2026-07-28T03:17:52.000Z",
+      "uid": "35240-3695a5a2-0732-4015-b1fe-62aad37de9dc"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://tray.io"
+    }
+  ]
+}

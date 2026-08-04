@@ -1,0 +1,453 @@
+{
+  "info": {
+    "_postman_id": "4d24e0b0-da23-4733-9f9e-eac7257782e5",
+    "name": "Tray.ai Embedded Authentication Projects API",
+    "description": "The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray's UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.\n\nContact Support:\n Name: Tray.ai Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T03:17:58.000Z",
+    "updatedAt": "2026-07-28T03:17:58.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-4d24e0b0-da23-4733-9f9e-eac7257782e5"
+  },
+  "item": [
+    {
+      "name": "projects",
+      "item": [
+        {
+          "name": "{projectId}",
+          "item": [
+            {
+              "name": "export",
+              "item": [
+                {
+                  "name": "Tray.ai Export Project",
+                  "id": "11544458-a042-415d-8352-903f02a57d01",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/projects/:projectId/export",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "projects",
+                        ":projectId",
+                        "export"
+                      ],
+                      "variable": [
+                        {
+                          "id": "f2151e74-7de5-496e-8154-8bef06e60e90",
+                          "key": "projectId",
+                          "value": "<string>",
+                          "description": "(Required) The unique identifier for the project"
+                        }
+                      ]
+                    },
+                    "description": "Exports a project version for environment promotion, such as moving from staging to production workspaces."
+                  },
+                  "response": [
+                    {
+                      "id": "984e684b-b780-4b9a-84ec-ea8813cd25ab",
+                      "name": "Project exported successfully",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/projects/:projectId/export",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "projects",
+                            ":projectId",
+                            "export"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"exportedData\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T03:17:58.000Z",
+                      "updatedAt": "2026-07-28T03:17:58.000Z",
+                      "uid": "35240-984e684b-b780-4b9a-84ec-ea8813cd25ab"
+                    },
+                    {
+                      "id": "304e68e4-9c69-40ca-aaa4-639983ce7391",
+                      "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/projects/:projectId/export",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "projects",
+                            ":projectId",
+                            "export"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"statusCode\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T03:17:58.000Z",
+                      "updatedAt": "2026-07-28T03:17:58.000Z",
+                      "uid": "35240-304e68e4-9c69-40ca-aaa4-639983ce7391"
+                    },
+                    {
+                      "id": "200abc62-832c-4d68-a89c-8fd47b14795d",
+                      "name": "Project not found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/projects/:projectId/export",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "projects",
+                            ":projectId",
+                            "export"
+                          ],
+                          "variable": [
+                            {
+                              "key": "projectId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T03:17:58.000Z",
+                      "updatedAt": "2026-07-28T03:17:58.000Z",
+                      "uid": "35240-200abc62-832c-4d68-a89c-8fd47b14795d"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T03:17:58.000Z",
+                  "updatedAt": "2026-07-28T03:17:58.000Z",
+                  "uid": "35240-11544458-a042-415d-8352-903f02a57d01"
+                }
+              ],
+              "id": "6ee11bcd-0253-4614-bc12-4ab9f599bf16",
+              "createdAt": "2026-07-28T03:17:58.000Z",
+              "updatedAt": "2026-07-28T03:17:58.000Z",
+              "uid": "35240-6ee11bcd-0253-4614-bc12-4ab9f599bf16"
+            }
+          ],
+          "id": "702b3bc5-71d8-46c6-bba4-445d4c301842",
+          "createdAt": "2026-07-28T03:17:58.000Z",
+          "updatedAt": "2026-07-28T03:17:58.000Z",
+          "uid": "35240-702b3bc5-71d8-46c6-bba4-445d4c301842"
+        },
+        {
+          "name": "import",
+          "item": [
+            {
+              "name": "Tray.ai Import Project",
+              "id": "2568098c-5576-44f5-8706-dd73c6159d87",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"exportedData\": \"<string>\",\n  \"workspaceId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/projects/import",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "projects",
+                    "import"
+                  ]
+                },
+                "description": "Imports a project version from exported data into the target workspace for environment promotion."
+              },
+              "response": [
+                {
+                  "id": "04066296-749a-4055-9581-2be5220fd4d4",
+                  "name": "Project imported successfully",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"exportedData\": \"<string>\",\n  \"workspaceId\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/projects/import",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "projects",
+                        "import"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"projectId\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T03:17:58.000Z",
+                  "updatedAt": "2026-07-28T03:17:58.000Z",
+                  "uid": "35240-04066296-749a-4055-9581-2be5220fd4d4"
+                },
+                {
+                  "id": "e8857ba5-ada7-4d69-b3bd-78d6a66210b9",
+                  "name": "Invalid import data",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"exportedData\": \"<string>\",\n  \"workspaceId\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/projects/import",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "projects",
+                        "import"
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-07-28T03:17:58.000Z",
+                  "updatedAt": "2026-07-28T03:17:58.000Z",
+                  "uid": "35240-e8857ba5-ada7-4d69-b3bd-78d6a66210b9"
+                },
+                {
+                  "id": "f769d4c8-43ba-477b-b19c-74c365c0a6cf",
+                  "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"exportedData\": \"<string>\",\n  \"workspaceId\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/projects/import",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "projects",
+                        "import"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"statusCode\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T03:17:58.000Z",
+                  "updatedAt": "2026-07-28T03:17:58.000Z",
+                  "uid": "35240-f769d4c8-43ba-477b-b19c-74c365c0a6cf"
+                }
+              ],
+              "createdAt": "2026-07-28T03:17:58.000Z",
+              "updatedAt": "2026-07-28T03:17:58.000Z",
+              "uid": "35240-2568098c-5576-44f5-8706-dd73c6159d87"
+            }
+          ],
+          "id": "1044a9cf-d04a-4ead-9167-b54b66608563",
+          "createdAt": "2026-07-28T03:17:58.000Z",
+          "updatedAt": "2026-07-28T03:17:58.000Z",
+          "uid": "35240-1044a9cf-d04a-4ead-9167-b54b66608563"
+        }
+      ],
+      "id": "50dba150-698f-4c16-9532-6e2459de0c4a",
+      "createdAt": "2026-07-28T03:17:58.000Z",
+      "updatedAt": "2026-07-28T03:17:58.000Z",
+      "uid": "35240-50dba150-698f-4c16-9532-6e2459de0c4a"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://tray.io"
+    }
+  ]
+}

@@ -1,0 +1,333 @@
+{
+  "info": {
+    "_postman_id": "43efb858-5469-46f9-a615-47630dd4425e",
+    "name": "Tray.ai Embedded Authentication Deployments API",
+    "description": "The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray's UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.\n\nContact Support:\n Name: Tray.ai Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T03:17:55.000Z",
+    "updatedAt": "2026-07-28T03:17:55.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-43efb858-5469-46f9-a615-47630dd4425e"
+  },
+  "item": [
+    {
+      "name": "connectors",
+      "item": [
+        {
+          "name": "{connectorName}",
+          "item": [
+            {
+              "name": "versions",
+              "item": [
+                {
+                  "name": "{connectorVersion}",
+                  "item": [
+                    {
+                      "name": "deploy",
+                      "item": [
+                        {
+                          "name": "Tray.ai Deploy CDK Connector",
+                          "id": "02ebb8ec-dd8f-41f4-b060-f2f7f5d94154",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"connectorBundle\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/connectors/:connectorName/versions/:connectorVersion/deploy",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "connectors",
+                                ":connectorName",
+                                "versions",
+                                ":connectorVersion",
+                                "deploy"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "c3b9cb5d-3d23-414b-ba29-adf6d9e562fd",
+                                  "key": "connectorName",
+                                  "value": "<string>",
+                                  "description": "(Required) The name of the CDK connector to deploy"
+                                },
+                                {
+                                  "id": "57fd5ea3-21f9-403d-a9e2-7f7c8873b82d",
+                                  "key": "connectorVersion",
+                                  "value": "<string>",
+                                  "description": "(Required) The version of the CDK connector to deploy"
+                                }
+                              ]
+                            },
+                            "description": "Deploys a CDK (Connector Development Kit) connector to the Tray platform. The connector name and version must match those defined in connector.json."
+                          },
+                          "response": [
+                            {
+                              "id": "7f19940d-a095-40cb-961e-789eb5905bc0",
+                              "name": "Connector deployed successfully",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"connectorBundle\": \"<string>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/connectors/:connectorName/versions/:connectorVersion/deploy",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "connectors",
+                                    ":connectorName",
+                                    "versions",
+                                    ":connectorVersion",
+                                    "deploy"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectorName"
+                                    },
+                                    {
+                                      "key": "connectorVersion"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"connectorName\": \"<string>\",\n  \"connectorVersion\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T03:17:55.000Z",
+                              "updatedAt": "2026-07-28T03:17:55.000Z",
+                              "uid": "35240-7f19940d-a095-40cb-961e-789eb5905bc0"
+                            },
+                            {
+                              "id": "24f7012f-428b-4c84-9fc4-ee62e6617fb6",
+                              "name": "Invalid deployment request",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"connectorBundle\": \"<string>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/connectors/:connectorName/versions/:connectorVersion/deploy",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "connectors",
+                                    ":connectorName",
+                                    "versions",
+                                    ":connectorVersion",
+                                    "deploy"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectorName"
+                                    },
+                                    {
+                                      "key": "connectorVersion"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-07-28T03:17:55.000Z",
+                              "updatedAt": "2026-07-28T03:17:55.000Z",
+                              "uid": "35240-24f7012f-428b-4c84-9fc4-ee62e6617fb6"
+                            },
+                            {
+                              "id": "3d11496b-8c0a-4fae-8700-b42f91ec7961",
+                              "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"connectorBundle\": \"<string>\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/connectors/:connectorName/versions/:connectorVersion/deploy",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "connectors",
+                                    ":connectorName",
+                                    "versions",
+                                    ":connectorVersion",
+                                    "deploy"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "connectorName"
+                                    },
+                                    {
+                                      "key": "connectorVersion"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Unauthorized",
+                              "code": 401,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"statusCode\": \"<integer>\"\n}",
+                              "createdAt": "2026-07-28T03:17:55.000Z",
+                              "updatedAt": "2026-07-28T03:17:55.000Z",
+                              "uid": "35240-3d11496b-8c0a-4fae-8700-b42f91ec7961"
+                            }
+                          ],
+                          "createdAt": "2026-07-28T03:17:55.000Z",
+                          "updatedAt": "2026-07-28T03:17:55.000Z",
+                          "uid": "35240-02ebb8ec-dd8f-41f4-b060-f2f7f5d94154"
+                        }
+                      ],
+                      "id": "512bb7d0-44dd-497e-bcc2-c228c68276a6",
+                      "createdAt": "2026-07-28T03:17:55.000Z",
+                      "updatedAt": "2026-07-28T03:17:55.000Z",
+                      "uid": "35240-512bb7d0-44dd-497e-bcc2-c228c68276a6"
+                    }
+                  ],
+                  "id": "4f65bcdb-205d-49da-8eb3-e6a7c4ccb014",
+                  "createdAt": "2026-07-28T03:17:55.000Z",
+                  "updatedAt": "2026-07-28T03:17:55.000Z",
+                  "uid": "35240-4f65bcdb-205d-49da-8eb3-e6a7c4ccb014"
+                }
+              ],
+              "id": "1334685e-d8fe-4258-ac25-a15856b534f6",
+              "createdAt": "2026-07-28T03:17:55.000Z",
+              "updatedAt": "2026-07-28T03:17:55.000Z",
+              "uid": "35240-1334685e-d8fe-4258-ac25-a15856b534f6"
+            }
+          ],
+          "id": "eda6681d-5fb3-4548-b577-eb3e8ff6cfd6",
+          "createdAt": "2026-07-28T03:17:55.000Z",
+          "updatedAt": "2026-07-28T03:17:55.000Z",
+          "uid": "35240-eda6681d-5fb3-4548-b577-eb3e8ff6cfd6"
+        }
+      ],
+      "id": "538375e2-7c68-4765-a242-20e50d873ca9",
+      "createdAt": "2026-07-28T03:17:55.000Z",
+      "updatedAt": "2026-07-28T03:17:55.000Z",
+      "uid": "35240-538375e2-7c68-4765-a242-20e50d873ca9"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://tray.io"
+    }
+  ]
+}

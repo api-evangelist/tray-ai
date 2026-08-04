@@ -1,0 +1,526 @@
+{
+  "info": {
+    "_postman_id": "e492525a-2a25-42b2-b5dd-f6a00f897a23",
+    "name": "Tray.ai Embedded Authentication Workspaces API",
+    "description": "The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray's UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.\n\nContact Support:\n Name: Tray.ai Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T03:18:23.000Z",
+    "updatedAt": "2026-07-28T03:18:23.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-e492525a-2a25-42b2-b5dd-f6a00f897a23"
+  },
+  "item": [
+    {
+      "name": "workspaces",
+      "item": [
+        {
+          "name": "{workspaceId}",
+          "item": [
+            {
+              "name": "users",
+              "item": [
+                {
+                  "name": "Tray.ai List Workspace Users",
+                  "id": "b4cbc80b-ec0d-4ca7-a8d0-fa37f2f01328",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/workspaces/:workspaceId/users",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "workspaces",
+                        ":workspaceId",
+                        "users"
+                      ],
+                      "variable": [
+                        {
+                          "id": "f865cfe9-2930-40bd-90bb-6e4eed468105",
+                          "key": "workspaceId",
+                          "value": "<string>",
+                          "description": "(Required) The unique identifier for the workspace"
+                        }
+                      ]
+                    },
+                    "description": "Retrieves a list of users belonging to a specific workspace."
+                  },
+                  "response": [
+                    {
+                      "id": "fce8f66a-722b-4069-851b-126517f7346d",
+                      "name": "Workspace users returned successfully",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/users",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "users"
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"elements\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<email>\",\n      \"role\": \"<string>\",\n      \"status\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"email\": \"<email>\",\n      \"role\": \"<string>\",\n      \"status\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T03:18:24.000Z",
+                      "updatedAt": "2026-07-28T03:18:24.000Z",
+                      "uid": "35240-fce8f66a-722b-4069-851b-126517f7346d"
+                    },
+                    {
+                      "id": "cd4be8af-d77d-4727-a6cf-b6afa0c50f2e",
+                      "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/users",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "users"
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"statusCode\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T03:18:24.000Z",
+                      "updatedAt": "2026-07-28T03:18:24.000Z",
+                      "uid": "35240-cd4be8af-d77d-4727-a6cf-b6afa0c50f2e"
+                    },
+                    {
+                      "id": "e5704e3b-2b3c-4d36-9a96-c74adb3468de",
+                      "name": "Workspace not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/users",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "users"
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T03:18:24.000Z",
+                      "updatedAt": "2026-07-28T03:18:24.000Z",
+                      "uid": "35240-e5704e3b-2b3c-4d36-9a96-c74adb3468de"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T03:18:24.000Z",
+                  "updatedAt": "2026-07-28T03:18:24.000Z",
+                  "uid": "35240-b4cbc80b-ec0d-4ca7-a8d0-fa37f2f01328"
+                }
+              ],
+              "id": "e7266bf4-bae7-41c4-9011-634864674771",
+              "createdAt": "2026-07-28T03:18:24.000Z",
+              "updatedAt": "2026-07-28T03:18:24.000Z",
+              "uid": "35240-e7266bf4-bae7-41c4-9011-634864674771"
+            },
+            {
+              "name": "Tray.ai Get Workspace",
+              "id": "47798b7a-7e6b-45ba-a117-adef05d01275",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/workspaces/:workspaceId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "workspaces",
+                    ":workspaceId"
+                  ],
+                  "variable": [
+                    {
+                      "id": "a6362b58-84d8-4cd5-bf70-24842a4d837d",
+                      "key": "workspaceId",
+                      "value": "<string>",
+                      "description": "(Required) The unique identifier for the workspace"
+                    }
+                  ]
+                },
+                "description": "Retrieves details for a specific workspace by its ID."
+              },
+              "response": [
+                {
+                  "id": "815f04fc-55e9-41f3-8c81-0f78eeb8e7e4",
+                  "name": "Workspace returned successfully",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/workspaces/:workspaceId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "workspaces",
+                        ":workspaceId"
+                      ],
+                      "variable": [
+                        {
+                          "key": "workspaceId"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"createdAt\": \"<dateTime>\"\n}",
+                  "createdAt": "2026-07-28T03:18:24.000Z",
+                  "updatedAt": "2026-07-28T03:18:24.000Z",
+                  "uid": "35240-815f04fc-55e9-41f3-8c81-0f78eeb8e7e4"
+                },
+                {
+                  "id": "67e79bcd-b1f2-49ff-8aa0-15e9460df4c7",
+                  "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/workspaces/:workspaceId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "workspaces",
+                        ":workspaceId"
+                      ],
+                      "variable": [
+                        {
+                          "key": "workspaceId"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"statusCode\": \"<integer>\"\n}",
+                  "createdAt": "2026-07-28T03:18:24.000Z",
+                  "updatedAt": "2026-07-28T03:18:24.000Z",
+                  "uid": "35240-67e79bcd-b1f2-49ff-8aa0-15e9460df4c7"
+                },
+                {
+                  "id": "bccb9a80-58e5-40e3-9b57-02d6bfc2ccec",
+                  "name": "Workspace not found",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/workspaces/:workspaceId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "workspaces",
+                        ":workspaceId"
+                      ],
+                      "variable": [
+                        {
+                          "key": "workspaceId"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-07-28T03:18:24.000Z",
+                  "updatedAt": "2026-07-28T03:18:24.000Z",
+                  "uid": "35240-bccb9a80-58e5-40e3-9b57-02d6bfc2ccec"
+                }
+              ],
+              "createdAt": "2026-07-28T03:18:24.000Z",
+              "updatedAt": "2026-07-28T03:18:24.000Z",
+              "uid": "35240-47798b7a-7e6b-45ba-a117-adef05d01275"
+            }
+          ],
+          "id": "7b797f95-409b-4fe3-813e-bf993d0c8e42",
+          "createdAt": "2026-07-28T03:18:24.000Z",
+          "updatedAt": "2026-07-28T03:18:24.000Z",
+          "uid": "35240-7b797f95-409b-4fe3-813e-bf993d0c8e42"
+        },
+        {
+          "name": "Tray.ai List Workspaces",
+          "id": "dc54458b-8fc1-4388-8a32-ba6f15266ca9",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/workspaces",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "workspaces"
+              ]
+            },
+            "description": "Retrieves a list of workspaces in the organization. Workspaces divide the organization into sub-categories such as departments or dev/prod environments for environment promotion."
+          },
+          "response": [
+            {
+              "id": "53446f22-1f6f-4c56-837e-6ad562c1d192",
+              "name": "Workspaces returned successfully",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/workspaces",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "workspaces"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"elements\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"createdAt\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\",\n      \"createdAt\": \"<dateTime>\"\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T03:18:24.000Z",
+              "updatedAt": "2026-07-28T03:18:24.000Z",
+              "uid": "35240-53446f22-1f6f-4c56-837e-6ad562c1d192"
+            },
+            {
+              "id": "31690633-14f1-4ea4-a405-53a548f1c205",
+              "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/workspaces",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "workspaces"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"error\": \"<string>\",\n  \"message\": \"<string>\",\n  \"statusCode\": \"<integer>\"\n}",
+              "createdAt": "2026-07-28T03:18:24.000Z",
+              "updatedAt": "2026-07-28T03:18:24.000Z",
+              "uid": "35240-31690633-14f1-4ea4-a405-53a548f1c205"
+            }
+          ],
+          "createdAt": "2026-07-28T03:18:24.000Z",
+          "updatedAt": "2026-07-28T03:18:24.000Z",
+          "uid": "35240-dc54458b-8fc1-4388-8a32-ba6f15266ca9"
+        }
+      ],
+      "id": "61418b72-6e57-46bf-9ca8-dc53a2ee25e5",
+      "createdAt": "2026-07-28T03:18:24.000Z",
+      "updatedAt": "2026-07-28T03:18:24.000Z",
+      "uid": "35240-61418b72-6e57-46bf-9ca8-dc53a2ee25e5"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://tray.io"
+    }
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "info": {
+    "_postman_id": "66fd485b-bcd6-4848-81d5-6681e565390d",
+    "name": "Tray.ai Embedded Authentication Solutions API",
+    "description": "The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray's UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.\n\nContact Support:\n Name: Tray.ai Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T03:17:59.000Z",
+    "updatedAt": "2026-07-28T03:18:00.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-66fd485b-bcd6-4848-81d5-6681e565390d"
+  },
+  "item": [
+    {
+      "name": "graphql#getSolutions",
+      "item": [
+        {
+          "name": "Tray.ai Get Solutions",
+          "id": "379af045-d805-430a-aad2-0c5b9b0cf606",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": {},\n  \"operationName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql#getSolutions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ],
+              "hash": "getSolutions"
+            },
+            "description": "Retrieves a list of published solutions (integrations) available in your embedded application. Solutions represent integrations built on the Tray platform. Supports pagination. Requires a master token or user token."
+          },
+          "response": [
+            {
+              "id": "d08cfd79-7a69-44e9-ac5f-5e3e7c7778e1",
+              "name": "Solutions returned successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": {},\n  \"operationName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/graphql#getSolutions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "getSolutions"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"data\": {\n    \"viewer\": {\n      \"solutions\": {\n        \"edges\": [\n          {\n            \"node\": {\n              \"id\": \"<string>\",\n              \"title\": \"<string>\",\n              \"description\": \"<string>\",\n              \"tags\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            \"cursor\": \"<string>\"\n          },\n          {\n            \"node\": {\n              \"id\": \"<string>\",\n              \"title\": \"<string>\",\n              \"description\": \"<string>\",\n              \"tags\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            \"cursor\": \"<string>\"\n          }\n        ],\n        \"pageInfo\": {\n          \"hasNextPage\": \"<boolean>\",\n          \"endCursor\": \"<string>\",\n          \"hasPreviousPage\": \"<boolean>\",\n          \"startCursor\": \"<string>\"\n        }\n      }\n    }\n  }\n}",
+              "createdAt": "2026-07-28T03:18:00.000Z",
+              "updatedAt": "2026-07-28T03:18:00.000Z",
+              "uid": "35240-d08cfd79-7a69-44e9-ac5f-5e3e7c7778e1"
+            },
+            {
+              "id": "2de0438d-68dd-4f76-8f3c-2e85d239d829",
+              "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": {},\n  \"operationName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/graphql#getSolutions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "getSolutions"
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"locations\": [\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        },\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        }\n      ],\n      \"path\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"locations\": [\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        },\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        }\n      ],\n      \"path\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T03:18:00.000Z",
+              "updatedAt": "2026-07-28T03:18:00.000Z",
+              "uid": "35240-2de0438d-68dd-4f76-8f3c-2e85d239d829"
+            }
+          ],
+          "createdAt": "2026-07-28T03:18:00.000Z",
+          "updatedAt": "2026-07-28T03:18:00.000Z",
+          "uid": "35240-379af045-d805-430a-aad2-0c5b9b0cf606"
+        }
+      ],
+      "id": "19e8c797-9701-4a4e-a2a9-0d93581fc76c",
+      "createdAt": "2026-07-28T03:18:00.000Z",
+      "updatedAt": "2026-07-28T03:18:00.000Z",
+      "uid": "35240-19e8c797-9701-4a4e-a2a9-0d93581fc76c"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://tray.io"
+    }
+  ]
+}

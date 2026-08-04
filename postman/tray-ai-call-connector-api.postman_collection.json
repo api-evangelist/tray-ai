@@ -1,0 +1,199 @@
+{
+  "info": {
+    "_postman_id": "2afd656a-791e-45e1-a95d-c66fed8f4182",
+    "name": "Tray.ai Embedded Authentication Call Connector API",
+    "description": "The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray's UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.\n\nContact Support:\n Name: Tray.ai Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T03:17:53.000Z",
+    "updatedAt": "2026-07-28T03:17:53.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-2afd656a-791e-45e1-a95d-c66fed8f4182"
+  },
+  "item": [
+    {
+      "name": "graphql#callConnector",
+      "item": [
+        {
+          "name": "Tray.ai Call Connector",
+          "id": "80922513-f137-47ff-af99-7f1f5f1b8122",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": {},\n  \"operationName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql#callConnector",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ],
+              "hash": "callConnector"
+            },
+            "description": "Calls any Tray connector operation to pull data from a particular third-party service. Used in combination with a user token and authentication ID to interact with service connector operations (e.g., list Salesforce objects, get Slack channels). Returns a promise that resolves to the output of the connector call. Requires a user token."
+          },
+          "response": [
+            {
+              "id": "95660e46-afb5-423b-8c50-3dfe9587cf53",
+              "name": "Connector operation executed successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": {},\n  \"operationName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/graphql#callConnector",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "callConnector"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"data\": {\n    \"callConnector\": {\n      \"output\": {}\n    }\n  }\n}",
+              "createdAt": "2026-07-28T03:17:54.000Z",
+              "updatedAt": "2026-07-28T03:17:54.000Z",
+              "uid": "35240-95660e46-afb5-423b-8c50-3dfe9587cf53"
+            },
+            {
+              "id": "35377ab1-f0e5-4129-9661-23d481f0053b",
+              "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": {},\n  \"operationName\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/graphql#callConnector",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "callConnector"
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"errors\": [\n    {\n      \"message\": \"<string>\",\n      \"locations\": [\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        },\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        }\n      ],\n      \"path\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"message\": \"<string>\",\n      \"locations\": [\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        },\n        {\n          \"line\": \"<integer>\",\n          \"column\": \"<integer>\"\n        }\n      ],\n      \"path\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+              "createdAt": "2026-07-28T03:17:54.000Z",
+              "updatedAt": "2026-07-28T03:17:54.000Z",
+              "uid": "35240-35377ab1-f0e5-4129-9661-23d481f0053b"
+            }
+          ],
+          "createdAt": "2026-07-28T03:17:54.000Z",
+          "updatedAt": "2026-07-28T03:17:54.000Z",
+          "uid": "35240-80922513-f137-47ff-af99-7f1f5f1b8122"
+        }
+      ],
+      "id": "d71dea49-86a4-4abc-a529-85b4b851426e",
+      "createdAt": "2026-07-28T03:17:53.000Z",
+      "updatedAt": "2026-07-28T03:17:53.000Z",
+      "uid": "35240-d71dea49-86a4-4abc-a529-85b4b851426e"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://tray.io"
+    }
+  ]
+}

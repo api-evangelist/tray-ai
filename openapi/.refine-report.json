@@ -1,0 +1,36 @@
+{
+  "provider": "tray-ai",
+  "sources": [
+    "tray-ai-authentication-api-openapi.yml",
+    "tray-ai-authentications-api-openapi.yml",
+    "tray-ai-call-connector-api-openapi.yml",
+    "tray-ai-connectors-api-openapi.yml",
+    "tray-ai-deployments-api-openapi.yml",
+    "tray-ai-projects-api-openapi.yml",
+    "tray-ai-solution-instances-api-openapi.yml",
+    "tray-ai-solutions-api-openapi.yml",
+    "tray-ai-triggers-api-openapi.yml",
+    "tray-ai-users-api-openapi.yml",
+    "tray-ai-workflows-api-openapi.yml",
+    "tray-ai-workspaces-api-openapi.yml"
+  ],
+  "outputs": [
+    "tray-ai-authentication-api-openapi.yml",
+    "tray-ai-authentications-api-openapi.yml",
+    "tray-ai-call-connector-api-openapi.yml",
+    "tray-ai-connectors-api-openapi.yml",
+    "tray-ai-deployments-api-openapi.yml",
+    "tray-ai-projects-api-openapi.yml",
+    "tray-ai-solution-instances-api-openapi.yml",
+    "tray-ai-solutions-api-openapi.yml",
+    "tray-ai-triggers-api-openapi.yml",
+    "tray-ai-users-api-openapi.yml",
+    "tray-ai-workflows-api-openapi.yml",
+    "tray-ai-workspaces-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
