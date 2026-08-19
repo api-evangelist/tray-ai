@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tray.ai Embedded Authentication Call Connector API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Call Connector",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai Call Connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#callConnector",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Calls any Tray connector operation to pull data from a particular third-party service. Used in combination with a user token and authentication ID to interact with service connector operations (e.g., list Salesforce objects, get Slack channels). Returns a promise that resolves to the output of the connector call. Requires a user token."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

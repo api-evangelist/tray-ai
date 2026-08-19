@@ -1,0 +1,69 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tray.ai Embedded Authentication Triggers API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Triggers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai List Triggers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://tray.io/triggers"
+          },
+          "docs": "Returns a list of all available triggers from Tray's trigger library. Triggers allow you to receive data from third-party services in real time."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Create Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/subscriptions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new trigger subscription using a trigger operation. The input must conform to the input schema of the trigger operation."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Delete Subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://tray.io/subscriptions/:subscriptionId",
+            "params": [
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the subscription"
+              }
+            ]
+          },
+          "docs": "Deletes a trigger subscription by its ID. Requires a user token."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

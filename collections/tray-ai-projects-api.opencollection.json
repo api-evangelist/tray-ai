@@ -1,0 +1,58 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tray.ai Embedded Authentication Projects API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai Export Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/projects/:projectId/export",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the project"
+              }
+            ]
+          },
+          "docs": "Exports a project version for environment promotion, such as moving from staging to production workspaces."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Import Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/projects/import",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Imports a project version from exported data into the target workspace for environment promotion."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

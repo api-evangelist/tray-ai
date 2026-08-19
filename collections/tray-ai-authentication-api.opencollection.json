@@ -1,0 +1,50 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tray.ai Embedded Authentication API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai GraphQL Playground",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://tray.io/graphql"
+          },
+          "docs": "Access the GraphQL Playground interface for exploring the Tray Embedded API interactively. This is only available for development and testing purposes."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Create User Token (Authorize)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#authorize",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generates a user access token from a master token for a specific user. The returned token is used as a Bearer token for user-scoped API calls such as managing solution instances and authentications. Requires a master token."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

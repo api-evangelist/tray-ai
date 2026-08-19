@@ -1,0 +1,89 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tray.ai Embedded Authentication Connectors API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Connectors",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai List Connectors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://tray.io/connectors"
+          },
+          "docs": "Returns a list of all available connectors from Tray's connector library. A connector can have multiple versions. Each connector exposes the API operations of a third-party service."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Get Connector Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://tray.io/connectors/:connectorName/versions/:connectorVersion",
+            "params": [
+              {
+                "name": "connectorName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the connector (e.g., salesforce, slack)"
+              },
+              {
+                "name": "connectorVersion",
+                "value": "",
+                "type": "path",
+                "description": "The version of the connector (e.g., 2.1)"
+              }
+            ]
+          },
+          "docs": "Retrieves details of a specific connector version, including its available operations, input schemas, and output schemas."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Call Connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/connectors/:connectorName/versions/:connectorVersion/call",
+            "params": [
+              {
+                "name": "connectorName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the connector (e.g., twilio-output)"
+              },
+              {
+                "name": "connectorVersion",
+                "value": "",
+                "type": "path",
+                "description": "The version of the connector (e.g., 2.1)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Executes an operation of a connector and returns the result. This is a billable endpoint. The input must conform to the input schema of the specified operation. An authId for a previously created authentication is required for most operations."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,133 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tray.ai Embedded Authentication Authentications API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentications",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai Create User Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#createUserAuthentication",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new authentication for a third-party service (e.g., Salesforce, Slack) for a specific user. Returns an authId that can be used when creating or updating solution instances. Note that OAuth-based authentications cannot be created via API unless you own the service. Requires a user token."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Get Authentications",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#getAuthentications",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves a list of authentications for third-party services. Supports both master token (returns all authentications) and user token (returns user-scoped authentications)."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Delete Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#deleteAuthentication",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deletes a third-party service authentication. Requires a user token."
+        },
+        {
+          "info": {
+            "name": "Tray.ai List Authentications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://tray.io/authentications"
+          },
+          "docs": "Retrieves a list of authentications associated with the authenticated user or organization."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Create Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/authentications",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new user authentication for a third-party service in Tray. Requires the serviceEnvironmentId, user data, and credentials. Returns an authentication ID that can be used with the Call Connector endpoint."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Get Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://tray.io/authentications/:authenticationId",
+            "params": [
+              {
+                "name": "authenticationId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the authentication"
+              }
+            ]
+          },
+          "docs": "Retrieves metadata associated with a user authentication by its ID, including auth id, serviceEnvironmentId, name, and scopes."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Delete Authentication",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://tray.io/authentications/:authenticationId",
+            "params": [
+              {
+                "name": "authenticationId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the authentication"
+              }
+            ]
+          },
+          "docs": "Deletes a user authentication using the authentication ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

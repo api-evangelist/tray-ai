@@ -1,0 +1,110 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tray.ai Embedded Authentication Users API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai Create External User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new external user for your embedded application. Accepts a name, externalUserId, and optional isTestUser flag. Test users are excluded from billing. Requires a master token."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Get Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#getUsers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves a list of external users with pagination support. Returns user details including name, id, externalUserId, and pagination cursor information. Requires a master token."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Update External User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#updateExternalUser",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an external user's properties, such as marking them as a test user to exclude from billing. Requires a master token."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Remove User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#removeUser",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Removes an external user from your embedded application. This will also remove all associated solution instances and authentications. Requires a master token."
+        },
+        {
+          "info": {
+            "name": "Tray.ai List Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://tray.io/users"
+          },
+          "docs": "Retrieves a list of users within the organization. Returns user details including name, email, and role information."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Invite User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/users/invite",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Invites a user to the organization by email address. The invited user will receive an email with instructions to join."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

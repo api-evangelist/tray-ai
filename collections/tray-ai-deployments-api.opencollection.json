@@ -1,0 +1,53 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tray.ai Embedded Authentication Deployments API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Deployments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai Deploy CDK Connector",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/connectors/:connectorName/versions/:connectorVersion/deploy",
+            "params": [
+              {
+                "name": "connectorName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the CDK connector to deploy"
+              },
+              {
+                "name": "connectorVersion",
+                "value": "",
+                "type": "path",
+                "description": "The version of the CDK connector to deploy"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deploys a CDK (Connector Development Kit) connector to the Tray platform. The connector name and version must match those defined in connector.json."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

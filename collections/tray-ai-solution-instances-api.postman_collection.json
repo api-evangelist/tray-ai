@@ -1,0 +1,653 @@
+{
+  "item": [
+    {
+      "id": "1bdda04e-8d85-43c6-9ab3-b1160b6616b7",
+      "name": "Solution Instances",
+      "description": {
+        "content": "Create, update, enable, disable, and delete solution instances for end users. Requires a user token for most operations.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5d9d1697-3f75-4281-8bac-5c23183b9708",
+          "name": "Tray.ai Create Solution Instance",
+          "request": {
+            "name": "Tray.ai Create Solution Instance",
+            "description": {
+              "content": "Creates a new solution instance from a published solution for a specific end user. Accepts the solutionId, instanceName, and optional authValues and configValues. Requires a user token.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "graphql"
+              ],
+              "hash": "createSolutionInstance",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": \"<object>\",\n  \"operationName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "293dc263-4fc1-44d1-9b99-747d6c8015a8",
+              "name": "Solution instance created successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "createSolutionInstance",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"mutation {\\n  createSolutionInstance(input: {\\n    solutionId: \\\"solution-uuid-here\\\",\\n    instanceName: \\\"My Integration\\\",\\n    authValues: [{\\n      externalId: \\\"auth-slot-external-id\\\",\\n      authId: \\\"auth-uuid-here\\\"\\n    }],\\n    configValues: [{\\n      externalId: \\\"config-external-id\\\",\\n      value: \\\"config-value\\\"\\n    }]\\n  }) {\\n    solutionInstance {\\n      id\\n      name\\n      enabled\\n      workflows {\\n        edges {\\n          node {\\n            id\\n            triggerUrl\\n          }\\n        }\\n      }\\n    }\\n  }\\n}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"createSolutionInstance\": {\n      \"solutionInstance\": {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"enabled\": true,\n        \"created\": \"1968-10-13T20:35:21.019Z\",\n        \"owner\": \"string\",\n        \"workflows\": {\n          \"edges\": [\n            {\n              \"node\": {\n                \"id\": \"string\",\n                \"triggerUrl\": \"https://FWFgBfukY.mcsirTbq9IVXeaAHsfyUas,1uBB99UXevZSvvPVnEZdtsL\"\n              }\n            },\n            {\n              \"node\": {\n                \"id\": \"string\",\n                \"triggerUrl\": \"http://ChOjvDgc.bbmaC37S4zNjfmltH+zwGfn+Mt8RyPNRfzsuhmB5NjKT+fpjkGHzXlaAhgvXGQJJZyXO13jFY6.A\"\n              }\n            }\n          ]\n        },\n        \"solutionVersionFlags\": {\n          \"hasNewerVersion\": true\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0816a6cd-9a0d-4f5d-aa51-64c8d6644958",
+              "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "createSolutionInstance",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"mutation {\\n  createSolutionInstance(input: {\\n    solutionId: \\\"solution-uuid-here\\\",\\n    instanceName: \\\"My Integration\\\",\\n    authValues: [{\\n      externalId: \\\"auth-slot-external-id\\\",\\n      authId: \\\"auth-uuid-here\\\"\\n    }],\\n    configValues: [{\\n      externalId: \\\"config-external-id\\\",\\n      value: \\\"config-value\\\"\\n    }]\\n  }) {\\n    solutionInstance {\\n      id\\n      name\\n      enabled\\n      workflows {\\n        edges {\\n          node {\\n            id\\n            triggerUrl\\n          }\\n        }\\n      }\\n    }\\n  }\\n}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"locations\": [\n        {\n          \"line\": 1617,\n          \"column\": 4119\n        },\n        {\n          \"line\": 7850,\n          \"column\": 2324\n        }\n      ],\n      \"path\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"message\": \"string\",\n      \"locations\": [\n        {\n          \"line\": 1173,\n          \"column\": 7286\n        },\n        {\n          \"line\": 4631,\n          \"column\": 2669\n        }\n      ],\n      \"path\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "00569117-bfe1-470c-bde8-91a0be0a18d1",
+          "name": "Tray.ai Get Solution Instances",
+          "request": {
+            "name": "Tray.ai Get Solution Instances",
+            "description": {
+              "content": "Retrieves solution instances. When called with a master token, returns instances for all end users. When called with a user token, returns only instances owned by that user. Supports pagination.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "graphql"
+              ],
+              "hash": "getSolutionInstances",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": \"<object>\",\n  \"operationName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "755a2bc3-801f-4926-bb0b-42dc3f8c5ed2",
+              "name": "Solution instances returned successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "getSolutionInstances",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"query {\\n  viewer {\\n    solutionInstances {\\n      edges {\\n        node {\\n          id\\n          name\\n          enabled\\n          created\\n          owner\\n          solutionVersionFlags {\\n            hasNewerVersion\\n          }\\n        }\\n        cursor\\n      }\\n      pageInfo {\\n        hasNextPage\\n        endCursor\\n      }\\n    }\\n  }\\n}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"viewer\": {\n      \"solutionInstances\": {\n        \"edges\": [\n          {\n            \"node\": {\n              \"id\": \"string\",\n              \"name\": \"string\",\n              \"enabled\": false,\n              \"created\": \"1961-01-18T07:28:32.182Z\",\n              \"owner\": \"string\",\n              \"workflows\": {\n                \"edges\": [\n                  {\n                    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                  },\n                  {\n                    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                  }\n                ]\n              },\n              \"solutionVersionFlags\": {\n                \"hasNewerVersion\": true\n              }\n            },\n            \"cursor\": \"string\"\n          },\n          {\n            \"node\": {\n              \"id\": \"string\",\n              \"name\": \"string\",\n              \"enabled\": false,\n              \"created\": \"2020-05-06T14:26:24.355Z\",\n              \"owner\": \"string\",\n              \"workflows\": {\n                \"edges\": [\n                  {\n                    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                  },\n                  {\n                    \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                  }\n                ]\n              },\n              \"solutionVersionFlags\": {\n                \"hasNewerVersion\": true\n              }\n            },\n            \"cursor\": \"string\"\n          }\n        ],\n        \"pageInfo\": {\n          \"hasNextPage\": true,\n          \"endCursor\": \"string\",\n          \"hasPreviousPage\": false,\n          \"startCursor\": \"string\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dee0f23b-18c0-4b4a-8881-7b6ef7141a64",
+              "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "getSolutionInstances",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"query {\\n  viewer {\\n    solutionInstances {\\n      edges {\\n        node {\\n          id\\n          name\\n          enabled\\n          created\\n          owner\\n          solutionVersionFlags {\\n            hasNewerVersion\\n          }\\n        }\\n        cursor\\n      }\\n      pageInfo {\\n        hasNextPage\\n        endCursor\\n      }\\n    }\\n  }\\n}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"locations\": [\n        {\n          \"line\": 5328,\n          \"column\": 6352\n        },\n        {\n          \"line\": 7,\n          \"column\": 9022\n        }\n      ],\n      \"path\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"message\": \"string\",\n      \"locations\": [\n        {\n          \"line\": 6309,\n          \"column\": 6906\n        },\n        {\n          \"line\": 4512,\n          \"column\": 890\n        }\n      ],\n      \"path\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b8d4439d-a509-4c80-b5c8-f965b8c55b5f",
+          "name": "Tray.ai Update Solution Instance",
+          "request": {
+            "name": "Tray.ai Update Solution Instance",
+            "description": {
+              "content": "Updates an existing solution instance. Can update the instance name, enable/disable status, auth values, and config values. Setting errorOnEnablingWithMissingValues to true is recommended to catch configuration issues. Requires a user token.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "graphql"
+              ],
+              "hash": "updateSolutionInstance",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": \"<object>\",\n  \"operationName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "91f8a99b-7c40-4b35-87d0-6e5702a359a1",
+              "name": "Solution instance updated successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "updateSolutionInstance",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"mutation {\\n  updateSolutionInstance(input: {\\n    solutionInstanceId: \\\"instance-uuid-here\\\",\\n    instanceName: \\\"Updated Integration Name\\\",\\n    enabled: true,\\n    errorOnEnablingWithMissingValues: true\\n  }) {\\n    solutionInstance {\\n      id\\n      name\\n      enabled\\n    }\\n  }\\n}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"updateSolutionInstance\": {\n      \"solutionInstance\": {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"enabled\": false,\n        \"created\": \"1982-09-14T05:36:29.013Z\",\n        \"owner\": \"string\",\n        \"workflows\": {\n          \"edges\": [\n            {\n              \"node\": {\n                \"id\": \"string\",\n                \"triggerUrl\": \"https://HlYRInatLiHhfKcLaxZddzRTJA.zvijNjtgp.uVjn8zHlK89GY8CxaeJxxfjAVinv\"\n              }\n            },\n            {\n              \"node\": {\n                \"id\": \"string\",\n                \"triggerUrl\": \"https://qTlQS.izOKlRVol7+9NUvA2aB38LRqbMFQ4POh0rZkuPLXtf6wu4V9+risX8rCFfij.giI8SDbDFnYHQ\"\n              }\n            }\n          ]\n        },\n        \"solutionVersionFlags\": {\n          \"hasNewerVersion\": false\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9ad5df17-6423-45e5-9e03-f5a715923917",
+              "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "updateSolutionInstance",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"mutation {\\n  updateSolutionInstance(input: {\\n    solutionInstanceId: \\\"instance-uuid-here\\\",\\n    instanceName: \\\"Updated Integration Name\\\",\\n    enabled: true,\\n    errorOnEnablingWithMissingValues: true\\n  }) {\\n    solutionInstance {\\n      id\\n      name\\n      enabled\\n    }\\n  }\\n}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"locations\": [\n        {\n          \"line\": 5328,\n          \"column\": 6352\n        },\n        {\n          \"line\": 7,\n          \"column\": 9022\n        }\n      ],\n      \"path\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"message\": \"string\",\n      \"locations\": [\n        {\n          \"line\": 6309,\n          \"column\": 6906\n        },\n        {\n          \"line\": 4512,\n          \"column\": 890\n        }\n      ],\n      \"path\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4c8a79f7-1e1c-4398-bf30-fd04d10347f0",
+          "name": "Tray.ai Delete Solution Instance",
+          "request": {
+            "name": "Tray.ai Delete Solution Instance",
+            "description": {
+              "content": "Deletes a solution instance and all associated data. This action is irreversible. Requires a user token.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "graphql"
+              ],
+              "hash": "deleteSolutionInstance",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"variables\": \"<object>\",\n  \"operationName\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "975f289f-aff6-4565-868d-98f106be2b8c",
+              "name": "Solution instance deleted successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "deleteSolutionInstance",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"mutation {\\n  deleteSolutionInstance(input: {\\n    solutionInstanceId: \\\"instance-uuid-here\\\"\\n  }) {\\n    clientMutationId\\n  }\\n}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"deleteSolutionInstance\": {\n      \"clientMutationId\": \"string\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "44abf88d-e067-4984-b3f5-34234066df68",
+              "name": "Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "graphql"
+                  ],
+                  "hash": "deleteSolutionInstance",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"mutation {\\n  deleteSolutionInstance(input: {\\n    solutionInstanceId: \\\"instance-uuid-here\\\"\\n  }) {\\n    clientMutationId\\n  }\\n}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"message\": \"string\",\n      \"locations\": [\n        {\n          \"line\": 5328,\n          \"column\": 6352\n        },\n        {\n          \"line\": 7,\n          \"column\": 9022\n        }\n      ],\n      \"path\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"message\": \"string\",\n      \"locations\": [\n        {\n          \"line\": 6309,\n          \"column\": 6906\n        },\n        {\n          \"line\": 4512,\n          \"column\": 890\n        }\n      ],\n      \"path\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://tray.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "b278b1c3-e15a-4456-a4af-2675bbd12d7e",
+    "name": "Tray.ai Embedded Authentication Solution Instances API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray's UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.\n\nContact Support:\n Name: Tray.ai Support",
+      "type": "text/plain"
+    }
+  }
+}

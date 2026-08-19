@@ -1,0 +1,84 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tray.ai Embedded Authentication Solution Instances API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Solution Instances",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai Create Solution Instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#createSolutionInstance",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new solution instance from a published solution for a specific end user. Accepts the solutionId, instanceName, and optional authValues and configValues. Requires a user token."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Get Solution Instances",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#getSolutionInstances",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves solution instances. When called with a master token, returns instances for all end users. When called with a user token, returns only instances owned by that user. Supports pagination."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Update Solution Instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#updateSolutionInstance",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an existing solution instance. Can update the instance name, enable/disable status, auth values, and config values. Setting errorOnEnablingWithMissingValues to true is recommended to catch configuration issues. Requires a user token."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Delete Solution Instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://tray.io/graphql#deleteSolutionInstance",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deletes a solution instance and all associated data. This action is irreversible. Requires a user token."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

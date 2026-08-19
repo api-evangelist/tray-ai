@@ -1,0 +1,73 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Tray.ai Embedded Authentication Workspaces API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workspaces",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tray.ai List Workspaces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://tray.io/workspaces"
+          },
+          "docs": "Retrieves a list of workspaces in the organization. Workspaces divide the organization into sub-categories such as departments or dev/prod environments for environment promotion."
+        },
+        {
+          "info": {
+            "name": "Tray.ai Get Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://tray.io/workspaces/:workspaceId",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the workspace"
+              }
+            ]
+          },
+          "docs": "Retrieves details for a specific workspace by its ID."
+        },
+        {
+          "info": {
+            "name": "Tray.ai List Workspace Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://tray.io/workspaces/:workspaceId/users",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the workspace"
+              }
+            ]
+          },
+          "docs": "Retrieves a list of users belonging to a specific workspace."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
