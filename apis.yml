@@ -210,6 +210,8 @@ apis:
   humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   baseURL: https://tray.io/graphql
   tags:
+  - Deployment
+  tags_raw:
   - Deployments
   properties:
   - type: OpenAPI
@@ -261,6 +263,8 @@ apis:
   humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   baseURL: https://tray.io/graphql
   tags:
+  - Project
+  tags_raw:
   - Projects
   properties:
   - type: OpenAPI
@@ -463,6 +467,8 @@ apis:
   humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   baseURL: https://tray.io/graphql
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
