@@ -799,11 +799,11 @@ common:
 - name: CDK Examples
   description: Collection of example connectors built using the Tray.io Connector Development Kit (TypeScript).
   url: https://github.com/trayio/CDK-examples-public
-  type: Samples
+  type: Examples
 - name: Embedded Edition Sample App
   description: Sample application demonstrating Tray Embedded integration.
   url: https://github.com/trayio/embedded-edition-sample-app
-  type: Samples
+  type: Examples
 - name: Connector Tester
   description: Tray developer tool for testing connectors locally.
   url: https://github.com/trayio/connector-tester-public
