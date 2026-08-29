@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Tray.ai Embedded Authentication Connectors API
-  description: 'The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray''s UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.'
+  title: Tray.ai Platform Connectors API
+  description: The Tray.ai Platform API (also known as the Connectivity API or Tray APIs) provides direct programmatic REST access to Tray's connectors, authentication management, trigger subscriptions, user and workspace administration, and project/solution lifecycle operations. It enables developers to integrate Tray's 700+ pre-built service connectors into their own applications without using the Builder UI. All endpoints require Bearer token authentication.
   version: 1.0.0
   contact:
     name: Tray.ai Support
@@ -11,11 +11,11 @@ info:
     name: Proprietary
     url: https://tray.ai/terms
 servers:
-- url: https://tray.io
+- url: https://api.tray.io/core/v1
   description: US Region (Default)
-- url: https://eu1.tray.io
+- url: https://api.eu1.tray.io/core/v1
   description: EU Region
-- url: https://ap1.tray.io
+- url: https://api.ap1.tray.io/core/v1
   description: APAC Region
 security:
 - bearerAuth: []
@@ -116,21 +116,14 @@ paths:
         '404':
           description: Connector or version not found
 components:
+  responses:
+    Unauthorized:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    CallConnectorRequest:
-      type: object
-      required:
-      - operation
-      properties:
-        operation:
-          type: string
-          description: The name of the connector operation to execute
-        authId:
-          type: string
-          description: The ID of a previously created authentication to use for the connector call
-        input:
-          type: object
-          description: Input data for the operation. Must conform to the operation's input schema.
     Operation:
       type: object
       properties:
@@ -202,16 +195,23 @@ components:
         statusCode:
           type: integer
           description: HTTP status code
-  responses:
-    Unauthorized:
-      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    CallConnectorRequest:
+      type: object
+      required:
+      - operation
+      properties:
+        operation:
+          type: string
+          description: The name of the connector operation to execute
+        authId:
+          type: string
+          description: The ID of a previously created authentication to use for the connector call
+        input:
+          type: object
+          description: Input data for the operation. Must conform to the operation's input schema.
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: Use either a master token (obtained from Tray Embedded UI settings) or a user token (obtained via the authorize mutation). Master tokens are required for admin operations like managing users. User tokens are required for user-scoped operations like managing solution instances.
+      description: Bearer token authentication. Use a master token for admin operations or a user token for user-scoped operations. Tokens are obtained from the Tray platform settings or via the Embedded API authorize mutation.

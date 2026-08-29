@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Tray.ai Embedded Authentication Solution Instances API
+  title: Tray.ai Embedded Solution Instances API
   description: 'The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray''s UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.'
   version: 1.0.0
   contact:
@@ -169,6 +169,59 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    PageInfo:
+      type: object
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Whether there are more results after the current page
+        endCursor:
+          type: string
+          description: Cursor for fetching the next page
+        hasPreviousPage:
+          type: boolean
+          description: Whether there are results before the current page
+        startCursor:
+          type: string
+          description: Cursor for fetching the previous page
+    GraphQLRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+          description: The GraphQL query or mutation string
+        variables:
+          type: object
+          description: Variables to pass to the GraphQL query or mutation
+        operationName:
+          type: string
+          description: The name of the operation to execute if the query contains multiple operations
+    GraphQLError:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              locations:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    line:
+                      type: integer
+                    column:
+                      type: integer
+              path:
+                type: array
+                items:
+                  type: string
     SolutionInstance:
       type: object
       properties:
@@ -210,59 +263,6 @@ components:
             hasNewerVersion:
               type: boolean
               description: Whether a newer version of the solution is available
-    GraphQLRequest:
-      type: object
-      required:
-      - query
-      properties:
-        query:
-          type: string
-          description: The GraphQL query or mutation string
-        variables:
-          type: object
-          description: Variables to pass to the GraphQL query or mutation
-        operationName:
-          type: string
-          description: The name of the operation to execute if the query contains multiple operations
-    PageInfo:
-      type: object
-      properties:
-        hasNextPage:
-          type: boolean
-          description: Whether there are more results after the current page
-        endCursor:
-          type: string
-          description: Cursor for fetching the next page
-        hasPreviousPage:
-          type: boolean
-          description: Whether there are results before the current page
-        startCursor:
-          type: string
-          description: Cursor for fetching the previous page
-    GraphQLError:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-                description: Error message
-              locations:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    line:
-                      type: integer
-                    column:
-                      type: integer
-              path:
-                type: array
-                items:
-                  type: string
   responses:
     Unauthorized:
       description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.

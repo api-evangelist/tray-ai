@@ -1,36 +1,45 @@
 {
   "provider": "tray-ai",
   "sources": [
-    "tray-ai-authentication-api-openapi.yml",
-    "tray-ai-authentications-api-openapi.yml",
-    "tray-ai-call-connector-api-openapi.yml",
-    "tray-ai-connectors-api-openapi.yml",
-    "tray-ai-deployments-api-openapi.yml",
-    "tray-ai-projects-api-openapi.yml",
-    "tray-ai-solution-instances-api-openapi.yml",
-    "tray-ai-solutions-api-openapi.yml",
-    "tray-ai-triggers-api-openapi.yml",
-    "tray-ai-users-api-openapi.yml",
-    "tray-ai-workflows-api-openapi.yml",
-    "tray-ai-workspaces-api-openapi.yml"
+    "_original/tray-ai-embedded-api-openapi.yml",
+    "_original/tray-ai-platform-api-openapi.yml"
   ],
   "outputs": [
     "tray-ai-authentication-api-openapi.yml",
     "tray-ai-authentications-api-openapi.yml",
     "tray-ai-call-connector-api-openapi.yml",
+    "tray-ai-solution-instances-api-openapi.yml",
+    "tray-ai-solutions-api-openapi.yml",
+    "tray-ai-users-api-openapi.yml",
+    "tray-ai-workflows-api-openapi.yml",
     "tray-ai-connectors-api-openapi.yml",
     "tray-ai-deployments-api-openapi.yml",
     "tray-ai-projects-api-openapi.yml",
-    "tray-ai-solution-instances-api-openapi.yml",
-    "tray-ai-solutions-api-openapi.yml",
     "tray-ai-triggers-api-openapi.yml",
-    "tray-ai-users-api-openapi.yml",
-    "tray-ai-workflows-api-openapi.yml",
     "tray-ai-workspaces-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "tray-ai-embedded-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "tray-ai-platform-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "tag 'Authentications' spans 2 source specs (tray-ai-embedded-api-openapi.yml, tray-ai-platform-api-openapi.yml): per-path servers applied",
+    "tag 'Users' spans 2 source specs (tray-ai-embedded-api-openapi.yml, tray-ai-platform-api-openapi.yml): per-path servers applied"
+  ],
+  "skipped": [
+    "tray-ai-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tray-ai-authentications-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tray-ai-call-connector-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tray-ai-connectors-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tray-ai-deployments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tray-ai-projects-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tray-ai-solution-instances-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tray-ai-solutions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tray-ai-triggers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tray-ai-users-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tray-ai-workflows-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tray-ai-workspaces-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
