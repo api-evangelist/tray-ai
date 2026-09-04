@@ -13,6 +13,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/tray-ai-authentication-api-openapi.yml
+  - type: Overlay
+    url: overlays/tray-ai-authentication-overlay.yaml
   - type: Documentation
     url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   - type: PostmanCollection
@@ -64,6 +66,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/tray-ai-authentications-api-openapi.yml
+  - type: Overlay
+    url: overlays/tray-ai-authentications-overlay.yaml
   - type: Documentation
     url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   - type: PostmanCollection
@@ -114,6 +118,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/tray-ai-call-connector-api-openapi.yml
+  - type: Overlay
+    url: overlays/tray-ai-call-connector-overlay.yaml
   - type: Documentation
     url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   - type: PostmanCollection
@@ -158,13 +164,15 @@ apis:
   description: >-
     List available connectors and their operations, and call connector operations to interact with third-party
     services programmatically.
-  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
-  baseURL: https://tray.io/graphql
+  humanURL: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  baseURL: https://api.tray.io/core/v1
   tags:
   - Connectors
   properties:
   - type: OpenAPI
     url: openapi/tray-ai-connectors-api-openapi.yml
+  - type: Overlay
+    url: overlays/tray-ai-connectors-overlay.yaml
   - type: Documentation
     url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   - type: PostmanCollection
@@ -207,8 +215,8 @@ apis:
 - aid: tray-ai:tray-ai-deployments-api
   name: Tray.ai Deployments API
   description: Deploy CDK (Connector Development Kit) connectors to the Tray platform.
-  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
-  baseURL: https://tray.io/graphql
+  humanURL: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  baseURL: https://api.tray.io/core/v1
   tags:
   - Deployment
   tags_raw:
@@ -216,6 +224,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/tray-ai-deployments-api-openapi.yml
+  - type: Overlay
+    url: overlays/tray-ai-deployments-overlay.yaml
   - type: Documentation
     url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   - type: PostmanCollection
@@ -260,8 +270,8 @@ apis:
   description: >-
     Manage projects and solutions for environment promotion, including creating, exporting, and importing
     project versions.
-  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
-  baseURL: https://tray.io/graphql
+  humanURL: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  baseURL: https://api.tray.io/core/v1
   tags:
   - Project
   tags_raw:
@@ -269,6 +279,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/tray-ai-projects-api-openapi.yml
+  - type: Overlay
+    url: overlays/tray-ai-projects-overlay.yaml
   - type: Documentation
     url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   - type: PostmanCollection
@@ -320,6 +332,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/tray-ai-solution-instances-api-openapi.yml
+  - type: Overlay
+    url: overlays/tray-ai-solution-instances-overlay.yaml
   - type: Documentation
     url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   - type: PostmanCollection
@@ -370,6 +384,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/tray-ai-solutions-api-openapi.yml
+  - type: Overlay
+    url: overlays/tray-ai-solutions-overlay.yaml
   - type: Documentation
     url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   - type: PostmanCollection
@@ -414,13 +430,15 @@ apis:
   description: >-
     List available triggers and manage trigger subscriptions to receive real-time data from third-party
     services.
-  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
-  baseURL: https://tray.io/graphql
+  humanURL: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  baseURL: https://api.tray.io/core/v1
   tags:
   - Triggers
   properties:
   - type: OpenAPI
     url: openapi/tray-ai-triggers-api-openapi.yml
+  - type: Overlay
+    url: overlays/tray-ai-triggers-overlay.yaml
   - type: Documentation
     url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   - type: PostmanCollection
@@ -473,6 +491,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/tray-ai-users-api-openapi.yml
+  - type: Overlay
+    url: overlays/tray-ai-users-overlay.yaml
   - type: Documentation
     url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   - type: PostmanCollection
@@ -524,6 +544,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/tray-ai-workflows-api-openapi.yml
+  - type: Overlay
+    url: overlays/tray-ai-workflows-overlay.yaml
   - type: Documentation
     url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   - type: PostmanCollection
@@ -568,13 +590,15 @@ apis:
   description: >-
     Manage workspaces and workspace users. Workspaces divide your organization into sub-categories such
     as departments or dev/prod environments.
-  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
-  baseURL: https://tray.io/graphql
+  humanURL: https://tray.ai/documentation/developer/openapi/trayapi/overview/
+  baseURL: https://api.tray.io/core/v1
   tags:
   - Workspaces
   properties:
   - type: OpenAPI
     url: openapi/tray-ai-workspaces-api-openapi.yml
+  - type: Overlay
+    url: overlays/tray-ai-workspaces-overlay.yaml
   - type: Documentation
     url: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   - type: PostmanCollection
@@ -621,6 +645,13 @@ tags:
 - iPaaS
 - AI Agents
 - MCP
+- Orchestration
+- Workflow Automation
+- Connectors
+- Agent Gateway
+- Embedded Integration
+- Enterprise Automation
+- Model Context Protocol
 type: Index
 deliveryModel:
   model: saas
@@ -650,8 +681,8 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/tray-ai.png
 access: 3rd-Party
 created: '2025-06-05'
-modified: '2026-05-22'
-position: Consumer
+modified: '2026-09-02'
+position: Consuming
 description: >-
   Tray.ai (formerly Tray.io) is an AI-ready enterprise orchestration platform for data and AI, combining a Merlin Agent
   Builder for no-code AI agent creation, an Agent Gateway for governed MCP server management, and an intelligent iPaaS
@@ -766,7 +797,7 @@ common:
   type: Portal
 - name: Merlin Agent Builder
   description: No-code AI agent builder with reasoning, guardrails, and a composable hub of 700+ connectors as agent tools.
-  url: https://tray.ai/documentation/agent-builder/
+  url: https://tray.ai/documentation/platform/artificial-intelligence/agent-builder/overview
   type: Product
 - name: Agent Hub
   description: >-
@@ -883,3 +914,70 @@ common:
       on-premise, SSO, HIPAA, Regional hosting, Log streaming, Data engineering.
 - type: LlmsText
   url: https://tray.ai/llms.txt
+- type: LLMsTxt
+  url: llms/tray-ai-llms.txt
+- type: OpenAPI
+  name: Tray Platform API (provider-published spec)
+  url: https://tray.ai/documentation/files/openapi/trayapi.yaml
+- type: OpenAPI
+  name: Tray Embedded API (provider-published spec)
+  url: https://tray.ai/documentation/files/openapi/embeddedapi.yaml
+- type: Documentation
+  url: https://tray.ai/documentation/
+- type: APIReference
+  url: https://tray.ai/documentation/developer/
+- type: GettingStarted
+  url: https://tray.ai/documentation/developer/getting-started/introduction
+- type: Support
+  url: https://tray.ai/documentation/help/
+- type: Community
+  url: https://tray.ai/community/
+- type: Pricing
+  url: https://tray.ai/pricing
+- type: Packages
+  url: packages/tray-ai-packages.yml
+- type: SDKs
+  url: packages/tray-ai-packages.yml
+- type: CLI
+  url: cli/tray-ai-cli.yml
+- type: Components
+  url: components/tray-ai-components.yml
+- type: MCPServer
+  url: mcp/tray-ai-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/tray-ai-tool-crosswalk.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: WellKnown
+  url: well-known/tray-ai-well-known.yml
+- type: OAuthScopes
+  url: scopes/tray-ai-scopes.yml
+- type: Conventions
+  url: conventions/tray-ai-conventions.yml
+- type: ErrorCatalog
+  url: errors/tray-ai-problem-types.yml
+- type: DataModel
+  url: data-model/tray-ai-data-model.yml
+- type: Webhooks
+  url: asyncapi/tray-ai-webhooks.yml
+- type: Lifecycle
+  url: lifecycle/tray-ai-lifecycle.yml
+- type: Deprecation
+  url: https://tray.ai/documentation/releases/deprecations/connector-builder-deprecation
+- type: ChangeLog
+  url: changelog/tray-ai-changelog.yml
+- type: ReleaseNotes
+  url: https://tray.ai/documentation/releases
+- type: Conformance
+  url: conformance/tray-ai-conformance.yml
+- type: Compliance
+  url: security/tray-ai-trust-center.yml
+- type: Security
+  url: security/tray-ai-vulnerability-disclosure.yml
+- type: VulnerabilityDisclosure
+  url: security/tray-ai-vulnerability-disclosure.yml
+x-enrichment:
+  date: '2026-09-02'
+  status: enriched
+  artifacts_added: 43
+  pass: local-v1
