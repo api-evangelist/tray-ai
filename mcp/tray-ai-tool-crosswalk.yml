@@ -1,0 +1,217 @@
+generated: '2026-09-02'
+method: derived
+source: >-
+  skills/_published/*.md (Tray-published tray-workflows plugin skills, github.com/trayio/tray-plugins),
+  mcp/tray-ai-mcp.yml,
+  openapi/_original/tray-ai-platform-api-published-openapi.yaml (provider-published, 49 operations),
+  openapi/_original/tray-ai-embedded-api-published-openapi.yaml (provider-published, 21 operations),
+  graphql/tray-ai-graphql.md
+provider: Tray.ai
+providerId: tray-ai
+description: >-
+  Binding between the tools Tray's remote MCP server exposes, its GraphQL Embedded API and its REST
+  Platform API. The live tools/list is OAuth-gated, but Tray publishes the tool NAMES and many of
+  their parameter names itself, in the SKILL.md files of its own tray-workflows plugin
+  (github.com/trayio/tray-plugins, Apache-2.0) — so the tool column below is real, not inferred.
+  Full inputSchemas still require authenticated introspection.
+
+  The structural finding: Tray's MCP server is a projection of the WORKFLOW BUILDER, not of the
+  public REST API. Only the connector and authentication tools have REST twins. Everything that
+  makes the MCP server interesting — create a workflow, add steps, validate structure, fire an
+  execution, read a step's input and output — has no public REST or GraphQL operation at all. And
+  the entire Embedded (GraphQL) partner surface, plus workspace/user administration, the Trigger
+  subscription pipeline, CDK deployment and solution releases, has no MCP tool.
+surfaces:
+  openapi:
+    - file: openapi/_original/tray-ai-platform-api-published-openapi.yaml
+      url: https://tray.ai/documentation/files/openapi/trayapi.yaml
+      base: https://api.tray.io
+      operations: 49
+      gated: false
+    - file: openapi/_original/tray-ai-embedded-api-published-openapi.yaml
+      url: https://tray.ai/documentation/files/openapi/embeddedapi.yaml
+      base: https://tray.io/graphql
+      operations: 21
+      gated: false
+  graphql:
+    endpoint: https://tray.io/graphql
+    gated: true
+    note: >-
+      Introspection requires a master or user bearer token. The schema is documented through the
+      Embedded API OpenAPI wrapper, which models each GraphQL operation as a POST to /graphql.
+  mcp:
+    url: https://api.tray.io/mcp
+    gated: true
+    note: >-
+      tools/list returns 401 invalid_token anonymously. Tool names below come from Tray's own
+      published plugin skills; input schemas require an OAuth2 token to read.
+    tool_name_evidence: https://github.com/trayio/tray-plugins/blob/HEAD/plugins/tray-workflows/skills/research-connector/SKILL.md
+crosswalk:
+  - tool: list_connectors
+    category: connectors
+    rest: [get-connectors]
+    binding: direct
+    confidence: high
+    note: >-
+      Takes a `search` term and returns exact connector `name`, `version` and `service` details —
+      the same catalogue as GET /core/v1/connectors.
+  - tool: list_connector_operations
+    category: connectors
+    rest: [get-connector-operations]
+    binding: direct
+    confidence: high
+    note: >-
+      Returns inputSchema.required, inputSchema.properties, hasDynamicOutput and `lookup` (DDL)
+      objects — the same payload as
+      GET /core/v1/connectors/{connector-name}/versions/{connector-version}/operations, but
+      COMPACTED: advanced fields stripped and polymorphic branches replaced with `_collapsed`
+      markers carrying `expand: ['<propName>']` hints. Extra MCP-only parameters:
+      include_advanced, include_output_schema, expand.
+  - tool: call_connector
+    category: connectors
+    rest: [call-connector]
+    graphql: [call-connector]
+    binding: direct
+    confidence: high
+    note: >-
+      Same execution path as POST /core/v1/connectors/{name}/versions/{version}/call and the
+      Embedded callConnector mutation. Takes auth_id and has_dynamic_output. Inherits the
+      pass-through error trap — a 200 does not mean the downstream call succeeded.
+  - tool: list_authentications
+    category: authentication
+    rest: [get-user-authentication, get-full-authentication]
+    graphql: [get-authentications]
+    binding: partial
+    confidence: medium
+    note: >-
+      Filters by `service_name` (or a fragile keyword `search`). The published Platform spec has
+      read-by-id and read-full but NO list-all authentications operation, so this tool is broader
+      than any single REST operation and closest to the Embedded getAuthentications query.
+  - tool: list_service_environments
+    category: authentication
+    rest: [get-service-environments]
+    binding: direct
+    confidence: high
+    note: >-
+      Maps to GET /core/v1/services/{service-name}/versions/{service-version}/environments. Tray's
+      own skill warns the parameters are service_name + service_version (integer), NOT service_id.
+  - tool: create_auth_collection
+    category: authentication
+    rest: [create-user-authentication]
+    graphql: [create-authentication]
+    binding: partial
+    confidence: medium
+    note: >-
+      Creates an auth REQUEST and returns a URL the end user completes, rather than storing a
+      credential directly. Parameters are `service` (UUID), `service_environment_id` and `scopes` —
+      not connector_name/connector_version.
+  - tool: check_auth_completion
+    category: authentication
+    rest: [get-user-authentication]
+    binding: partial
+    confidence: medium
+    note: Polls whether the user finished the auth URL; the REST analogue is reading the authentication by id.
+  - tool: create_project
+    category: projects
+    rest: []
+    binding: none
+    confidence: high
+    note: >-
+      MCP-only. The published Platform API can version, export and import a project but cannot
+      create one.
+  - tool: list_projects
+    category: projects
+    rest: []
+    binding: none
+    confidence: high
+    note: MCP-only; there is no GET /core/v1/projects in the published spec.
+mcp_only:
+  - tool: create_workflow
+    reason: No public REST or GraphQL operation creates a workflow with its trigger. Workflow authoring is builder-side.
+    consequence: write
+  - tool: add_workflow_steps
+    reason: No public operation adds steps to a workflow.
+    consequence: write
+  - tool: update_workflow_steps
+    reason: No public operation edits step configuration.
+    consequence: write
+  - tool: update_workflow_structure
+    reason: No public operation reorders branches or step structure.
+    consequence: write
+  - tool: update_workflow_metadata
+    reason: No public operation edits workflow name/description.
+    consequence: write
+  - tool: update_workflow
+    reason: No public operation updates a workflow.
+    consequence: write
+  - tool: remove_workflow_step
+    reason: No public operation removes a step. DESTRUCTIVE and surfaced for confirmation by the packaged plugin.
+    consequence: write
+  - tool: get_workflow
+    reason: >-
+      Nothing in the published specs reads a single workflow's live step graph; export-workflows
+      only produces a bundle.
+    consequence: read
+  - tool: get_workflow_step_detail
+    reason: No public operation reads one step.
+    consequence: read
+  - tool: validate_workflow
+    reason: >-
+      Tray's structural audit (jsonpath resolution, output-shape rules, structural conventions) has
+      no public endpoint. This is the strongest MCP-only capability in the set.
+    consequence: read
+  - tool: trigger_workflow
+    reason: >-
+      Workflows are otherwise fired by their own trigger or public webhook URL, not by a public API
+      operation.
+    consequence: write
+  - tool: list_workflow_executions
+    reason: No public execution-log operation exists in either published spec.
+    consequence: read
+  - tool: get_workflow_execution
+    reason: No public execution-log operation exists.
+    consequence: read
+rest_only:
+  - operations: [create-subscription, get-subscriptions, get-subscription-by-id, delete-connector-events-subscription, get-triggers, get-trigger-operations]
+    reason: >-
+      The Trigger / subscription surface — the webhook event pipeline and its HMAC signing keys —
+      has no MCP tool. An agent cannot subscribe to third-party events over MCP.
+  - operations: [get-workspaces, get-workspace-by-id, list-users-in-workspace, add-user-to-workspace, get-workspace-user-by-id, update-user-workspace-role, remove-user-from-a-Workspace, get-workspace-roles]
+    reason: >-
+      Workspace and membership administration is REST-only, by design — the MCP session binds one
+      workspace at OAuth sign-in and takes no workspaceId argument.
+  - operations: [invite-user-to-organization, list-organization-roles, list-users-in-organization, create-user, get-user-by-id, delete-user-by-id, update-user-organization-role]
+    reason: Organization user and role administration is REST-only.
+  - operations: [create-deployment, get-deployment-status, share-with-emails]
+    reason: CDK connector deployment and sharing are REST + tray-cdk CLI only.
+  - operations: [PublicApiProjectController.importProject, PublicApiProjectController.previewProjectImport, PublicApiProjectController.getProjectImportRequirements, PublicApiProjectController.createProjectVersion, listProjectVersions, exportAProjectVersion]
+    reason: Project versioning and promotion is REST + Tray Sync CLI only.
+  - operations: [PublicApiSolutionController.createSolutionRelease, PublicApiSolutionController.previewSolutionRelease]
+    reason: Embedded solution releases are REST-only.
+  - operations: [getCoreV1WorkspacesWorkspace-idOn-prem-agent-groups, postCoreV1WorkspacesWorkspace-idOn-prem-agent-groups, deleteCoreV1WorkspacesWorkspace-idOn-prem-agent-groupsAgent-group-id, getCoreV1WorkspacesWorkspace-idOn-prem-agent-groupsAgent-group-idAgents, postCoreV1WorkspacesWorkspace-idOn-prem-agent-groupsAgent-group-idAgents, getCoreV1WorkspacesWorkspace-idOn-prem-agent-groupsAgent-group-idAgentsAgent-id, patchCoreV1WorkspacesWorkspace-idOn-prem-agent-groupsAgent-group-idAgentsAgent-id, deleteCoreV1WorkspacesWorkspace-idOn-prem-agent-groupsAgent-group-idAgentsAgent-id]
+    reason: On-prem agent group and instance management is REST-only.
+  - operations: [get-users, create-user, create-user-token, create-config-wizard-auth-code, update-user, delete-user, get-solutions, get-solution-instances, create-solution-instance, update-solution-instance, upgrade-solution-instance, delete-solution-instance, import-project, export-project, export-project-config, import-workflows, export-workflows]
+    reason: >-
+      The entire Embedded (GraphQL) end-user surface — external users, user tokens, solutions and
+      solution instances — has no MCP tool. Embedded is a partner-facing API, not an agent surface.
+coverage:
+  mcp_tools_named: 22
+  mapped_to_rest: 9
+  mcp_only: 13
+  rest_operations_total: 70
+  rest_only: 61
+  overlap_ratio: '9 of 70 published REST operations (13%) have an MCP counterpart'
+  note: >-
+    22 named tools is a lower bound — it is what Tray's published plugin skills reference. The
+    server may expose more (a delete-workflow tool is described in prose on the Tray Headless docs
+    page but is not named in any published skill, so it is deliberately not listed above).
+caveats:
+  - >-
+    Tool names are provider-published strings, but their full inputSchemas are not. Introspect
+    tools/list with an OAuth2 access token before binding parameters.
+  - >-
+    call_connector inherits Tray's pass-through error semantics: a successful tool call can carry a
+    third-party failure in its body. See errors/tray-ai-problem-types.yml.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

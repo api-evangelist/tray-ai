@@ -1,0 +1,165 @@
+generated: '2026-09-02'
+method: probed
+source: https://tray.ai/documentation/platform/tray-headless/tray-headless-mcp, https://tray.ai/documentation/platform/artificial-intelligence/agent-gateway/connecting-clients,
+  live POST tools/list to https://api.tray.io/mcp, https://api.tray.io/.well-known/oauth-protected-resource/mcp
+provider: Tray.ai
+providerId: tray-ai
+name: Tray MCP Server (Tray Headless MCP / Agent Gateway)
+status: published
+description: 'Tray.ai runs a first-party, hosted remote MCP server. Two surfaces exist and they are different
+  products. (1) Tray Headless MCP — a Tray-hosted server at https://api.tray.io/mcp (with EU and APAC
+  regional twins) that exposes the Tray PLATFORM itself as MCP tools: build and edit workflows, projects,
+  connectors, authentication, validation, run and debug. (2) Agent Gateway — a governed MCP server your
+  workspace publishes, at https://{workspace-id}.mcp.tray.ai, that exposes YOUR Tray workflows and connector
+  operations as tools to your own AI clients. Both are reached over HTTP by an MCP client; Agent Gateway
+  additionally supports a local stdio setup configured by `npx @trayio/tray-mcp` against an API token.'
+deployment:
+  mode: both
+  endpoint: https://api.tray.io/mcp
+  install: npx @trayio/tray-mcp
+  package: https://www.npmjs.com/package/@trayio/tray-mcp
+  auth: oauth
+  verified: probed
+  note: '`mode: both` is literal, not inferred. The remote endpoint was probed directly: POST {"jsonrpc":"2.0","id":1,"method":"tools/list"}
+    to https://api.tray.io/mcp returned HTTP 401 with WWW-Authenticate: Bearer error="invalid_token",
+    scope="mcp:list_tools mcp:call_tools", resource_metadata="https://api.tray.io/.well-known/oauth-protected-resource/mcp"
+    — a live, RFC 9728-compliant MCP resource. The stdio path is Tray''s own documented alternative for
+    clients that cannot do OAuth2: `npx @trayio/tray-mcp --workspace-id <UUID> --api-token <TOKEN>` writes
+    the local client config, per Tray''s Connecting to Agent Gateway page.'
+  probe_prior: (never probed)
+  probe: gated
+  probe_why: RFC 9728 challenge on the MCP path only
+  checked: '2026-09-11'
+  source: claimed-backlog re-probe 2026-09-11
+endpoints:
+- region: US
+  url: https://api.tray.io/mcp
+  surface: Tray Headless MCP
+  probed: '2026-09-02'
+  http_status: 401
+  challenge: Bearer error="invalid_token", error_description="Missing Authorization header"
+- region: EU
+  url: https://api.eu1.tray.io/mcp
+  surface: Tray Headless MCP
+  source: https://tray.ai/documentation/platform/tray-headless/tray-headless-mcp
+- region: APAC
+  url: https://api.ap1.tray.io/mcp
+  surface: Tray Headless MCP
+  source: https://tray.ai/documentation/platform/tray-headless/tray-headless-mcp
+- region: per-workspace
+  url: https://{workspace-id}.mcp.tray.ai
+  surface: Agent Gateway (customer-published MCP server)
+  source: https://tray.ai/documentation/platform/artificial-intelligence/agent-gateway/connecting-clients
+  note: Templated — the workspace UUID is the subdomain; there is no shared Agent Gateway host.
+authorization:
+  protocol: OAuth 2.1 (authorization_code + PKCE S256)
+  issuer: https://auth.tray.io
+  authorization_endpoint: https://auth.tray.io/server/oauth2/authorize
+  token_endpoint: https://auth.tray.io/server/oauth2/token
+  registration_endpoint: https://auth.tray.io/server/oauth2/register
+  revocation_endpoint: https://auth.tray.io/server/oauth2/revoke
+  dynamic_client_registration: true
+  scopes:
+  - mcp:list_tools
+  - mcp:call_tools
+  - api:full
+  resource_metadata: https://api.tray.io/.well-known/oauth-protected-resource/mcp
+  alternative: API token (static bearer) for clients that do not support OAuth2. Documented as the "Local
+    MCP" path; it cannot use dynamic (user-provided) tool authentication.
+  workspace_binding: The target workspace is chosen during the OAuth2 sign-in and bound to the session
+    — since the 2026-07-08 release there is no workspaceId argument on tool calls.
+tools:
+  status: auth-gated
+  note: tools/list requires an OAuth2 access token, so the live inputSchema set could not be introspected
+    anonymously. The capability groups below are transcribed from Tray's own "Tray Headless for Claude
+    Code" page, which states these are the same tools Tray Headless MCP exposes. Tool NAMES are not published,
+    so none are invented here — only the documented capability groups are recorded, and input schemas
+    require authenticated introspection.
+  source: https://tray.ai/documentation/platform/tray-headless/headless-for-claude-code
+  capability_groups:
+  - group: workflows
+    capabilities:
+    - create a workflow with its trigger
+    - add a step
+    - update step configuration
+    - swap a step's operation
+    - reorganize structure (branches, ordering)
+    - update workflow metadata
+    - remove a step
+    - delete a workflow
+    - read a workflow's structure
+    - read a specific step's detail
+    consequence: write
+    destructive: true
+  - group: projects
+    capabilities:
+    - create a project
+    - read a project
+    - list projects
+  - group: connectors
+    capabilities:
+    - search connectors
+    - read an operation's input and output schemas
+    - call a connector for dynamic field-value lookups and schema discovery
+  - group: authentication
+    capabilities:
+    - list existing authentications
+    - list available service environments
+    - create a new authentication request
+    - check authentication completion
+  - group: validation
+    capabilities:
+    - run a whole-workflow structural audit (jsonpath resolution, output-shape rules, structural conventions)
+  - group: run_and_debug
+    capabilities:
+    - fire a workflow against the live workspace
+    - list executions
+    - read an execution
+    - read a step's input and output
+    consequence: write
+clients:
+  documented:
+  - Claude Code
+  - Claude Desktop
+  - Cursor
+  - Windsurf
+  - OpenAI Codex CLI
+  - VS Code
+  plugin:
+    name: tray-workflows
+    marketplaces:
+    - claude-code
+    - codex
+    repository: https://github.com/trayio/tray-plugins
+    note: The Claude Code / Codex `tray-workflows` plugin is a guided client over the same remote server,
+      US endpoint only. It adds skills (build-workflow, research-connector, tray-connectors, tray-patterns,
+      tray-gotchas) and a `tray-researcher` subagent.
+limits:
+- scope: Agent Gateway workflow tools
+  limit: Maximum callable depth 5 levels
+  source: https://tray.ai/documentation/platform/artificial-intelligence/agent-gateway/troubleshooting-and-limitations
+- scope: Agent Gateway workflow tools
+  limit: Maximum 20 cumulative callables across all levels
+  source: https://tray.ai/documentation/platform/artificial-intelligence/agent-gateway/troubleshooting-and-limitations
+- scope: tools per MCP server
+  limit: No hard limit, but Tray documents noticeable degradation in client tool-selection accuracy beyond
+    15-20 tools and recommends splitting into multiple servers.
+  source: https://tray.ai/documentation/platform/artificial-intelligence/agent-gateway/troubleshooting-and-limitations
+- scope: dynamic (user-provided) authentication mapping
+  limit: Valid for 7 days; only reset is to disconnect and reconnect the MCP server.
+  source: https://tray.ai/documentation/platform/artificial-intelligence/agent-gateway/troubleshooting-and-limitations
+safety:
+  note: Tray states plainly that these tools act in the caller's Tray organization AS the caller — they
+    can create, modify and delete projects, workflows and authentications, and run workflows with real
+    side effects. The packaged plugin surfaces destructive actions for confirmation; a raw MCP client
+    applies only the guardrails the operator gives it.
+  source: https://tray.ai/documentation/platform/tray-headless/tray-headless-mcp
+docs:
+- https://tray.ai/documentation/platform/tray-headless/tray-headless-mcp
+- https://tray.ai/documentation/platform/tray-headless/overview
+- https://tray.ai/documentation/platform/artificial-intelligence/agent-gateway/overview
+- https://tray.ai/documentation/platform/artificial-intelligence/agent-gateway/connecting-clients
+- https://tray.ai/documentation/platform/artificial-intelligence/agent-gateway/authentication-and-access
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
