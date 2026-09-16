@@ -638,8 +638,50 @@ apis:
     url: examples/tray-ai-create-authentication-example.json
   - type: SpectralRuleset
     url: rules/tray-ai-rules.yml
+- aid: tray-ai:tray-ai-agent-groups-api
+  name: Tray.ai Agent Groups API
+  description: '{''$ref'': ''descriptions/trayapi/tags/agent-groups.md''}'
+  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  baseURL: https://tray.io/graphql
+  tags:
+  - agent-groups
+  properties:
+  - type: OpenAPI
+    url: openapi/tray-ai-agent-groups-api-openapi.yml
+- aid: tray-ai:tray-ai-agent-instances-api
+  name: Tray.ai Agent Instances API
+  description: '{''$ref'': ''descriptions/trayapi/tags/agent-instances.md''}'
+  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  baseURL: https://tray.io/graphql
+  tags:
+  - agent-instances
+  properties:
+  - type: OpenAPI
+    url: openapi/tray-ai-agent-instances-api-openapi.yml
+- aid: tray-ai:tray-ai-permissions-api
+  name: Tray.ai Permissions API
+  description: '{''$ref'': ''descriptions/trayapi/tags/permissions.md''}'
+  humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
+  baseURL: https://tray.io/graphql
+  tags:
+  - permissions
+  properties:
+  - type: OpenAPI
+    url: openapi/tray-ai-permissions-api-openapi.yml
 name: Tray.ai
 tags:
+- Automation
+- Integration
+- iPaaS
+- AI Agents
+- MCP
+- Orchestration
+- Workflow-Automation
+- Connectors
+- Agent Gateway
+- Embedded Integration
+- Enterprise Automation
+tags_raw:
 - Automation
 - Integration
 - iPaaS
