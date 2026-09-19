@@ -593,6 +593,8 @@ apis:
   humanURL: https://tray.ai/documentation/developer/openapi/trayapi/overview/
   baseURL: https://api.tray.io/core/v1
   tags:
+  - Workspace
+  tags_raw:
   - Workspaces
   properties:
   - type: OpenAPI
@@ -644,6 +646,8 @@ apis:
   humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   baseURL: https://tray.io/graphql
   tags:
+  - Agent Groups
+  tags_raw:
   - agent-groups
   properties:
   - type: OpenAPI
@@ -664,6 +668,8 @@ apis:
   humanURL: https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/
   baseURL: https://tray.io/graphql
   tags:
+  - Permissions
+  tags_raw:
   - permissions
   properties:
   - type: OpenAPI
