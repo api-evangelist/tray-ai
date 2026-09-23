@@ -1,0 +1,1 @@
+{"resource":"https://api.tray.io/mcp","authorization_servers":["https://auth.tray.io"],"scopes_supported":["mcp:list_tools","mcp:call_tools"],"resource_name":"Tray MCP Server"}

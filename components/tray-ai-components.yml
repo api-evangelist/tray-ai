@@ -1,0 +1,91 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://tray.ai/documentation/platform/embedded/delivery-methods/config-wizard,
+  https://tray.ai/documentation/developer/getting-started/creating-end-user-auths/auth-dialog-events,
+  https://tray.ai/documentation/platform/embedded/advanced-features/whitelabelling/public-urls,
+  https://github.com/trayio/embedded-customjs-public,
+  https://github.com/trayio/embedded-edition-sample-app
+provider: Tray.ai
+providerId: tray-ai
+description: >-
+  Tray Embedded is Tray's client-side surface: hosted, white-labellable UI a partner drops into
+  their own product so their end users can authenticate third-party services and configure
+  integrations without leaving the host app. These are HOSTED PAGES opened by URL (in an iframe or
+  a popup) rather than an npm component library — there is no @trayio UI package on npm. The host
+  app drives them by URL and listens for `window.postMessage` events.
+distribution: hosted-url
+loader_libraries: none
+npm_component_package: none
+families:
+  - family: Config Wizard (Standard Experience)
+    kind: hosted page
+    description: >-
+      Tray's prebuilt end-user configuration wizard. The host app creates an end user, issues a
+      user token, creates a Solution Instance, and then opens the wizard URL for that instance so
+      the user can authenticate services and fill in the solution's config slots.
+    urls:
+      - region: US
+        url: https://embedded.tray.io/external/solutions/{partner}/configure/{solutionInstanceId}
+      - region: EU
+        url: https://embedded.eu1.tray.io/external/solutions/...
+      - region: APAC
+        url: https://embedded.ap1.tray.io/external/solutions/...
+    note: >-
+      URL shapes are templated on partner name and solution-instance id; the exact path segments
+      are given in Tray's Config Wizard walkthrough. Region is selected by host.
+    docs: https://tray.ai/documentation/platform/embedded/delivery-methods/config-wizard
+    backing_operations: [create-user, create-user-token, get-solutions, create-solution-instance, get-solution-instances]
+  - family: Auth dialog (auth-only popup)
+    kind: hosted popup
+    description: >-
+      A standalone authentication dialog for capturing a single third-party auth from an end user,
+      without the full config wizard. Opened with window.open from a user gesture (or it is blocked
+      by the popup blocker) and communicated with over postMessage.
+    url_template: 'https://{AUTH_DIALOG_URL}/external/auth/create/{PARTNER_NAME}?code={authorizationCode}&serviceId={serviceId}&serviceEnvironmentId={serviceEnvironmentId}&scopes[]={scopes}'
+    events:
+      - name: tray.authPopup.error
+        fires_when: The dialog hits an unexpected error, e.g. a mismatched service environment id and service id.
+      - name: tray.authpopup.close
+        fires_when: The user closes the dialog abruptly.
+      - name: tray.authpopup.finish
+        fires_when: The user completes the auth; the event payload carries the authId of the new authentication.
+    integration: 'window.addEventListener("message", onmessage)'
+    docs: https://tray.ai/documentation/developer/getting-started/creating-end-user-auths/auth-dialog-events
+    backing_operations: [create-config-wizard-auth-code, create-user-authentication]
+  - family: Custom form experience
+    kind: bring-your-own UI
+    description: >-
+      Instead of Tray's hosted wizard, the partner renders its own form from the connector's
+      inputSchema and calls the APIs directly. Tray publishes a Form Builder tutorial and a
+      downloadable demo app for this path.
+    docs: https://tray.ai/documentation/platform/embedded/delivery-methods/custom-experience
+    tutorial: https://tray.ai/documentation/developer/getting-started/tutorials/building-a-ui-form
+    backing_operations: [get-connectors, get-connector-operations, call-connector]
+  - family: White-labelling
+    kind: configuration
+    description: >-
+      CSS theming of the embedded surfaces, and de-branded public webhook URLs: the default
+      {uuid}.trayapp.io (US) / {uuid}.eu1.trayapp.io (EU) suffix can be replaced with
+      *.integration-hook.com / *.eu1.integration-hook.com.
+    docs: https://tray.ai/documentation/platform/embedded/advanced-features/whitelabelling/public-urls
+  - family: Embedded custom JS
+    kind: open-source examples
+    repository: https://github.com/trayio/embedded-customjs-public
+    description: Tray-published custom JavaScript examples for extending the embedded experience.
+  - family: Embedded Edition sample app
+    kind: open-source reference app
+    repository: https://github.com/trayio/embedded-edition-sample-app
+    description: A full reference implementation of an Embedded integration host app.
+developer_tools:
+  - name: Operations Explorer
+    kind: hosted dev tool
+    description: Explore any connector operation's input schema without writing code.
+    docs: https://tray.ai/documentation/developer/developer-tools/operations-explorer
+  - name: Connector Tester / Form Builder demo app
+    kind: downloadable dev tool
+    repository: https://github.com/trayio/connector-tester-public
+    description: Run live tests against connector operations and render their input schemas as forms.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

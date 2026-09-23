@@ -1,0 +1,210 @@
+generated: '2026-09-02'
+method: derived
+source: >-
+  openapi/_original/tray-ai-platform-api-published-openapi.yaml,
+  openapi/_original/tray-ai-embedded-api-published-openapi.yaml,
+  json-schema/*.json,
+  https://tray.ai/documentation/platform/introduction/getting-started/key-concepts
+provider: Tray.ai
+providerId: tray-ai
+description: >-
+  Entity-relationship graph for Tray.ai, derived from the path parameters and id-reference fields
+  of the two provider-published OpenAPI documents and from the JSON Schemas already in this repo.
+  Two distinct object graphs sit under one platform and they meet in exactly one place. The
+  PLATFORM graph is organization / workspace / project / workflow, with connectors, triggers,
+  authentications and subscriptions hanging off it. The EMBEDDED graph is partner / external user /
+  solution / solution instance. Authentication is the shared entity: an authentication belongs to a
+  workspace user on the Platform side and to an external user on the Embedded side, and it is what
+  a connector call executes under in both.
+id_conventions:
+  - entity: workspace
+    form: UUID
+    example_source: 'app.tray.io/workspaces/{UUID} — the org/workspace UUID also used by tray-cdk and the Tray Sync CLI.'
+  - entity: authentication
+    form: UUID
+    note: 'Passed as authId in the Call Connector body; a malformed value yields "Couldn''t decode a valid UUID at ''authId''".'
+  - entity: connector
+    form: 'name + version pair, not an id (e.g. salesforce / 9.0)'
+  - entity: trigger
+    form: name + version pair
+  - entity: workflow instance public URL
+    form: '{uuid}.trayapp.io'
+  - entity: solution instance
+    form: UUID
+entities:
+  - name: Organization
+    surface: platform
+    operations: [invite-user-to-organization, list-organization-roles, list-users-in-organization, create-user, get-user-by-id, delete-user-by-id, update-user-organization-role]
+    relationships:
+      - has_many: Workspace
+      - has_many: User
+      - has_many: Role
+        via: /core/v1/roles
+  - name: Workspace
+    surface: platform
+    schema: json-schema/workspace.json
+    fields: [id, name, description, createdAt]
+    operations: [get-workspaces, get-workspace-by-id, list-users-in-workspace, add-user-to-workspace, get-workspace-user-by-id, update-user-workspace-role, remove-user-from-a-Workspace, get-workspace-roles]
+    relationships:
+      - belongs_to: Organization
+      - has_many: User
+        via: workspaceId
+      - has_many: Project
+      - has_many: OnPremAgentGroup
+        via: workspaceId
+      - has_many: MCPServer
+        note: Agent Gateway servers are published per workspace; the endpoint is {workspace-id}.mcp.tray.ai.
+  - name: User
+    surface: both
+    schema: json-schema/user.json
+    fields: [id, name, externalUserId, email, isTestUser, role, status]
+    operations: [list-users-in-organization, create-user, get-user-by-id, delete-user-by-id, get-users, create-user, update-user, delete-user, create-user-token]
+    relationships:
+      - belongs_to: Organization
+      - has_many: Authentication
+      - has_many: SolutionInstance
+        note: Embedded external users own solution instances.
+    note: >-
+      One entity, two personas. A Platform user is an org member with an RBAC role; an Embedded
+      external user is a partner's end customer, keyed by the partner's own externalUserId.
+  - name: Role
+    surface: platform
+    operations: [list-organization-roles, get-workspace-roles, update-user-organization-role, update-user-workspace-role]
+    relationships:
+      - belongs_to: Organization
+      - belongs_to: Workspace
+  - name: Project
+    surface: platform
+    operations: [listProjectVersions, exportAProjectVersion, PublicApiProjectController.createProjectVersion, PublicApiProjectController.importProject, PublicApiProjectController.previewProjectImport, PublicApiProjectController.getProjectImportRequirements]
+    relationships:
+      - belongs_to: Workspace
+      - has_many: ProjectVersion
+        via: versionNumber
+      - has_many: Workflow
+  - name: ProjectVersion
+    surface: platform
+    relationships:
+      - belongs_to: Project
+        via: projectId
+  - name: Workflow
+    surface: both
+    operations: [import-workflows, export-workflows]
+    relationships:
+      - belongs_to: Project
+      - has_one: PublicWebhookURL
+      - has_many: Execution
+    note: >-
+      Workflow authoring has NO public REST operation — it is builder-side or MCP-side only. The
+      public APIs only import and export workflows in bulk.
+  - name: Connector
+    surface: platform
+    schema: json-schema/connector.json
+    fields: [name, title, description, icon, versions]
+    operations: [get-connectors, get-connector-operations, call-connector, create-deployment, get-deployment-status, share-with-emails]
+    relationships:
+      - has_many: ConnectorVersion
+        via: versions
+      - has_many: ConnectorOperation
+      - has_many: ServiceEnvironment
+  - name: ConnectorOperation
+    surface: platform
+    relationships:
+      - belongs_to: Connector
+        via: 'connector-name + connector-version'
+    fields: [operation, inputSchema, outputSchema, hasDynamicOutput]
+  - name: ServiceEnvironment
+    surface: platform
+    operations: [get-service-environments]
+    relationships:
+      - belongs_to: Connector
+        via: 'service-name + service-version'
+      - has_many: Authentication
+  - name: Authentication
+    surface: both
+    schema: json-schema/authentication.json
+    fields: [id, name, serviceEnvironmentId, service, serviceEnvironment, scopes, createdAt]
+    operations: [create-user-authentication, get-user-authentication, update-user-authentication, delete-user-authentication, get-full-authentication, get-authentications, create-authentication, delete-authentication]
+    relationships:
+      - belongs_to: User
+      - belongs_to: ServiceEnvironment
+        via: serviceEnvironmentId
+      - has_many: Subscription
+        via: authId
+    note: The hinge of the whole model — every connector call and every subscription executes under an authentication.
+  - name: Trigger
+    surface: platform
+    operations: [get-triggers, get-trigger-operations]
+    relationships:
+      - has_many: TriggerOperation
+      - has_many: Subscription
+  - name: Subscription
+    surface: platform
+    schema: json-schema/subscription.json
+    fields: [id, triggerName, connectorName, connectorVersion, authId, status, input, createdAt]
+    operations: [create-subscription, get-subscriptions, get-subscription-by-id, delete-connector-events-subscription]
+    relationships:
+      - belongs_to: Trigger
+        via: 'triggerName + version'
+      - belongs_to: Authentication
+        via: authId
+      - has_one: SigningKey
+        note: Returned once at creation and never retrievable again.
+      - has_one: Endpoint
+        note: Subscriber-owned delivery URL.
+  - name: Solution
+    surface: embedded
+    schema: json-schema/solution.json
+    fields: [id, title, description, tags, configSlots, authSlots]
+    operations: [get-solutions, PublicApiSolutionController.createSolutionRelease, PublicApiSolutionController.previewSolutionRelease]
+    relationships:
+      - has_many: SolutionInstance
+      - has_many: ConfigSlot
+        via: configSlots
+      - has_many: AuthSlot
+        via: authSlots
+  - name: SolutionInstance
+    surface: embedded
+    schema: json-schema/solution-instance.json
+    fields: [id, name, enabled, created, owner, solutionId, authValues, configValues, workflows, solutionVersionFlags]
+    operations: [get-solution-instances, create-solution-instance, update-solution-instance, upgrade-solution-instance, delete-solution-instance]
+    relationships:
+      - belongs_to: Solution
+        via: solutionId
+      - belongs_to: User
+        via: owner
+      - has_many: Authentication
+        via: authValues
+      - has_many: Workflow
+        via: workflows
+  - name: Deployment
+    surface: platform
+    operations: [create-deployment, get-deployment-status]
+    relationships:
+      - belongs_to: Connector
+        via: 'connector-name + connector-version'
+  - name: OnPremAgentGroup
+    surface: platform
+    operations: [getCoreV1WorkspacesWorkspace-idOn-prem-agent-groups, postCoreV1WorkspacesWorkspace-idOn-prem-agent-groups, deleteCoreV1WorkspacesWorkspace-idOn-prem-agent-groupsAgent-group-id]
+    relationships:
+      - belongs_to: Workspace
+        via: 'workspace-id'
+      - has_many: OnPremAgent
+  - name: OnPremAgent
+    surface: platform
+    operations: [getCoreV1WorkspacesWorkspace-idOn-prem-agent-groupsAgent-group-idAgents, postCoreV1WorkspacesWorkspace-idOn-prem-agent-groupsAgent-group-idAgents, getCoreV1WorkspacesWorkspace-idOn-prem-agent-groupsAgent-group-idAgentsAgent-id, patchCoreV1WorkspacesWorkspace-idOn-prem-agent-groupsAgent-group-idAgentsAgent-id, deleteCoreV1WorkspacesWorkspace-idOn-prem-agent-groupsAgent-group-idAgentsAgent-id]
+    relationships:
+      - belongs_to: OnPremAgentGroup
+        via: 'agent-group-id'
+join_points:
+  - entity: Authentication
+    note: The only entity that appears on both the Platform and the Embedded graph.
+  - entity: Connector
+    note: >-
+      Reachable from both graphs — REST call-connector and GraphQL callConnector are the same
+      execution path.
+gaps:
+  - No components.schemas reuse worth speaking of in the Embedded spec — every GraphQL operation is modelled as a bespoke POST body.
+  - No published id-prefix scheme; ids are bare UUIDs with no type discriminator.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

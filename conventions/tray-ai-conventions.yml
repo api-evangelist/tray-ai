@@ -1,0 +1,189 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://tray.ai/documentation/developer/getting-started/troubleshooting/error-handling-tray,
+  https://tray.ai/documentation/developer/getting-started/troubleshooting/rate-limiting-tray,
+  https://tray.ai/documentation/developer/getting-started/implementation-notes/pagination,
+  https://tray.ai/documentation/developer/getting-started/prerequisites/master-and-user-tokens,
+  https://tray.ai/documentation/developer/getting-started/using-triggers/verifying-subcription-payloads,
+  openapi/_original/tray-ai-platform-api-published-openapi.yaml,
+  openapi/_original/tray-ai-embedded-api-published-openapi.yaml
+provider: Tray.ai
+providerId: tray-ai
+description: >-
+  Cross-cutting runtime semantics for Tray.ai's two public APIs. The short version for an agent:
+  bearer token, no scopes on REST/GraphQL, no idempotency keys, no first-party pagination, no
+  rate-limit response headers, a flat {message, code} error envelope, and — the load-bearing one —
+  a Call Connector endpoint that returns HTTP 200 even when the third-party call it proxied failed.
+authentication:
+  style: bearer
+  header: 'Authorization: Bearer <token>'
+  token_types:
+    - name: master token
+      obtained: Tray Embedded UI settings / API Users & Tokens
+      authority: >-
+        Acts as the organization. Required for admin operations such as creating end users and
+        issuing user tokens.
+    - name: user token
+      obtained: 'Embedded API `authorize` mutation (createExternalUserToken), using a master token.'
+      authority: Scoped to one end user; required for user-scoped operations such as solution instances.
+    - name: OAuth2 access token
+      obtained: https://auth.tray.io/server/oauth2/authorize (PKCE S256, dynamic client registration)
+      authority: MCP only — scopes mcp:list_tools, mcp:call_tools, api:full.
+  scopes_on_rest: none
+  docs: https://tray.ai/documentation/developer/getting-started/prerequisites/master-and-user-tokens
+  cross_ref: authentication/tray-ai-authentication.yml, scopes/tray-ai-scopes.yml
+idempotency:
+  supported: false
+  header: none
+  scope: none
+  retention: none
+  evidence: >-
+    No Idempotency-Key header, no idempotent-retry semantics, and no idempotency documentation
+    anywhere in Tray's developer docs or in either published OpenAPI. Retrying a POST
+    /core/v1/authentications or a Call Connector write will re-execute it.
+  guidance: >-
+    Callers must dedupe on their own side. The Trigger API's `externalId` on a subscription is the
+    closest thing Tray offers to a client-supplied dedupe key, and it applies only to subscriptions.
+pagination:
+  first_party: none
+  note: >-
+    Tray's own list endpoints (GET /core/v1/connectors, /triggers, /users, /workspaces,
+    /subscriptions) declare no page/limit/cursor parameters in the published spec. Pagination in
+    Tray's documentation is a PASS-THROUGH concern of the Call Connector endpoint: the parameters
+    belong to the third-party service being proxied.
+  pass_through:
+    style: service-specific
+    common_request_params: [batch_size, page_offset, next_page_token]
+    common_response_fields: [total, next_page_offset]
+    discovery: >-
+      Read the operation's inputSchema/outputSchema from
+      GET /core/v1/connectors/{connector-name}/versions/{connector-version}/operations.
+    docs: https://tray.ai/documentation/developer/getting-started/implementation-notes/pagination
+field_expansion:
+  supported: partial
+  mechanisms:
+    - name: returnOutputSchema
+      applies_to: POST /core/v1/connectors/{connector-name}/versions/{connector-version}/call
+      description: Boolean on the Call Connector request body; when true the response also carries the output schema.
+    - name: /authentications/{id}/full
+      applies_to: GET
+      description: A separate "full" variant of the authentication read, rather than an expand parameter.
+metadata:
+  supported: partial
+  fields:
+    - name: externalId
+      applies_to: subscriptions
+      description: Caller-supplied unique id stored against the subscription and usable to query it later.
+    - name: externalUserId
+      applies_to: Embedded createExternalUser
+      description: Caller's own user identifier, mapped to a Tray userId.
+request_tracing:
+  request_id_header: not documented
+  note: >-
+    No X-Request-Id / X-Correlation-Id convention is documented and none appears in the published
+    specs. Tray's observability story is workspace-side (execution logs, Insights, Monitor tab),
+    not response-header-side.
+versioning:
+  style: url-path
+  values: ['/core/v1', '/cdk/v1']
+  cross_ref: lifecycle/tray-ai-lifecycle.yml
+error_envelope:
+  content_type: application/json
+  shape: '{ "message": string, "code": string|null }'
+  rfc9457: false
+  critical: >-
+    HTTP 200 from Call Connector means Tray's validation passed, NOT that the downstream call
+    succeeded. Third-party failures are returned inside the 200 body. Branch on the body's
+    `outcome`, not on the status code.
+  cross_ref: errors/tray-ai-problem-types.yml
+rate_limit_signaling:
+  headers_published: none
+  status_on_exhaustion: 429
+  documented_limits:
+    - 30 requests per second / 1800 requests per minute on all Platform and Embedded endpoints
+    - burst tolerance up to 50 requests per second
+    - 1000 concurrent requests on Call Connector (concurrency limit, not a rate limit)
+    - Trigger event delivery is not rate limited
+  note: >-
+    Tray documents the numbers but returns no RateLimit-* / X-RateLimit-* / Retry-After headers, so
+    an agent cannot read its remaining budget at runtime — it has to model the published ceiling.
+  cross_ref: rate-limits/tray-ai-rate-limits.yml
+webhooks:
+  signing: HMAC-SHA256, base64, over the raw request body
+  header: x-tray-signature
+  key_delivery: >-
+    The signingKey is returned ONCE, in the Create Subscription response, and can never be
+    retrieved again through GET Subscriptions or GET Subscription by Id.
+  retry: exponential backoff, no event loss claimed
+  cross_ref: asyncapi/tray-ai-webhooks.yml
+regions:
+  model: >-
+    Region is selected by HOST, not by a header or a path segment. US api.tray.io / tray.io,
+    EU api.eu1.tray.io / eu1.tray.io, APAC api.ap1.tray.io / ap1.tray.io. A token issued in one
+    region does not work in another.
+reversibility:
+  grade: documented
+  assessment: >-
+    Tray has a real write surface — delete an authentication, delete a subscription, delete a
+    solution instance, delete a user, remove a user from a workspace, and (over MCP) delete a
+    workflow or remove a step. For the API surface, NONE of these deletes has a documented undo,
+    restore or retention window: the published specs declare a 204 and stop. The one genuine
+    reversal path Tray documents is builder-side, and it is documented well.
+  reversal_paths:
+    - operation: workflow edits in the builder
+      reversal: Undo / Redo, plus rollback of a workflow to a specific point in its build history.
+      window: not stated
+      operationId: null
+      surface: UI / builder (no public API operation)
+      docs: https://tray.ai/documentation/platform/automation-integration/building-workflows/shortcuts/undo-redo
+      grade: documented
+    - operation: running executions
+      reversal: >-
+        Execution Kill Switch — "Stop all executions" halts every running execution of a workflow.
+        This stops further work; it does not roll back side effects already committed downstream.
+      window: while executions are running
+      operationId: null
+      surface: UI
+      docs: https://tray.ai/documentation/platform/automation-integration/testing-debugging/execution-kill-switch
+      grade: documented
+    - operation: project promotion between environments
+      reversal: >-
+        Tray Sync CLI `tray promote` supports a dry run first, and refuses a promotion outright if
+        any project or authentication mapping is unresolved. That is a pre-flight guard, not a
+        rollback — there is no `tray demote`.
+      window: pre-execution only
+      operationId: null
+      surface: CLI
+      docs: https://tray.ai/documentation/developer/developer-tools/tray-sync-cli
+      grade: documented
+    - operation: MCP dynamic authentication mapping
+      reversal: Disconnect and reconnect the MCP server to reset a user's credential mapping.
+      window: mapping is valid for 7 days
+      operationId: null
+      surface: MCP / Agent Gateway
+      docs: https://tray.ai/documentation/platform/artificial-intelligence/agent-gateway/troubleshooting-and-limitations
+      grade: verified
+  irreversible:
+    - 'DELETE /core/v1/authentications/{authentication-id} — no restore, no retention window documented.'
+    - 'DELETE /core/v1/subscriptions/{subscription-id} — no restore; the signingKey is unrecoverable, so a deleted subscription cannot be recreated with the same key.'
+    - 'DELETE /core/v1/users/{userId} and DELETE /core/v1/workspaces/{workspaceId}/users/{userId} — no restore documented.'
+    - 'Embedded delete-solution-instance and delete-user — no restore documented.'
+    - 'MCP workflows.delete and workflows.remove_step — Tray surfaces these for confirmation in the packaged plugin precisely because they are not reversible through the API.'
+  agent_guidance: >-
+    Treat every Tray DELETE as final. Export the project (GET /core/v1/projects/{projectId}/versions/{versionNumber}/export)
+    or pull it with the Tray Sync CLI before any destructive change — that export is the only
+    restore path Tray publishes, and it is a client-side one.
+dry_run_mode:
+  supported: partial
+  paths:
+    - 'Tray Sync CLI `tray promote` dry run — shows exactly what would change before importing.'
+    - 'POST /core/v1/projects/{projectId}/imports/previews and /imports/requirements — preview a project import before committing it.'
+    - 'POST /core/v1/solutions/{solutionId}/releases/previews — preview a solution release.'
+    - 'MCP validation.audit_workflow — structural audit before a workflow runs.'
+  note: >-
+    Genuinely good coverage on the promotion path; none on the Call Connector path, which is the
+    one that reaches third-party systems.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

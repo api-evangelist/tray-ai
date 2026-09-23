@@ -2,14 +2,9 @@ openapi: 3.2.0
 info:
   title: Tray Ai Users API
   version: 1.0.0
-  contact:
-    name: Tray.ai Support
-    url: https://tray.ai
-  license:
-    name: Proprietary
-    url: https://tray.ai/terms
-  termsOfService: https://tray.ai/terms
-  description: 'Operations tagged Users across 2 of this provider''s published API definitions: tray-ai-embedded-api-openapi.yml, tray-ai-platform-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  description: 'Operations tagged Users across 4 of this provider''s published API definitions: tray-ai-embedded-api-openapi.yml, tray-ai-embedded-api-published-openapi.yaml, tray-ai-platform-api-openapi.yml, tray-ai-platform-api-published-openapi.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://tray.io
   description: US Region (Default)
@@ -17,12 +12,24 @@ servers:
   description: EU Region
 - url: https://ap1.tray.io
   description: APAC Region
+- url: https://tray.io/graphql
+  description: US
+- url: https://eu1.tray.io/graphql
+  description: EU
+- url: https://ap1.tray.io/graphql
+  description: APAC
 - url: https://api.tray.io/core/v1
   description: US Region (Default)
 - url: https://api.eu1.tray.io/core/v1
   description: EU Region
 - url: https://api.ap1.tray.io/core/v1
   description: APAC Region
+- url: https://api.tray.io
+  description: US
+- url: https://api.eu1.tray.io
+  description: EU
+- url: https://api.ap1.tray.io
+  description: APAC
 security:
 - bearerAuth: []
 tags:
@@ -199,6 +206,553 @@ paths:
       description: EU Region
     - url: https://ap1.tray.io
       description: APAC Region
+  /:
+    post:
+      tags:
+      - Users
+      summary: Get users (master token)
+      description:
+        $ref: descriptions/embedded/endpoints/users/getUsers.md
+      operationId: get-users
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/users/getUsers.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              get-all-users:
+                summary: Get all users
+                value:
+                  query: "query {\n    users {\n        edges {\n            node {\n                name\n                id\n                externalUserId\n            }\n            cursor\n        }\n        pageInfo {\n          hasNextPage\n          endCursor\n          hasPreviousPage\n          startCursor\n        }\n    }\n}"
+                  variables: {}
+              get-user-by-id:
+                summary: Get user by id
+                value:
+                  query: "query {\n    users (criteria: {userId: \"13b3ab9c-XXXX-XXXX-XXXX-c4dd07fbbfa4\"}){\n        edges {\n            node {\n                name\n                id\n                externalUserId\n            }\n            cursor\n        }\n        pageInfo {\n          hasNextPage\n          endCursor\n          hasPreviousPage\n          startCursor\n        }\n    }\n}"
+                  variables: {}
+              get-user-by-externalId:
+                summary: Get user by externalId
+                value:
+                  query: "query {\n    users (criteria: {externalUserId: \"13b3ab9c-XXXX-XXXX-XXXX-c4dd07fbbfa4\"}){\n        edges {\n            node {\n                name\n                id\n                externalUserId\n            }\n            cursor\n        }\n        pageInfo {\n          hasNextPage\n          endCursor\n          hasPreviousPage\n          startCursor\n        }\n    }\n}"
+                  variables: {}
+              get-users-after-cursor:
+                summary: Get users after cursor
+                value:
+                  query: "query {\n    users (after: \"MTNiM2FiOWMtZTIyMi00NzM5LWE2OWItYzRkZDA3ZmJiZmE0\"){\n        edges {\n            node {\n                name\n                id\n                externalUserId\n            }\n            cursor\n        }\n        pageInfo {\n          hasNextPage\n          endCursor\n          hasPreviousPage\n          startCursor\n        }\n    }\n}"
+                  variables: {}
+              get-first-2-users:
+                summary: Get first 2 users
+                value:
+                  query: "query {\n    users (first: 2){\n        edges {\n            node {\n                name\n                id\n                externalUserId\n            }\n            cursor\n        }\n        pageInfo {\n          hasNextPage\n          endCursor\n          hasPreviousPage\n          startCursor\n        }\n    }\n}"
+                  variables: {}
+              get-first-5-users-after-cursor:
+                summary: Get first 5 users after cursor
+                value:
+                  query: "query {\n    users (first: 5, after: \"MTNiM2FiOWMtZTIyMi00NzM5LWE2OWItYzRkZDA3ZmJiZmE0\"){\n        edges {\n            node {\n                name\n                id\n                externalUserId\n            }\n            cursor\n        }\n        pageInfo {\n          hasNextPage\n          endCursor\n          hasPreviousPage\n          startCursor\n        }\n    }\n}"
+                  variables: {}
+        required: true
+      responses:
+        '200':
+          description: OK - Returns the end users from your embedded org
+          content:
+            application/json:
+              examples:
+                get-all-users:
+                  summary: Get all users
+                  value:
+                    $ref: examples/users/getUsersAll.json
+                get-user-by-id:
+                  summary: Get user by id
+                  value:
+                    $ref: examples/users/getUsersById.json
+                get-user-by-externalId:
+                  summary: Get user by externalId
+                  value:
+                    $ref: examples/users/getUsersByExternalId.json
+                get-users-after-cursor:
+                  summary: Get users after cursor
+                  value:
+                    $ref: examples/users/getUsersAfterCursor.json
+                get-first-2-users:
+                  summary: Get first 2 users
+                  value:
+                    $ref: examples/users/getUsersFirstTwo.json
+                get-first-5-users-after-cursor:
+                  summary: Get first 5 users after cursor
+                  value:
+                    $ref: examples/users/getUsersFiveAfterCursor.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
+  '/ ':
+    post:
+      tags:
+      - Users
+      summary: Create new user (master token)
+      description:
+        $ref: descriptions/embedded/endpoints/users/createUser.md
+      operationId: create-user
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/users/createNewUser.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              create-billable-user:
+                summary: Create user
+                value:
+                  query: "mutation($name: String!, $externalUserId: String!) {\n  createExternalUser(input: { \n      name: $name, \n      externalUserId: $externalUserId  \n    }) {\n      userId\n  }\n}"
+                  variables:
+                    name: Dwight Schrute
+                    externalUserId: my-apps-user-id-for-dwight
+              create-test-user:
+                summary: Create test user
+                value:
+                  query: "mutation($name: String!, $externalUserId: String!, $isTestUser: Boolean) {\n  createExternalUser(input: { \n      name: $name, \n      externalUserId: $externalUserId,\n      isTestUser: $isTestUser\n    }) {\n      userId\n  }\n}"
+                  variables:
+                    name: Dwight Schrute
+                    externalUserId: my-apps-user-id-for-dwight
+                    isTestUser: true
+        required: true
+      responses:
+        '200':
+          description: OK - Returns the userId of the newly created user
+          content:
+            application/json:
+              examples:
+                create-billable-user:
+                  summary: Create billable user
+                  value:
+                    $ref: examples/users/createBillableUser.json
+                create-test-user:
+                  summary: Create test user
+                  value:
+                    $ref: examples/users/createTestUser.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
+  '/  ':
+    post:
+      tags:
+      - Users
+      summary: Create user token (master token)
+      description:
+        $ref: descriptions/embedded/endpoints/users/createUserToken.md
+      operationId: create-user-token
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/users/createUserToken.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              create-user-token:
+                summary: Create user token
+                value:
+                  query: "mutation ($userId: ID!) {\n  authorize(input: {\n      userId: $userId\n  }) {\n    accessToken\n  }\n}"
+                  variables:
+                    userId: d869ec65-XXXX-XXXX-XXXX-ac5c1a3958b6
+              create-user-token-with-clientMutationId:
+                summary: Create user token with clientMutationId
+                value:
+                  query: "mutation ($userId: ID!, $clientMutationId: String) {\n  authorize(input: {\n      userId: $userId,\n      clientMutationId: $clientMutationId #OPTIONAL - only needed for legacy Relay & Apollo clients\n  }) {\n    accessToken\n    clientMutationId #OPTIONAL\n  }\n}"
+                  variables:
+                    userId: d869ec65-XXXX-XXXX-XXXX-ac5c1a3958b6
+                    clientMutationId: my-mutation-id
+        required: true
+      responses:
+        '200':
+          description: OK - Returns the accessToken of the user
+          content:
+            application/json:
+              examples:
+                create-user-token:
+                  summary: Create user token
+                  value:
+                    $ref: examples/users/createUserToken.json
+                create-user-token-with-clientMutationId:
+                  summary: Create user token with clientMutationId
+                  value:
+                    $ref: examples/users/createUserTokenWithCMID.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
+  '/   ':
+    post:
+      tags:
+      - Users
+      summary: Create Auth/Config dialog Authorization Code (master token)
+      description:
+        $ref: descriptions/embedded/endpoints/users/createConfigWizardAuthCode.md
+      operationId: create-config-wizard-auth-code
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/users/createConfigWizardAuthCode.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              create-config-wizard-auth-code:
+                summary: Create config wizard auth code
+                value:
+                  query: "mutation ($userId: ID!) {\n  generateAuthorizationCode( input: {\n    userId: $userId\n  }) {\n    authorizationCode\n  }\n}"
+                  variables:
+                    userId: d869ec65-XXXX-XXXX-XXXX-ac5c1a3958b6
+              create-config-wizard-auth-code-with-clientMutationId:
+                summary: Create config wizard auth code with clientMutationId
+                value:
+                  query: "mutation ($userId: ID!, $clientMutationId: String) {\n  generateAuthorizationCode( input: {\n    userId: $userId,\n    clientMutationId: $clientMutationId\n  }) {\n    authorizationCode\n    clientMutationId\n  }\n}"
+                  variables:
+                    userId: d869ec65-XXXX-XXXX-XXXX-ac5c1a3958b6
+                    clientMutationId: my-mutation-id
+        required: true
+      responses:
+        '200':
+          description: OK - Returns the one time use authorizationCode for the user
+          content:
+            application/json:
+              examples:
+                create-config-wizard-auth-code:
+                  summary: Create config wizard auth code
+                  value:
+                    $ref: examples/users/createConfigWizardAuthCode.json
+                create-config-wizard-auth-code-with-clientMutationId:
+                  summary: Create config wizard auth code with clientMutationId
+                  value:
+                    $ref: examples/users/createConfigWizardAuthCodeWithCMID.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
+  '/    ':
+    post:
+      tags:
+      - Users
+      summary: Update user (master token)
+      description:
+        $ref: descriptions/embedded/endpoints/users/updateUser.md
+      operationId: update-user
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/users/updateUserEnable.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              update-user:
+                summary: Update user
+                value:
+                  query: "mutation  ($userId: ID!, $isTestUser: Boolean ){\n   updateExternalUser(input: {\n      userId: $userId,\n      isTestUser: $isTestUser\n  }) {\n    user{\n\t\t\tname\n\t\t\tid\n\t\t\texternalUserId\n\t\t\tisTestUser\n\t\t}\n  }\n}"
+                  variables:
+                    userId: 53824943-XXXX-XXXX-XXXX-088aee14038e
+                    isTestUser: true
+              update-user-with-clientMutationId:
+                summary: Update user with clientMutationId
+                value:
+                  query: "mutation  ($userId: ID! $isTestUser: Boolean $clientMutationId: String){\n   updateExternalUser(input: {\n      userId: $userId,\n      isTestUser: $isTestUser,\n      clientMutationId: $clientMutationId\n  }) {\n    user{\n\t\t\tname\n\t\t\tid\n\t\t\texternalUserId\n\t\t\tisTestUser\n            clientMutationId\n\t\t}\n  }\n}"
+                  variables:
+                    userId: ad15b7ae-4c2d-4574-bf4f-5e8e1097a6e9
+                    isTestUser: true
+                    clientMutationId: some-mutation-id
+        required: true
+      responses:
+        '200':
+          description: OK - Updates the user with the new data provided
+          content:
+            application/json:
+              examples:
+                update-user:
+                  summary: Update user
+                  value:
+                    $ref: examples/users/updateUser.json
+                update-user-with-clientMutationId:
+                  summary: Update user with clientMutationId
+                  value:
+                    $ref: examples/users/updateUserWithCMID.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
+  '/     ':
+    post:
+      tags:
+      - Users
+      summary: Delete user (master token)
+      description:
+        $ref: descriptions/embedded/endpoints/users/deleteUser.md
+      operationId: delete-user
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/users/deleteUser.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              delete-user:
+                summary: Delete user
+                value:
+                  query: "mutation {\n  removeExternalUser(input: {userId: $userId}) {\n      clientMutationId # REQUIRED - must specify as return field, not required to provide this in mutation function\n  }\n}"
+                  variables:
+                    userId: 53824943-XXXX-XXXX-XXXX-088aee14038e
+              delete-user-with-clientMutationId:
+                summary: Delete user with clientMutationId
+                value:
+                  query: "mutation {\n  removeExternalUser(input: {\n      userId: $userId, \n      clientMutationId: $clientMutationId\n  }) {\n      clientMutationId # REQUIRED - must specify as return field\n  }\n}"
+                  variables:
+                    userId: 53824943-XXXX-XXXX-XXXX-088aee14038e
+                    clientMutationId: someClientMutationId
+        required: true
+      responses:
+        '200':
+          description: OK - Deletes the end user
+          content:
+            application/json:
+              examples:
+                delete-user:
+                  summary: Delete user
+                  value:
+                    $ref: examples/users/deleteUser.json
+                delete-user-with-clientMutationId:
+                  summary: Delete user with clientMutationId
+                  value:
+                    $ref: examples/users/deleteUserWithCMID.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
   /users:
     get:
       operationId: listUsers
@@ -258,52 +812,542 @@ paths:
       description: EU Region
     - url: https://api.ap1.tray.io/core/v1
       description: APAC Region
+  /core/v1/invites:
+    post:
+      operationId: invite-user-to-organization
+      summary: Invite User to Organization Workspace
+      description: 'Invites a user to the organization.
+
+
+        This will send an email to the user with a link to create an account.
+
+
+        If your organization has SSO configured and you do not wish an invitation to be sent, make use of the Create User endpoint.
+
+
+        This endpoint is **rate limited to 100 user invites per day per organization**.'
+      tags:
+      - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InviteUserExternalEndpointBody'
+        required: true
+      responses:
+        '200':
+          description: Indicates invite has been sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InviteCreatedExternalApiModel'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsError'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/roles:
+    get:
+      operationId: list-organization-roles
+      summary: List Organization Roles
+      description: 'List all roles in the organization.
+
+        When managing APIs you would want to take full control of how your endpoints are accessed.
+
+        Role-based policies allow you to build clear and consistent access control.
+
+        Read this page for details on creating roles and issuing tokens.'
+      tags:
+      - Users
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        description: The authorization token. You must use either an org admin/owner or a [master token](https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/#master-token)
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+      - name: cursor
+        in: query
+        description: The cursor token for page starting point
+        required: false
+        schema:
+          type: string
+      - name: first
+        in: query
+        description: The page size, in a forwards direction, with a maximum of 1000. Default direction if last not defined
+        required: false
+        schema:
+          type: integer
+          format: int32
+          exclusiveMinimum: 0
+      - name: last
+        in: query
+        description: ''
+        required: false
+        schema:
+          type: integer
+          format: int32
+          exclusiveMinimum: 0
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalApiDataPage_ENT'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsError'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/users:
+    get:
+      operationId: list-users-in-organization
+      summary: List Users
+      description: List all users in the organization
+      tags:
+      - Users
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        description: The authorization token. You must use either an org admin token OR a [master token](https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/#master-token)
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+      - name: cursor
+        in: query
+        description: The cursor token for page starting point
+        required: false
+        schema:
+          type: string
+      - name: first
+        in: query
+        description: The page size, in a forwards direction, with a maximum of 1000. Default direction if last not defined
+        required: false
+        schema:
+          type: integer
+          format: int32
+          exclusiveMinimum: 0
+      - name: last
+        in: query
+        description: ''
+        required: false
+        schema:
+          type: integer
+          format: int32
+          exclusiveMinimum: 0
+      - name: email
+        in: query
+        description: Filter by email address
+        required: false
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalApiDataPage_ENT'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsError'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    post:
+      operationId: create-user
+      summary: Create User
+      description: 'Creates a user in the organization.
+
+
+        This endpoint should be used when you have SSO configured as it will not send an invitation to set up an account.
+
+
+        If an invitation is required, make use of the Invite user to organization workspace endpoint.'
+      tags:
+      - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserEndpointBody'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserExternalApiModel'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsError'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/users/{userId}:
+    get:
+      operationId: get-user-by-id
+      summary: Get User
+      description: Get user by id
+      tags:
+      - Users
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        description: The authorization token. You must use either an org level token (viewer or higher) OR a [master token](https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/#master-token)
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+      - name: userId
+        in: path
+        description: The id of an user
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9-]+$
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserExternalApiModel'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsError'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    delete:
+      operationId: delete-user-by-id
+      summary: Delete User
+      description: Delete user by id
+      tags:
+      - Users
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        description: The authorization token. You must use either an org admin token OR a [master token](https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/#master-token)
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+      - name: userId
+        in: path
+        description: The id of an user
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9-]+$
+      responses:
+        '204':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsError'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/users/{userId}/roles:
+    put:
+      operationId: update-user-organization-role
+      summary: Update User Role
+      description: Updates the role of a user in the organization
+      tags:
+      - Users
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        description: The authorization token. You must use either an org admin token OR a [master token](https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/#master-token)
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+      - name: userId
+        in: path
+        description: The id of a user to update the role for
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9-]+$
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserOrganizationRoleExternalEndpointBody'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsError'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
 components:
   schemas:
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Tray internal user identifier
-        name:
-          type: string
-          description: Display name of the user
-        externalUserId:
-          type: string
-          description: External user identifier set during creation
-        isTestUser:
-          type: boolean
-          description: Whether the user is marked as a test user (excluded from billing)
-    PageInfo:
-      type: object
-      properties:
-        hasNextPage:
-          type: boolean
-          description: Whether there are more results after the current page
-        endCursor:
-          type: string
-          description: Cursor for fetching the next page
-        hasPreviousPage:
-          type: boolean
-          description: Whether there are results before the current page
-        startCursor:
-          type: string
-          description: Cursor for fetching the previous page
-    GraphQLRequest:
-      type: object
-      required:
-      - query
-      properties:
-        query:
-          type: string
-          description: The GraphQL query or mutation string
-        variables:
-          type: object
-          description: Variables to pass to the GraphQL query or mutation
-        operationName:
-          type: string
-          description: The name of the operation to execute if the query contains multiple operations
     GraphQLError:
       type: object
       properties:
@@ -328,6 +1372,62 @@ components:
                 type: array
                 items:
                   type: string
+    PageInfo:
+      type: object
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Whether there are more results after the current page
+        endCursor:
+          type: string
+          description: Cursor for fetching the next page
+        hasPreviousPage:
+          type: boolean
+          description: Whether there are results before the current page
+        startCursor:
+          type: string
+          description: Cursor for fetching the previous page
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Tray internal user identifier
+        name:
+          type: string
+          description: Display name of the user
+        externalUserId:
+          type: string
+          description: External user identifier set during creation
+        isTestUser:
+          type: boolean
+          description: Whether the user is marked as a test user (excluded from billing)
+    GraphQLRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+          description: The GraphQL query or mutation string
+        variables:
+          type: object
+          description: Variables to pass to the GraphQL query or mutation
+        operationName:
+          type: string
+          description: The name of the operation to execute if the query contains multiple operations
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type
+        message:
+          type: string
+          description: Human-readable error message
+        statusCode:
+          type: integer
+          description: HTTP status code
     InviteUserRequest:
       type: object
       required:
@@ -362,18 +1462,243 @@ components:
         status:
           type: string
           description: Account status (active, invited, etc.)
-    Error:
+    Shared:
+      title: Shared
       type: object
+    InvalidInput:
+      title: InvalidInput
+      type: object
+      required:
+      - message
       properties:
-        error:
-          type: string
-          description: Error type
         message:
           type: string
-          description: Human-readable error message
-        statusCode:
+        code:
+          type: string
+    CreateUserEndpointBody:
+      title: CreateUserEndpointBody
+      type: object
+      required:
+      - name
+      - email
+      - organizationRoleId
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          pattern: ^[a-zA-Z0-9\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$
+        organizationRoleId:
+          type: string
+          format: uuid
+    PersonalExternal:
+      title: PersonalExternal
+      type: object
+    WorkspaceExternalApiModel:
+      title: WorkspaceExternalApiModel
+      type: object
+      required:
+      - id
+      - name
+      - type
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/WorkspaceType'
+        description:
+          type: string
+        monthlyTaskLimit:
           type: integer
-          description: HTTP status code
+          format: int64
+    Integration:
+      title: Integration
+      type: object
+    Partner:
+      title: Partner
+      type: object
+    UserExternalApiModel:
+      title: UserExternalApiModel
+      type: object
+      required:
+      - id
+      - email
+      - name
+      - accountType
+      - role
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        accountType:
+          $ref: '#/components/schemas/AccountType'
+        role:
+          $ref: '#/components/schemas/RoleExternalApiModel'
+    ExternalApiPageInfoModel:
+      title: ExternalApiPageInfoModel
+      type: object
+      required:
+      - hasNextPage
+      - hasPreviousPage
+      properties:
+        startCursor:
+          type: string
+        endCursor:
+          type: string
+        hasNextPage:
+          type: boolean
+        hasPreviousPage:
+          type: boolean
+    WorkspaceType:
+      title: WorkspaceType
+      oneOf:
+      - $ref: '#/components/schemas/Embedded'
+      - $ref: '#/components/schemas/Organization'
+      - $ref: '#/components/schemas/Personal'
+      - $ref: '#/components/schemas/PersonalExternal'
+      - $ref: '#/components/schemas/Shared'
+    API:
+      title: API
+      type: object
+    Embedded:
+      title: Embedded
+      type: object
+    InviteCreatedExternalApiModel:
+      title: InviteCreatedExternalApiModel
+      type: object
+      required:
+      - inviteId
+      - expires
+      properties:
+        inviteId:
+          type: string
+          format: uuid
+        expires:
+          type: string
+          format: date-time
+    Unauthorized:
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    RoleExternalApiModel:
+      title: RoleExternalApiModel
+      type: object
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+    AccountType:
+      title: AccountType
+      oneOf:
+      - $ref: '#/components/schemas/API'
+      - $ref: '#/components/schemas/External'
+      - $ref: '#/components/schemas/Integration'
+      - $ref: '#/components/schemas/Partner'
+      - $ref: '#/components/schemas/Regular'
+      - $ref: '#/components/schemas/System'
+    System:
+      title: System
+      type: object
+    ResourceNotFound:
+      title: ResourceNotFound
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Regular:
+      title: Regular
+      type: object
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    TooManyRequestsError:
+      title: TooManyRequestsError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    UpdateUserOrganizationRoleExternalEndpointBody:
+      title: UpdateUserOrganizationRoleExternalEndpointBody
+      type: object
+      required:
+      - roleId
+      properties:
+        roleId:
+          type: string
+          format: uuid
+    Organization:
+      title: Organization
+      type: object
+    External:
+      title: External
+      type: object
+    ExternalApiDataPage_ENT:
+      title: ExternalApiDataPage_ENT
+      type: object
+      required:
+      - pageInfo
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceExternalApiModel'
+        pageInfo:
+          $ref: '#/components/schemas/ExternalApiPageInfoModel'
+    InternalError:
+      title: InternalError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Personal:
+      title: Personal
+      type: object
+    InviteUserExternalEndpointBody:
+      title: InviteUserExternalEndpointBody
+      type: object
+      required:
+      - email
+      - organizationRoleId
+      properties:
+        email:
+          type: string
+          pattern: ^[a-zA-Z0-9\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$
+        organizationRoleId:
+          type: string
+          format: uuid
   responses:
     Unauthorized:
       description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
@@ -395,4 +1720,6 @@ components:
       description: Use either a master token (obtained from Tray Embedded UI settings) or a user token (obtained via the authorize mutation). Master tokens are required for admin operations like managing users. User tokens are required for user-scoped operations like managing solution instances.
 x-refined-from:
 - tray-ai-embedded-api-openapi.yml
+- tray-ai-embedded-api-published-openapi.yaml
 - tray-ai-platform-api-openapi.yml
+- tray-ai-platform-api-published-openapi.yaml

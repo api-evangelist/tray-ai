@@ -1,15 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Tray.ai Platform Workspaces API
-  description: The Tray.ai Platform API (also known as the Connectivity API or Tray APIs) provides direct programmatic REST access to Tray's connectors, authentication management, trigger subscriptions, user and workspace administration, and project/solution lifecycle operations. It enables developers to integrate Tray's 700+ pre-built service connectors into their own applications without using the Builder UI. All endpoints require Bearer token authentication.
+  title: Tray Ai Workspaces API
   version: 1.0.0
-  contact:
-    name: Tray.ai Support
-    url: https://tray.ai
-  termsOfService: https://tray.ai/terms
-  license:
-    name: Proprietary
-    url: https://tray.ai/terms
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  description: 'Operations tagged Workspaces across 2 of this provider''s published API definitions: tray-ai-platform-api-openapi.yml, tray-ai-platform-api-published-openapi.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.tray.io/core/v1
   description: US Region (Default)
@@ -17,6 +12,12 @@ servers:
   description: EU Region
 - url: https://api.ap1.tray.io/core/v1
   description: APAC Region
+- url: https://api.tray.io
+  description: US
+- url: https://api.eu1.tray.io
+  description: EU
+- url: https://api.ap1.tray.io
+  description: APAC
 security:
 - bearerAuth: []
 tags:
@@ -44,6 +45,13 @@ paths:
                       $ref: '#/components/schemas/Workspace'
         '401':
           $ref: '#/components/responses/Unauthorized'
+    servers:
+    - url: https://api.tray.io/core/v1
+      description: US Region (Default)
+    - url: https://api.eu1.tray.io/core/v1
+      description: EU Region
+    - url: https://api.ap1.tray.io/core/v1
+      description: APAC Region
   /workspaces/{workspaceId}:
     get:
       operationId: getWorkspace
@@ -69,6 +77,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           description: Workspace not found
+    servers:
+    - url: https://api.tray.io/core/v1
+      description: US Region (Default)
+    - url: https://api.eu1.tray.io/core/v1
+      description: EU Region
+    - url: https://api.ap1.tray.io/core/v1
+      description: APAC Region
   /workspaces/{workspaceId}/users:
     get:
       operationId: listWorkspaceUsers
@@ -99,6 +114,658 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           description: Workspace not found
+    servers:
+    - url: https://api.tray.io/core/v1
+      description: US Region (Default)
+    - url: https://api.eu1.tray.io/core/v1
+      description: EU Region
+    - url: https://api.ap1.tray.io/core/v1
+      description: APAC Region
+  /core/v1/workspaces:
+    get:
+      operationId: get-workspaces
+      summary: List Workspaces
+      description: Lists all workspaces the token has access to i.e. will return all workspaces from the Tray Organization if the Org scope token is used, a single workspace for the workspace scoped token.
+      tags:
+      - Workspaces
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        description: The authorization token.
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+      - name: cursor
+        in: query
+        description: The cursor token for page starting point
+        required: false
+        schema:
+          type: string
+      - name: first
+        in: query
+        description: The page size, in a forwards direction, with a maximum of 100. Default direction if last not defined
+        required: false
+        schema:
+          type: integer
+          format: int32
+          exclusiveMinimum: 0
+      - name: last
+        in: query
+        description: ''
+        required: false
+        schema:
+          type: integer
+          format: int32
+          exclusiveMinimum: 0
+      - name: type
+        in: query
+        description: Filter by workspace type
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceType'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalApiDataPage_ENT'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsError'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/workspaces/{workspaceId}:
+    get:
+      operationId: get-workspace-by-id
+      summary: Get Workspace
+      description: Gets a workspace by Id.
+      tags:
+      - Workspaces
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        description: The authorization token. You must use either an org scoped token or a token that has viewer or higher permission in the workspace you are trying to access.
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+      - name: workspaceId
+        in: path
+        description: The id of a workspace
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9-]+$
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceExternalApiModel'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsError'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/workspaces/{workspaceId}/users:
+    get:
+      operationId: list-users-in-workspace
+      summary: List Users from a Workspace
+      description: List all users in the workspace
+      tags:
+      - Workspaces
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        description: The authorization token. You must use either an org scoped token or a token that has viewer or higher permission in the given workspace.
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+      - name: cursor
+        in: query
+        description: The cursor token for page starting point
+        required: false
+        schema:
+          type: string
+      - name: first
+        in: query
+        description: The page size, in a forwards direction, with a maximum of 100. Default direction if last not defined
+        required: false
+        schema:
+          type: integer
+          format: int32
+          exclusiveMinimum: 0
+      - name: last
+        in: query
+        description: ''
+        required: false
+        schema:
+          type: integer
+          format: int32
+          exclusiveMinimum: 0
+      - name: workspaceId
+        in: path
+        description: The id of a workspace to list users
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9-]+$
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalApiDataPage_ENT'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsError'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    post:
+      operationId: add-user-to-workspace
+      summary: Add User to Workspace
+      description: Adds a user to a workspace
+      tags:
+      - Workspaces
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        description: The authorization token. You must use either an org admin/owner token or a token that has Admin or higher permission in the workspace you are trying to access.
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+      - name: workspaceId
+        in: path
+        description: The id of a workspace to add a user to
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9-]+$
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUserToWorkspaceExternalApiBody'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsError'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/workspaces/{workspaceId}/users/{userId}:
+    get:
+      operationId: get-workspace-user-by-id
+      summary: Get Workspace User by id
+      description: Get workspace user by id
+      tags:
+      - Workspaces
+      parameters:
+      - name: workspaceId
+        in: path
+        description: The id of a workspace
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9-]+$
+      - name: userId
+        in: path
+        description: The id of the user
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9-]+$
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceUserExternalApiModel'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsError'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    put:
+      operationId: update-user-workspace-role
+      summary: Update User's Workspace Role
+      description: Updates the role of a user in a workspace
+      tags:
+      - Workspaces
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        description: The authorization token. You must use either an org admin/owner token or a token that has admin or higher permission in the given workspace.
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+      - name: workspaceId
+        in: path
+        description: The id of the workspace to update the users role
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9-]+$
+      - name: userId
+        in: path
+        description: The id of a user to update the role for
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9-]+$
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserWorkspaceRoleExternalEndpointBody'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsError'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    delete:
+      operationId: remove-user-from-a-Workspace
+      summary: Remove User from Workspace
+      description: Removes a user from a workspace
+      tags:
+      - Workspaces
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        description: The authorization token. You must use either an org admin/owner token or a token that has admin or higher permission in the given workspace.
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+      - name: workspaceId
+        in: path
+        description: The id of a workspace to add a user to
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9-]+$
+      - name: userId
+        in: path
+        description: The id of a user to remove from a workspace
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9-]+$
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsError'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/workspaces/{workspaceId}/roles:
+    get:
+      operationId: get-workspace-roles
+      summary: List Workspace Roles
+      description: Get Workspace Roles
+      tags:
+      - Workspaces
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        description: The authorization token. You must use either an org admin/owner token or a token that has admin or higher permission in the given workspace.
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+      - name: cursor
+        in: query
+        description: The cursor token for page starting point
+        required: false
+        schema:
+          type: string
+      - name: first
+        in: query
+        description: The page size, in a forwards direction, with a maximum of 100. Default direction if last not defined
+        required: false
+        schema:
+          type: integer
+          format: int32
+          exclusiveMinimum: 0
+      - name: last
+        in: query
+        description: ''
+        required: false
+        schema:
+          type: integer
+          format: int32
+          exclusiveMinimum: 0
+      - name: workspaceId
+        in: path
+        description: The id of a workspace to list roles for
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-zA-Z0-9-]+$
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalApiDataPage_ENT'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TooManyRequestsError'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
 components:
   schemas:
     PlatformUser:
@@ -148,6 +815,213 @@ components:
           type: string
           format: date-time
           description: Timestamp when the workspace was created
+    Shared:
+      title: Shared
+      type: object
+    InvalidInput:
+      title: InvalidInput
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    AddUserToWorkspaceExternalApiBody:
+      title: AddUserToWorkspaceExternalApiBody
+      type: object
+      required:
+      - userId
+      - roleId
+      properties:
+        userId:
+          type: string
+          pattern: ^[a-zA-Z0-9-]+$
+        roleId:
+          type: string
+          format: uuid
+    UpdateUserWorkspaceRoleExternalEndpointBody:
+      title: UpdateUserWorkspaceRoleExternalEndpointBody
+      type: object
+      required:
+      - roleId
+      properties:
+        roleId:
+          type: string
+          format: uuid
+    PersonalExternal:
+      title: PersonalExternal
+      type: object
+    WorkspaceExternalApiModel:
+      title: WorkspaceExternalApiModel
+      type: object
+      required:
+      - id
+      - name
+      - type
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/WorkspaceType'
+        description:
+          type: string
+        monthlyTaskLimit:
+          type: integer
+          format: int64
+    Integration:
+      title: Integration
+      type: object
+    Partner:
+      title: Partner
+      type: object
+    WorkspaceType:
+      title: WorkspaceType
+      oneOf:
+      - $ref: '#/components/schemas/Embedded'
+      - $ref: '#/components/schemas/Organization'
+      - $ref: '#/components/schemas/Personal'
+      - $ref: '#/components/schemas/PersonalExternal'
+      - $ref: '#/components/schemas/Shared'
+    ExternalApiPageInfoModel:
+      title: ExternalApiPageInfoModel
+      type: object
+      required:
+      - hasNextPage
+      - hasPreviousPage
+      properties:
+        startCursor:
+          type: string
+        endCursor:
+          type: string
+        hasNextPage:
+          type: boolean
+        hasPreviousPage:
+          type: boolean
+    API:
+      title: API
+      type: object
+    Embedded:
+      title: Embedded
+      type: object
+    Unauthorized:
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    RoleExternalApiModel:
+      title: RoleExternalApiModel
+      type: object
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+    AccountType:
+      title: AccountType
+      oneOf:
+      - $ref: '#/components/schemas/API'
+      - $ref: '#/components/schemas/External'
+      - $ref: '#/components/schemas/Integration'
+      - $ref: '#/components/schemas/Partner'
+      - $ref: '#/components/schemas/Regular'
+      - $ref: '#/components/schemas/System'
+    System:
+      title: System
+      type: object
+    ResourceNotFound:
+      title: ResourceNotFound
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Regular:
+      title: Regular
+      type: object
+    WorkspaceUserExternalApiModel:
+      title: WorkspaceUserExternalApiModel
+      type: object
+      required:
+      - workspaceId
+      - id
+      - accountType
+      - role
+      properties:
+        workspaceId:
+          type: string
+        id:
+          type: string
+        email:
+          type: string
+        accountType:
+          $ref: '#/components/schemas/AccountType'
+        role:
+          $ref: '#/components/schemas/RoleExternalApiModel'
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    TooManyRequestsError:
+      title: TooManyRequestsError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    Organization:
+      title: Organization
+      type: object
+    External:
+      title: External
+      type: object
+    ExternalApiDataPage_ENT:
+      title: ExternalApiDataPage_ENT
+      type: object
+      required:
+      - pageInfo
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceExternalApiModel'
+        pageInfo:
+          $ref: '#/components/schemas/ExternalApiPageInfoModel'
+    InternalError:
+      title: InternalError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Personal:
+      title: Personal
+      type: object
   responses:
     Unauthorized:
       description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
@@ -161,3 +1035,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: Bearer token authentication. Use a master token for admin operations or a user token for user-scoped operations. Tokens are obtained from the Tray platform settings or via the Embedded API authorize mutation.
+x-refined-from:
+- tray-ai-platform-api-openapi.yml
+- tray-ai-platform-api-published-openapi.yaml

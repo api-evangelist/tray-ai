@@ -2,14 +2,9 @@ openapi: 3.2.0
 info:
   title: Tray Ai Authentications API
   version: 1.0.0
-  contact:
-    name: Tray.ai Support
-    url: https://tray.ai
-  license:
-    name: Proprietary
-    url: https://tray.ai/terms
-  termsOfService: https://tray.ai/terms
-  description: 'Operations tagged Authentications across 2 of this provider''s published API definitions: tray-ai-embedded-api-openapi.yml, tray-ai-platform-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  description: 'Operations tagged Authentications across 4 of this provider''s published API definitions: tray-ai-embedded-api-openapi.yml, tray-ai-embedded-api-published-openapi.yaml, tray-ai-platform-api-openapi.yml, tray-ai-platform-api-published-openapi.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://tray.io
   description: US Region (Default)
@@ -17,12 +12,24 @@ servers:
   description: EU Region
 - url: https://ap1.tray.io
   description: APAC Region
+- url: https://tray.io/graphql
+  description: US
+- url: https://eu1.tray.io/graphql
+  description: EU
+- url: https://ap1.tray.io/graphql
+  description: APAC
 - url: https://api.tray.io/core/v1
   description: US Region (Default)
 - url: https://api.eu1.tray.io/core/v1
   description: EU Region
 - url: https://api.ap1.tray.io/core/v1
   description: APAC Region
+- url: https://api.tray.io
+  description: US
+- url: https://api.eu1.tray.io
+  description: EU
+- url: https://api.ap1.tray.io
+  description: APAC
 security:
 - bearerAuth: []
 tags:
@@ -162,6 +169,257 @@ paths:
       description: EU Region
     - url: https://ap1.tray.io
       description: APAC Region
+  '/      ':
+    post:
+      tags:
+      - Authentications
+      summary: Get user authentications (user/master token)
+      description:
+        $ref: descriptions/embedded/endpoints/authentications/getAuthentications.md
+      operationId: get-authentications
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/authentications/getUserAuthentications.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              get-user-authentications:
+                summary: Get user authentications
+                value:
+                  query: "query {\n  viewer {\n    authentications {\n      edges {\n        node {\n          id\n          name\n          customFields\n          service {\n            id,\n            name,\n            icon,\n            title,\n            version\n          }\n        }\n      }\n      pageInfo{\n        hasNextPage\n        hasPreviousPage\n      }\n    }\n  }\n}"
+                  variables: {}
+        required: true
+      responses:
+        '200':
+          description: OK - If user token is passed, an array of all end user auths is returned. In case of master token, an array of auths from the embedded organization workspace is returned.
+          content:
+            application/json:
+              examples:
+                get-user-authentications:
+                  summary: Get user authentications
+                  value:
+                    $ref: examples/authentications/getAuthentications.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
+  '/       ':
+    post:
+      tags:
+      - Authentications
+      summary: Create user Auth (user/master token)
+      description:
+        $ref: descriptions/embedded/endpoints/authentications/createAuthentication.md
+      operationId: create-authentication
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/authentications/createUserAuthentication.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              create-user-authentication:
+                summary: Create user auth
+                value:
+                  query: "mutation (\n    $authenticationName: String!,\n    $serviceId: String!,\n    $serviceEnvironmentId: String!,\n    $authenticationData: Json!,\n    $hidden: Boolean!\n    ){ createUserAuthentication (input:{\n            name: $authenticationName,\n            serviceId: $serviceId,\n            serviceEnvironmentId: $serviceEnvironmentId,\n            data: $authenticationData,\n            scopes: [],\n            hidden: $hidden\n      }) {\n    authenticationId\n  }\n}"
+                  variables:
+                    authenticationName: my-test-sqs-authentication-1
+                    serviceId: e73d8e91-XXXX-XXXX-XXXX-37df289242
+                    serviceEnvironmentId: a84eu2880-XXXX-XXXX-XXXX-7edd82904d
+                    authenticationData: '{"region":"us-east-1","account_id":"1234","access_key":"accesskey","secret_key":"secretkey"}'
+                    hidden: true
+              create-user-authentication-with-clientMutationId:
+                summary: Create user auth with clientMutationId
+                value:
+                  query: "mutation (\n    $authenticationName: String!,\n    $serviceId: String!,\n    $serviceEnvironmentId: String!,\n    $authenticationData: Json!,\n    $hidden: Boolean!,\n    $clientMutationId: String!\n    ){ createUserAuthentication (input:{\n            name: $authenticationName,\n            serviceId: $serviceId,\n            serviceEnvironmentId: $serviceEnvironmentId,\n            data: $authenticationData,\n            scopes: [],\n            hidden: $hidden,\n            clientMutationId: $clientMutationId\n      }) {\n    authenticationId\n    clientMutationId\n  }\n}"
+                  variables:
+                    authenticationName: my-test-sqs-authentication-1
+                    serviceId: e73d8e91-XXXX-XXXX-XXXX-37df289242
+                    serviceEnvironmentId: a84eu2880-XXXX-XXXX-XXXX-7edd82904d
+                    authenticationData: '{"region":"us-east-1","account_id":"1234","access_key":"accesskey","secret_key":"secretkey"}'
+                    hidden: true
+                    clientMutationId: some-mutation-id
+        required: true
+      responses:
+        '200':
+          description: OK - Returns the authentication ID of new auth
+          content:
+            application/json:
+              examples:
+                create-user-authentication:
+                  summary: Create user auth
+                  value:
+                    $ref: examples/authentications/createAuthentication.json
+                create-user-authentication-with-clientMutationId:
+                  summary: Create user auth with clientMutationId
+                  value:
+                    $ref: examples/authentications/createAuthenticationWithCMID.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
+  '/        ':
+    post:
+      tags:
+      - Authentications
+      summary: Delete user Auth (user/master token)
+      description:
+        $ref: descriptions/embedded/endpoints/authentications/deleteAuthentication.md
+      operationId: delete-authentication
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/authentications/deleteUserAuthentication.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              delete-authentication:
+                summary: Delete authentication
+                value:
+                  query: "mutation ($authenticationId: ID!){\n  removeAuthentication(input: { authenticationId: $authenticationId }) {\n    clientMutationId\n  }\n}"
+                  variables:
+                    authenticationId: dd36c246-XXXX-XXXX-XXXX-a600be2b39fe
+              delete-authentication-with-clientMutationId:
+                summary: Delete authentication with clientMutationId
+                value:
+                  query: "mutation ($authenticationId: ID!, $clientMutationId: String!){\n  removeAuthentication(input: { authenticationId: $authenticationId, clientMutationId: $clientMutationId }) {\n    clientMutationId\n  }\n}"
+                  variables:
+                    authenticationId: dd36c246-XXXX-XXXX-XXXX-a600be2b39fe
+                    clientMutationId: some-mutaion-id
+        required: true
+      responses:
+        '200':
+          description: OK - User authentication is deleted
+          content:
+            application/json:
+              examples:
+                delete-authentication:
+                  summary: Delete authentication
+                  value:
+                    $ref: examples/authentications/deleteAuthentication.json
+                delete-authentication-with-clientMutationId:
+                  summary: Delete authentication with clientMutationId
+                  value:
+                    $ref: examples/authentications/deleteAuthenticationWithCMID.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
   /authentications:
     get:
       operationId: listAuthentications
@@ -265,8 +523,623 @@ paths:
       description: EU Region
     - url: https://api.ap1.tray.io/core/v1
       description: APAC Region
+  /core/v1/authentications:
+    post:
+      operationId: create-user-authentication
+      summary: Create Authentication
+      description:
+        $ref: descriptions/trayapi/endpoints/authentications/createAuthentication.md
+      tags:
+      - Authentications
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: This must be a <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> in order to link the auth to the correct end user. <br/> If <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> is used, it creates the auth in your Tray admin account.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePublicUserAuthentication'
+            example:
+              name: Example authentication
+              serviceEnvironmentId: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+              userData:
+                region: us
+              credentials:
+                token: example_token
+              scopes:
+              - read
+              - write
+              onPremAgentGroupId: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+        required: true
+      responses:
+        '200':
+          description: OK - Returns the authentication id required by the [Call connector](/developer/platform-apis/connectors#endpoint-call-connector) endpoint<br /><br />Note that Tray only checks input schema and does not currently validate auths so e.g. an invalid API key may still return a successful result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePublicUserAuthenticationResult'
+              example:
+                id: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+        '400':
+          description: Invalid input - Use [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) to check the correct schema
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized - Verify the token validity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not found - Use [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) to check the `serviceEnvironmentId`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/authentications/{authentication-id}:
+    get:
+      operationId: get-user-authentication
+      summary: Get Authentication
+      description:
+        $ref: descriptions/trayapi/endpoints/authentications/getAuthenticationById.md
+      tags:
+      - Authentications
+      parameters:
+      - name: authentication-id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 497f6eca-xxxx-xxxx-xxxx-53cbbbba6f08
+        description: Unique ID of the authentication in Tray
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: This can either be a your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> or the <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> of the end user who owns the auth.
+      responses:
+        '200':
+          description: OK - Returns authentication details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserAuthenticationResult'
+              example:
+                id: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+                name: Example authentication
+                serviceEnvironmentId: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+                scopes:
+                - read
+                - write
+                onPremAgentGroupId: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized - Verify the token validity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not found - No auth with matching id has been found or user does not have access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    put:
+      operationId: update-user-authentication
+      summary: Update Authentication
+      description:
+        $ref: descriptions/trayapi/endpoints/authentications/updateAuthenticationById.md
+      tags:
+      - Authentications
+      parameters:
+      - name: authentication-id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 497f6eca-xxxx-xxxx-xxxx-53cbbbba6f08
+        description: Unique ID of the authentication in Tray
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: This can either be a your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> or the <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> of the end user who owns the auth.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePublicUserAuthenticationHttp'
+            example:
+              name: Example authentication
+              userData:
+                region: us
+              credentials:
+                token: example_token
+              scopes:
+              - read
+              - write
+              onPremAgentGroupId: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePublicUserAuthenticationResult'
+              example:
+                id: 123exxxx-xxxx-xxxx-xxxx-xxxxxx614174
+                name: Example authentication
+                serviceEnvironmentId: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+                scopes:
+                - read
+                - write
+                onPremAgentGroupId: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit Exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    delete:
+      operationId: delete-user-authentication
+      summary: Delete Authentication
+      description:
+        $ref: descriptions/trayapi/endpoints/authentications/deleteAuthenticationById.md
+      tags:
+      - Authentications
+      parameters:
+      - name: authentication-id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 497f6eca-xxxx-xxxx-xxxx-53cbbbba6f08
+        description: Unique ID of the authentication in Tray
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: This can either be a your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> or the <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> of the end user who owns the auth.
+      responses:
+        '204':
+          description: No content - The authentication was deleted successfully
+          content:
+            text/html:
+              example: ''
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized - Verify the token validity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not found - No auth with matching id has been found or user does not have access to delete
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/authentications/{authentication-id}/full:
+    get:
+      operationId: get-full-authentication
+      summary: Get Full Authentication
+      description:
+        $ref: descriptions/trayapi/endpoints/authentications/getFullAuthenticationById.md
+      tags:
+      - Authentications
+      parameters:
+      - name: authentication-id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        example: 497f6eca-xxxx-xxxx-xxxx-53cbbbba6f08
+        description: Unique ID of the authentication in Tray
+      - name: forceRefresh
+        in: query
+        required: false
+        schema:
+          type: boolean
+        example: true
+        description: If set to true, an attempt will be made to refresh the authentication before the credentials are returned. Enabling this will result in slower API calls, so it should only be used if the existing credentials have expired. For many authentications, Tray.ai will refresh them automatically.
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: This should be the <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> of the end user who owns the auth.
+      responses:
+        '200':
+          description: OK - Returns full authentication details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFullUserAuthenticationResult'
+              example:
+                id: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+                name: Example authentication
+                serviceEnvironmentId: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+                userData:
+                  userId: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+                credentials:
+                  accessToken: XXXXX
+                  tokenType: Bearer
+                  expiresIn: 3600
+                scopes:
+                - read
+                - write
+                onPremAgentGroupId: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized - Verify the token validity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not found - No auth with matching id has been found or user does not have access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/services/{service-name}/versions/{service-version}/environments:
+    get:
+      operationId: get-service-environments
+      summary: List Service Environments
+      description:
+        $ref: descriptions/trayapi/endpoints/services/getServiceEnvironments.md
+      tags:
+      - Authentications
+      parameters:
+      - name: service-name
+        in: path
+        required: true
+        schema:
+          type: string
+        example: trello
+        description: Name of the service as obtained from [Get connectors](/developer/platform-apis/connectors#endpoint-get-connectors)
+      - name: service-version
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 2
+        description: Version of the service as obtained from [Get connectors](/developer/platform-apis/connectors#endpoint-get-connectors)<br />Note that this is the **single int 'service' version not the decimal 'connector' version**
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: You can either pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here or <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> of an end user.
+      responses:
+        '200':
+          description: OK - Returns an `elements` array which contains the input schema for [Create user authentication](/developer/platform-apis/authentications#endpoint-create-user-authentication)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicServiceEnvironmentList'
+              examples:
+                Slack v4 Service Enviroment:
+                  value:
+                    elements:
+                    - id: 228axxxx-xxxx-xxxx-xxxx-xxxxxxa244c1
+                      title: Production
+                      authenticationType: oauth2
+                      userDataSchema:
+                        advanced: []
+                        additionalProperties: false
+                        type: object
+                        properties:
+                          signing_secret:
+                            format: password
+                            description: Used in the slack trigger version 5.0 and later to verify slash commands
+                            type: string
+                            title: Slash command signing secret
+                      credentialsSchema: {}
+                      scopes:
+                      - scope: calls:read
+                        description: Allow apps to access information about ongoing and past Calls
+                      - scope: channels:history
+                        description: Access user’s public channels
+                      - scope: channels:read
+                        description: Access information about user’s public channels
+                      - scope: channels:write
+                        description: Modify your public channels
+                      - scope: chat:write:bot
+                        description: Send messages as tray.io
+                Netsuite v1 Service Enviroment:
+                  value:
+                    elements:
+                    - id: b541xxxx-xxxx-xxxx-xxxx-xxxxxxb7434e
+                      title: Production
+                      authenticationType: token
+                      userDataSchema: {}
+                      credentialsSchema:
+                        id: http://jsonschema.net
+                        type: object
+                        schema: http://json-schema.org/draft-03/schema
+                        properties:
+                          email:
+                            id: http://jsonschema.net/key
+                            title: Email
+                            type: string
+                            description: The user email of the account.
+                          password:
+                            id: http://jsonschema.net/password
+                            title: Password
+                            type: string
+                            description: The user password of the account.
+                            format: password
+                          account:
+                            title: Account
+                            tytpe: string
+                            description: The account ID.
+                          role:
+                            title: Role
+                            type: integer
+                            description: The role ID.
+                        additionalProperties: false
+                        required:
+                        - email
+                        - password
+                        - account
+                        - role
+                      scopes: []
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized - Verify the token validity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not found - Service name or version not found or user does not have access
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
 components:
   schemas:
+    GraphQLError:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              locations:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    line:
+                      type: integer
+                    column:
+                      type: integer
+              path:
+                type: array
+                items:
+                  type: string
+    Authentication:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique authentication identifier
+        name:
+          type: string
+          description: Display name of the authentication
+        service:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            icon:
+              type: string
+              format: uri
+        serviceEnvironment:
+          type: object
+          properties:
+            id:
+              type: string
+            title:
+              type: string
     PageInfo:
       type: object
       properties:
@@ -296,56 +1169,36 @@ components:
         operationName:
           type: string
           description: The name of the operation to execute if the query contains multiple operations
-    Authentication:
+    Error:
       type: object
       properties:
-        id:
+        error:
           type: string
-          description: Unique authentication identifier
+          description: Error type
+        message:
+          type: string
+          description: Human-readable error message
+        statusCode:
+          type: integer
+          description: HTTP status code
+    CreateAuthenticationRequest:
+      type: object
+      required:
+      - name
+      - serviceEnvironmentId
+      properties:
         name:
           type: string
-          description: Display name of the authentication
-        service:
+          description: Display name for the authentication
+        serviceEnvironmentId:
+          type: string
+          description: The ID of the service environment to authenticate against
+        userData:
           type: object
-          properties:
-            id:
-              type: string
-            name:
-              type: string
-            icon:
-              type: string
-              format: uri
-        serviceEnvironment:
+          description: User-specific data for the authentication
+        credentials:
           type: object
-          properties:
-            id:
-              type: string
-            title:
-              type: string
-    GraphQLError:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-                description: Error message
-              locations:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    line:
-                      type: integer
-                    column:
-                      type: integer
-              path:
-                type: array
-                items:
-                  type: string
+          description: Credentials for the authentication (e.g., API key, OAuth tokens)
     PlatformAuthentication:
       type: object
       properties:
@@ -367,7 +1220,177 @@ components:
           type: string
           format: date-time
           description: Timestamp when the authentication was created
-    CreateAuthenticationRequest:
+    InvalidInput:
+      title: InvalidInput
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Unauthorized:
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    PublicServiceEnvironment:
+      required:
+      - id
+      - title
+      - authenticationType
+      - userDataSchema
+      - credentialsSchema
+      - scopes
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifies the service and its environment <br /> e.g. Tray Slack OAuth app and your custom Slack OAuth app will have different ids
+        title:
+          type: string
+          description: Will reflect the title given to your OAuth app when it was created in the Tray builder
+        authenticationType:
+          $ref: '#/components/schemas/AuthenticationType'
+          description: 'Enum: `"token"` `"oauth1"` `"oauth2"` `"oauth2password"` `"oauth2client_credentials"` `"builtin"`'
+        userDataSchema:
+          type: object
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+          description: Input schema for data regarding base url, company id, table id etc.
+        credentialsSchema:
+          type: object
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+          description: Input schema for auth data (token, secret etc.) required to complete the auth
+        scopes:
+          type: array
+          items:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+          description: All available scopes to control the level of access given to any authentications
+      description: ''
+    GetUserAuthenticationResult:
+      title: GetUserAuthenticationResult
+      type: object
+      required:
+      - id
+      - name
+      - serviceEnvironmentId
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique id of the authentication - required by the [Call connector](/developer/platform-apis/connectors#endpoint-call-connector) endpoint
+        name:
+          type: string
+          description: Name for the auth which identifies End User, service, test, dev etc.
+        serviceEnvironmentId:
+          type: string
+          description: Identifies the service and environment the auth is for (e.g. Tray Slack OAuth app or your own Custom Slack OAuth app)
+        scopes:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          description: The permission scopes which describe the level of access this auth has to the service
+        onPremAgentGroupId:
+          description: The on-prem agent group this authentication is associated with, if any.
+          type: string
+          format: uuid
+          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+    UpdatePublicUserAuthenticationResult:
+      title: UpdatePublicUserAuthenticationResult
+      type: object
+      required:
+      - id
+      - name
+      - serviceEnvironmentId
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Authentication Id in Tray for the updated auth
+        name:
+          type: string
+          description: Authentication Id in Tray for the updated auth
+        serviceEnvironmentId:
+          type: string
+          description: Authentication Id in Tray for the updated auth
+        scopes:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          description: Applicable for OAuth services only. An array of scopes attached to this auth are returned.
+        onPremAgentGroupId:
+          type: string
+          format: uuid
+          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+    LimitExceeded:
+      title: LimitExceeded
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    ResourceNotFound:
+      title: ResourceNotFound
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    CreatePublicUserAuthentication:
+      title: CreatePublicUserAuthentication
       type: object
       required:
       - name
@@ -375,28 +1398,193 @@ components:
       properties:
         name:
           type: string
-          description: Display name for the authentication
+          description: Name for the auth which identifies End User, service, test, dev etc.
         serviceEnvironmentId:
           type: string
-          description: The ID of the service environment to authenticate against
+          description: Obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
         userData:
           type: object
-          description: User-specific data for the authentication
+          description: Data regarding base url, company id, table id etc.<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
         credentials:
           type: object
-          description: Credentials for the authentication (e.g., API key, OAuth tokens)
-    Error:
-      type: object
-      properties:
-        error:
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+          description: Auth data (token, secret etc.) required to complete the auth<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
+        scopes:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          description: 'Example: `"scopes": ["chat:write", "channels:read"]` or `"scopes": ["chatter_api,", "openid"]`</br>List of the scopes required for the auth to function<br />Available scopes can be retrieved with [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments)'
+        onPremAgentGroupId:
           type: string
-          description: Error type
+          format: uuid
+          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+    GetFullUserAuthenticationResult:
+      title: GetFullUserAuthenticationResult
+      type: object
+      required:
+      - id
+      - name
+      - serviceEnvironmentId
+      - userData
+      - credentials
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique id of the authentication - required by the [Call connector](/developer/platform-apis/connectors#endpoint-call-connector) endpoint
+        name:
+          type: string
+          description: Name for the auth which identifies End User, service, test, dev etc.
+        serviceEnvironmentId:
+          type: string
+          description: Identifies the service and environment the auth is for (e.g. Tray Slack OAuth app or your own Custom Slack OAuth app)
+        userData:
+          description: For OAuth-based authentications, this field contains data that is provided by the user, rather than by the OAuth flow. This may include subdomains or regions, for example.
+          type: object
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+        credentials:
+          description: The authentication credentials.
+          type: object
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+        scopes:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          description: The permission scopes which describe the level of access this auth has to the service
+        onPremAgentGroupId:
+          description: The on-prem agent group this authentication is associated with, if any.
+          type: string
+          format: uuid
+          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+    InternalError:
+      title: InternalError
+      type: object
+      required:
+      - message
+      properties:
         message:
           type: string
-          description: Human-readable error message
-        statusCode:
-          type: integer
-          description: HTTP status code
+        code:
+          type: string
+    PublicServiceEnvironmentList:
+      type: object
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicServiceEnvironment'
+      description: ''
+    AuthenticationType:
+      title: AuthenticationType
+      type: string
+      enum:
+      - token
+      - oauth1
+      - oauth2
+      - oauth2password
+      - oauth2client_credentials
+      - builtin
+    UpdatePublicUserAuthenticationHttp:
+      title: UpdatePublicUserAuthenticationHttp
+      type: object
+      required:
+      - name
+      - credentials
+      properties:
+        name:
+          type: string
+          description: Name of the auth in Tray (e.g. `John Doe's Slack Auth 10th Oct`)
+        userData:
+          type: object
+          description: Data regarding base url, company id, table id etc.<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+        credentials:
+          type: object
+          description: Auth data (token, secret etc.) required to complete the auth<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+        scopes:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          description: 'Example: `"scopes": ["chat:write", "channels:read"]` or `"scopes": ["chatter_api,", "openid"]`</br>List of the scopes required for the auth to function<br />Available scopes can be retrieved with [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments)'
+        onPremAgentGroupId:
+          type: string
+          format: uuid
+          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+    CreatePublicUserAuthenticationResult:
+      title: CreatePublicUserAuthenticationResult
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Authentication Id in Tray for the newly created auth
   responses:
     Unauthorized:
       description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
@@ -418,4 +1606,6 @@ components:
       description: Use either a master token (obtained from Tray Embedded UI settings) or a user token (obtained via the authorize mutation). Master tokens are required for admin operations like managing users. User tokens are required for user-scoped operations like managing solution instances.
 x-refined-from:
 - tray-ai-embedded-api-openapi.yml
+- tray-ai-embedded-api-published-openapi.yaml
 - tray-ai-platform-api-openapi.yml
+- tray-ai-platform-api-published-openapi.yaml

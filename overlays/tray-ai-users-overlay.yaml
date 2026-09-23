@@ -1,0 +1,59 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Tray Ai Users API
+  version: 1.0.0
+extends: tray-ai-users-api-openapi.yml
+x-generated: '2026-09-02'
+x-method: generated
+x-source: apis.yml, conventions/tray-ai-conventions.yml, rate-limits/tray-ai-rate-limits.yml, errors/tray-ai-problem-types.yml,
+  mcp/tray-ai-mcp.yml, lifecycle/tray-ai-lifecycle.yml
+actions:
+- target: $.info
+  description: Attach provider contact and licensing/terms Tray publishes on its own site.
+  update:
+    contact:
+      name: Tray.ai Support
+      url: https://tray.ai/contact
+    termsOfService: https://tray.ai/terms
+    x-provider: Tray.ai
+    x-provider-id: tray-ai
+    x-developer-portal: https://tray.ai/documentation/developer/
+    x-published-spec: https://tray.ai/documentation/files/openapi/trayapi.yaml
+    x-status-page: https://status.tray.ai/
+    x-changelog: https://tray.ai/documentation/releases
+- target: $
+  description: Record the cross-cutting runtime semantics an agent needs and cannot read from this document.
+  update:
+    x-rate-limits:
+      requests_per_second: 30
+      requests_per_minute: 1800
+      burst_requests_per_second: 50
+      response_headers: none published
+      status_on_exhaustion: 429
+      docs: https://tray.ai/documentation/developer/getting-started/troubleshooting/rate-limiting-tray
+    x-idempotency:
+      supported: false
+      note: No Idempotency-Key header and no idempotent retry semantics are documented. A retried write
+        re-executes.
+    x-pagination:
+      first_party: none
+      note: Tray list endpoints declare no page/limit/cursor parameters; pagination is a pass-through
+        concern of the Call Connector endpoint.
+    x-error-envelope:
+      content_type: application/json
+      shape: '{ "message": string, "code": string|null }'
+      rfc9457: false
+      catalog: errors/tray-ai-problem-types.yml
+    x-regions:
+      model: host-based
+      us: api.tray.io / tray.io
+      eu: api.eu1.tray.io / eu1.tray.io
+      apac: api.ap1.tray.io / ap1.tray.io
+      note: A token issued in one region does not work in another.
+    x-agent-surface:
+      mcp_endpoint: https://api.tray.io/mcp
+      tool_crosswalk: mcp/tray-ai-tool-crosswalk.yml
+      note: Tray also runs a hosted MCP server. Most operations in this document have NO MCP tool; see
+        the crosswalk.
+    x-agentic-access: agentic-access/tray-ai-agentic-access.yml
+    x-lifecycle: lifecycle/tray-ai-lifecycle.yml

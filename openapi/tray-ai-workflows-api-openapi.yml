@@ -1,15 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Tray.ai Embedded Workflows API
-  description: 'The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray''s UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.'
+  title: Tray Ai Workflows API
   version: 1.0.0
-  contact:
-    name: Tray.ai Support
-    url: https://tray.ai
-  termsOfService: https://tray.ai/terms
-  license:
-    name: Proprietary
-    url: https://tray.ai/terms
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  description: 'Operations tagged Workflows across 2 of this provider''s published API definitions: tray-ai-embedded-api-openapi.yml, tray-ai-embedded-api-published-openapi.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://tray.io
   description: US Region (Default)
@@ -17,6 +12,12 @@ servers:
   description: EU Region
 - url: https://ap1.tray.io
   description: APAC Region
+- url: https://tray.io/graphql
+  description: US
+- url: https://eu1.tray.io/graphql
+  description: EU
+- url: https://ap1.tray.io/graphql
+  description: APAC
 security:
 - bearerAuth: []
 tags:
@@ -57,6 +58,13 @@ paths:
                             description: Serialized workflow data for import
         '401':
           $ref: '#/components/responses/Unauthorized'
+    servers:
+    - url: https://tray.io
+      description: US Region (Default)
+    - url: https://eu1.tray.io
+      description: EU Region
+    - url: https://ap1.tray.io
+      description: APAC Region
   /graphql#importWorkflows:
     post:
       operationId: importWorkflows
@@ -90,6 +98,174 @@ paths:
                             type: string
         '401':
           $ref: '#/components/responses/Unauthorized'
+    servers:
+    - url: https://tray.io
+      description: US Region (Default)
+    - url: https://eu1.tray.io
+      description: EU Region
+    - url: https://ap1.tray.io
+      description: APAC Region
+  '/                  ':
+    post:
+      tags:
+      - Workflows
+      summary: Import Workflows (master token)
+      description:
+        $ref: descriptions/embedded/endpoints/workflows/importWorkflows.md
+      operationId: import-workflows
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/workflows/importWorkflows.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              import-workflows:
+                summary: Import Workflows
+                value:
+                  query: "mutation ($exportedProjectJson: String!, $targetProjectId: ID!) {\n  importProject (input: {\n    exportedProjectJson: $exportedProjectJson,\n    targetProjectId: $targetProjectId\n  }) {\n    clientMutationId\n  }\n}"
+                  variables:
+                    exportedProjectJson: '{}'
+                    targetProjectId: 944dxxx-xxx-xxx-xxx-xxx222eb99
+              import-workflows-with-clientMutationId:
+                summary: Import Workflowswith clientMutationId
+                value:
+                  query: "mutation ($exportedProjectJson: String!, $targetProjectId: ID!, $clientMutationId: String) {\n  importProject (input: {\n    exportedProjectJson: $exportedProjectJson\n    targetProjectId: $targetProjectId,\n    clientMutationId: $clientMutationId\n  }) {\n    clientMutationId\n  }\n}"
+                  variables:
+                    exportedProjectJson: '{}'
+                    targetProjectId: 944dxxx-xxx-xxx-xxx-xxx222eb99
+                    clientMutationId: some-mutation-id
+        required: true
+      responses:
+        '200':
+          description: OK - Workflows are imported to the embedded org
+          content:
+            application/json:
+              examples:
+                import-workflows:
+                  summary: Import Workflows
+                  value:
+                    $ref: examples/workflows/importWorkflows.json
+                import-workflows-with-clientMutationId:
+                  summary: Import Workflows with clientMutationId
+                  value:
+                    $ref: examples/workflows/importWorkflowsWithClientMutationId.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
+  '/                   ':
+    post:
+      tags:
+      - Workflows
+      summary: Export Workflows (master token)
+      description:
+        $ref: descriptions/embedded/endpoints/workflows/exportWorkflows.md
+      operationId: export-workflows
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/workflows/exportWorkflows.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              export-workflows:
+                summary: Export Workflows
+                value:
+                  query: "mutation ($projectId: ID!) {\n  exportProject (input: {\n    projectId: $projectId,\n    exportSolution: true\n  }) {\n    exportedProjectJson\n  }\n}"
+                  variables:
+                    projectId: 944dxxx-xxx-xxx-xxx-xxx222eb99
+        required: true
+      responses:
+        '200':
+          description: OK - JSON string of the exported workflows is returned
+          content:
+            application/json:
+              examples:
+                export-workflows:
+                  summary: Export Workflows
+                  value:
+                    $ref: examples/workflows/exportWorkflows.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
 components:
   schemas:
     GraphQLError:
@@ -143,3 +319,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: Use either a master token (obtained from Tray Embedded UI settings) or a user token (obtained via the authorize mutation). Master tokens are required for admin operations like managing users. User tokens are required for user-scoped operations like managing solution instances.
+x-refined-from:
+- tray-ai-embedded-api-openapi.yml
+- tray-ai-embedded-api-published-openapi.yaml

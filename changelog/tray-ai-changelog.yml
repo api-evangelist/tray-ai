@@ -1,0 +1,142 @@
+generated: '2026-09-02'
+method: searched
+source: https://tray.ai/documentation/releases.md
+provider: Tray.ai
+providerId: tray-ai
+url: https://tray.ai/documentation/releases
+machine_readable_url: https://tray.ai/documentation/releases.md
+description: >-
+  Tray.ai publishes a dated, categorised release-notes feed covering the platform, its connectors
+  and its developer tooling. It is published as clean markdown at a stable URL, split per year
+  (releases.md carries the current year plus last year; releases-{YYYY}.md the archives), which
+  makes it one of the few genuinely machine-readable changelogs in the iPaaS cohort. It is a
+  PRODUCT changelog rather than an API changelog: neither published OpenAPI is versioned in it,
+  and no entry records a breaking API change.
+scheme: date-based
+current_version:
+  platform_spec: 1.0.0
+  embedded_spec: 1.0.0
+  note: Both published OpenAPI documents carry info.version 1.0.0 and are not bumped per release.
+categories: [Features, Connector updates, New connectors, Fixes, Deprecations]
+archives:
+  - year: 2024
+    entries: 68
+    url: https://tray.ai/documentation/releases-2024.md
+  - year: 2023
+    entries: 129
+    url: https://tray.ai/documentation/releases-2023.md
+entries:
+  - date: '2026-08-19'
+    category: Features
+    title: Tray Sync CLI
+    url: https://tray.ai/documentation/releases/features/tray-sync-cli.md
+    breaking: false
+    highlights:
+      - Clone Tray projects to a local directory for version control.
+      - Promote projects between Tray environments, with a dry run first.
+      - Local checksum-based drift detection with zero API calls.
+      - A promotion is refused outright if any project or authentication mapping is unresolved.
+  - date: '2026-07-14'
+    category: Features
+    title: Log Masking
+    url: https://tray.ai/documentation/releases/features/log-masking.md
+    breaking: false
+    highlights:
+      - Admins and Workspace Admins can mask a step's input and output values in execution logs.
+      - Reveals are recorded in the audit log; a central Data masking view lists every masked step.
+      - Gated — access is requested through a Customer Success Manager.
+  - date: '2026-07-08'
+    category: Features
+    title: Tray Headless — select your workspace at sign-in
+    url: https://tray.ai/documentation/releases/features/tray-headless-workspace-at-sign-in.md
+    breaking: false
+    behaviour_change: true
+    highlights:
+      - 'The workspaceId argument was REMOVED from Tray Headless MCP tool calls; workspace now comes from the OAuth2 sign-in.'
+      - Claude Code plugin no longer prompts for a Workspace ID at install.
+      - 'The `Active Tray Workspace:` line in AGENTS.md is no longer needed for Codex.'
+  - date: '2026-07-06'
+    category: Features
+    title: See which workflows use an authentication
+    url: https://tray.ai/documentation/releases/features/authentication-details-page.md
+    breaking: false
+  - date: '2026-06-22'
+    category: Features
+    title: Tray Headless now supports Codex
+    url: https://tray.ai/documentation/releases/features/tray-headless-for-codex.md
+    breaking: false
+    highlights:
+      - '`codex plugin marketplace add trayio/tray-plugins` then `codex plugin add tray-workflows@tray-plugins`.'
+      - 'One-time browser OAuth2 sign-in via `codex mcp login tray` — no API token.'
+  - date: '2026-06-17'
+    category: Features
+    title: MCP dynamic authentication
+    url: https://tray.ai/documentation/releases/features/mcp-dynamic-authentication.md
+    breaking: false
+    highlights:
+      - MCP tools can run with end-user credentials instead of a shared service account.
+      - Authentication Management tab, user allowlist, and a Monitor tab for tool execution activity.
+  - date: '2026-06-15'
+    category: Features
+    title: Tray Headless MCP — Regional Endpoints (EU & APAC)
+    url: https://tray.ai/documentation/releases/features/tray-headless-mcp-regional-endpoints.md
+    breaking: false
+    highlights:
+      - 'Endpoints: US https://api.tray.io/mcp, EU https://api.eu1.tray.io/mcp, APAC https://api.ap1.tray.io/mcp.'
+      - The tray-workflows plugin remains US-only and is not region-aware.
+  - date: '2026-06-09'
+    category: Connector updates
+    title: OpenAI connector 3.1
+    url: https://tray.ai/documentation/releases/connector-updates/openai-3-1-0.md
+    breaking: false
+  - date: '2026-06-03'
+    category: Features
+    title: Introducing Tray Headless
+    url: https://tray.ai/documentation/releases/features/tray-headless.md
+    breaking: false
+    highlights:
+      - 'Two shapes: the tray-workflows plugin for Claude Code, and the hosted MCP server at api.tray.io/mcp.'
+      - Both use a one-time browser OAuth2 sign-in — no API token to generate or paste.
+      - Launched US-region only.
+  - date: '2026-03-12'
+    category: Features
+    title: 'Inline functions: additional return types'
+    breaking: false
+  - date: '2026-02-24'
+    category: Features
+    title: 'Data Engineering: SQL Transformer'
+    breaking: false
+  - date: '2026-02-09'
+    category: Deprecations
+    title: Connector Builder deprecation
+    url: https://tray.ai/documentation/releases/deprecations/connector-builder-deprecation.md
+    breaking: true
+    highlights:
+      - 'February 2026: creating new connectors in Connector Builder is no longer available.'
+      - 'Date TBC: editing existing Connector Builder connectors will be permanently disabled.'
+      - Existing Connector Builder connectors keep running; migrate future work to the CDK.
+    cross_ref: lifecycle/tray-ai-lifecycle.yml
+  - date: '2026-02-04'
+    category: Fixes
+    title: API User Creation — help text for Admin role
+    breaking: false
+  - date: '2026-01-20'
+    category: New connectors
+    title: Microsoft Teams App 1.0
+    breaking: false
+  - date: '2026-01-15'
+    category: New connectors
+    title: Microsoft Graph 1.0
+    breaking: false
+  - date: '2026-01-09'
+    category: Features
+    title: Slack Interaction Channels for Merlin Agent Builder
+    breaking: false
+  - date: '2026-01-08'
+    category: New connectors
+    title: Project Queue 1.0
+    breaking: false
+window: '2026-01-08 to 2026-08-19 (the 17 most recent entries in the live feed)'
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

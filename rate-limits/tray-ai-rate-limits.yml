@@ -6,8 +6,8 @@ providerId: tray-ai
 created: '2026-05-04'
 # Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
 # bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-22'
+method: searched
+modified: '2026-09-02'
 tags:
   - Automation
   - Integration
@@ -16,8 +16,8 @@ tags:
   - Quotas
   - Throttling
 sourceUrls:
-  - https://tray.ai/documentation/developer/platform-apis/rate-limits
-  - https://tray.ai/documentation/developer/embedded-apis/rate-limits
+  - https://tray.ai/documentation/developer/getting-started/troubleshooting/rate-limiting-tray
+  - https://tray.ai/documentation/developer/getting-started/troubleshooting/rate-limiting-3rd-party
 description: >-
   Machine-readable rate limit definitions for Tray.ai's Platform API and Embedded API. Values
   reflect the limits documented in Tray's developer portal. Verbatim from the Platform API docs:
@@ -25,16 +25,33 @@ description: >-
   Embedded API docs match: "All endpoints are rate limited to 30 requests per second." The Call
   Connector endpoint is additionally capped at 1,000 concurrent requests. Trigger API event
   delivery is not rate limited.
-headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+# CORRECTION 2026-09-02: the previous version of this file listed X-RateLimit-Limit,
+# X-RateLimit-Remaining, X-RateLimit-Reset, Retry-After and RateLimit-Policy as though Tray
+# returned them. Tray documents none of these anywhere, and a live unauthenticated request to
+# https://api.tray.io/core/v1/connectors (probed 2026-09-02, HTTP 401) returned no rate-limit
+# header of any kind. The claim was a template default, not an observation, and it is removed.
+headersPublished: false
+headers: {}
+headersNote: >-
+  Tray publishes the NUMBERS but not the SIGNAL. There are no RateLimit-* / X-RateLimit-* headers
+  and no Retry-After, so a client cannot read its remaining budget at runtime — it must model the
+  published 30 rps / 1800 rpm ceiling and back off on its own schedule. Verified against the
+  documentation and against a live response on 2026-09-02.
 responseCodes:
   throttled: 429
   quotaExceeded: 429
-  serviceUnavailable: 503
+evidence:
+  - url: https://tray.ai/documentation/developer/getting-started/troubleshooting/rate-limiting-tray
+    status: 200
+    finding: >-
+      "all endpoints (Embedded APIs/Connectivity APIs) are rate limited at 30 requests per second
+      or 1800 requests per minute"; "limited burst capacity ... (up to 50 requests per second)";
+      Call Connector "limits the concurrent calls to 1000"; "the delivery of events to your
+      endpoint is not rate limited ... Tray will retry the delivery of those events with
+      exponential backoff."
+  - url: https://api.tray.io/core/v1/connectors
+    status: 401
+    finding: 'No RateLimit-* / X-RateLimit-* / Retry-After response header present.'
 limits:
   - name: Platform API Steady-State
     description: All Tray Platform API (Connectivity API) endpoints are rate limited at 30 requests

@@ -1,15 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Tray.ai Embedded Solution Instances API
-  description: 'The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray''s UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.'
+  title: Tray Ai Solution Instances API
   version: 1.0.0
-  contact:
-    name: Tray.ai Support
-    url: https://tray.ai
-  termsOfService: https://tray.ai/terms
-  license:
-    name: Proprietary
-    url: https://tray.ai/terms
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  description: 'Operations tagged Solution Instances across 2 of this provider''s published API definitions: tray-ai-embedded-api-openapi.yml, tray-ai-embedded-api-published-openapi.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://tray.io
   description: US Region (Default)
@@ -17,6 +12,12 @@ servers:
   description: EU Region
 - url: https://ap1.tray.io
   description: APAC Region
+- url: https://tray.io/graphql
+  description: US
+- url: https://eu1.tray.io/graphql
+  description: EU
+- url: https://ap1.tray.io/graphql
+  description: APAC
 security:
 - bearerAuth: []
 tags:
@@ -56,6 +57,13 @@ paths:
                             $ref: '#/components/schemas/SolutionInstance'
         '401':
           $ref: '#/components/responses/Unauthorized'
+    servers:
+    - url: https://tray.io
+      description: US Region (Default)
+    - url: https://eu1.tray.io
+      description: EU Region
+    - url: https://ap1.tray.io
+      description: APAC Region
   /graphql#getSolutionInstances:
     post:
       operationId: getSolutionInstances
@@ -101,6 +109,13 @@ paths:
                                 $ref: '#/components/schemas/PageInfo'
         '401':
           $ref: '#/components/responses/Unauthorized'
+    servers:
+    - url: https://tray.io
+      description: US Region (Default)
+    - url: https://eu1.tray.io
+      description: EU Region
+    - url: https://ap1.tray.io
+      description: APAC Region
   /graphql#updateSolutionInstance:
     post:
       operationId: updateSolutionInstance
@@ -134,6 +149,13 @@ paths:
                             $ref: '#/components/schemas/SolutionInstance'
         '401':
           $ref: '#/components/responses/Unauthorized'
+    servers:
+    - url: https://tray.io
+      description: US Region (Default)
+    - url: https://eu1.tray.io
+      description: EU Region
+    - url: https://ap1.tray.io
+      description: APAC Region
   /graphql#deleteSolutionInstance:
     post:
       operationId: deleteSolutionInstance
@@ -167,37 +189,427 @@ paths:
                             type: string
         '401':
           $ref: '#/components/responses/Unauthorized'
+    servers:
+    - url: https://tray.io
+      description: US Region (Default)
+    - url: https://eu1.tray.io
+      description: EU Region
+    - url: https://ap1.tray.io
+      description: APAC Region
+  '/          ':
+    post:
+      tags:
+      - Solution Instances
+      summary: Get solution instances (user/master token)
+      description:
+        $ref: descriptions/embedded/endpoints/solution-instances/getSolutionInstances.md
+      operationId: get-solution-instances
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/solution-instances/getSolutionInstances.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: You can either pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here or <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> of an end user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              get-solution-instances-by-owner:
+                summary: Get solution instance(s) by owner
+                value:
+                  query: "query ($ownerId: String!){\n\tviewer {\n\t\tsolutionInstances(criteria: { owner: $ownerId }) {\n\t\t\tedges {\n\t\t\t\tnode {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tenabled\n\t\t\t\t\towner\n\t\t\t\t\tcreated\n\t\t\t\t\tsolutionVersionFlags {\n\t\t\t\t\t\thasNewerVersion\n\t\t\t\t\t\trequiresUserInputToUpdateVersion\n\t\t\t\t\t\trequiresSystemInputToUpdateVersion\n\t\t\t\t\t}\n\t\t\t\t\tworkflows {\n\t\t\t\t\t\tedges {\n\t\t\t\t\t\t\tnode {\n\t\t\t\t\t\t\t\ttriggerUrl\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tsourceWorkflowId\n                                sourceWorkflowName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tauthValues {\n\t\t\t\t\t\texternalId\n\t\t\t\t\t\tauthId\n\t\t\t\t\t}\n\t\t\t\t\tconfigValues {\n\t\t\t\t\t\texternalId\n\t\t\t\t\t\tvalue\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tcursor\n\t\t\t}\n\t\t\tpageInfo {\n\t\t\t\tstartCursor\n\t\t\t\tendCursor\n\t\t\t\thasNextPage\n\t\t\t\thasPreviousPage\n\t\t\t}\n\t\t}\n\t}\n}"
+                  variables:
+                    ownerId: 13b3ab9c-XXXX-XXXX-XXXX-c4dd07fbbfa4
+              get-solution-instances-by-owner-and-solutionId:
+                summary: Get solution instance(s) by owner and solution ID
+                value:
+                  query: "query ($ownerId: String!){\n\tviewer {\n\t\tsolutionInstances (criteria: { solutionId: $solutionId, owner: $ownerId }) {\n\t\t\tedges {\n\t\t\t\tnode {\n\t\t\t\t\tid\n\t\t\t\t\tname\n\t\t\t\t\tenabled\n\t\t\t\t\towner\n\t\t\t\t\tcreated\n                    solution {\n                        id\n                        title\n                        description # more fields for solution can be returned\n                    }\n\t\t\t\t\tsolutionVersionFlags {\n\t\t\t\t\t\thasNewerVersion\n\t\t\t\t\t\trequiresUserInputToUpdateVersion\n\t\t\t\t\t\trequiresSystemInputToUpdateVersion\n\t\t\t\t\t}\n\t\t\t\t\tworkflows {\n\t\t\t\t\t\tedges {\n\t\t\t\t\t\t\tnode {\n\t\t\t\t\t\t\t\ttriggerUrl\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tsourceWorkflowId\n                                sourceWorkflowName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tauthValues {\n\t\t\t\t\t\texternalId\n\t\t\t\t\t\tauthId\n\t\t\t\t\t}\n\t\t\t\t\tconfigValues {\n\t\t\t\t\t\texternalId\n\t\t\t\t\t\tvalue\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tcursor\n\t\t\t}\n\t\t\tpageInfo {\n\t\t\t\tstartCursor\n\t\t\t\tendCursor\n\t\t\t\thasNextPage\n\t\t\t\thasPreviousPage\n\t\t\t}\n\t\t}\n\t}\n}"
+                  variables:
+                    ownerId: 13b3ab9c-XXXX-XXXX-XXXX-c4dd07fbbfa4
+                    solutionId: b73d4e07xxx-xxx-xxx-xxx-xxxafad23d94
+        required: true
+      responses:
+        '200':
+          description: OK - If master token is used, an array of solution instances for all end users is returned. In case of user token, only instances owned by the user are returned.
+          content:
+            application/json:
+              examples:
+                get-solution-instances-by-owner:
+                  summary: Get solution instance(s) by owner
+                  value:
+                    $ref: examples/solution-instances/getSolutionInstancesByOwner.json
+                get-solution-instances-by-owner-and-solutionId:
+                  summary: Get solution instance(s) by owner and solution ID
+                  value:
+                    $ref: examples/solution-instances/getSolutionInstancesByOwnerAndSolutionID.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
+  '/           ':
+    post:
+      tags:
+      - Solution Instances
+      summary: Create solution instance (user token)
+      description:
+        $ref: descriptions/embedded/endpoints/solution-instances/createSolutionInstance.md
+      operationId: create-solution-instance
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/solution-instances/createSolutionInstance.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              create-solution-instance--return-workflow-url:
+                summary: Create Solution Instance - return workflow URL
+                value:
+                  query: "mutation ($solutionId: ID!, $instanceName: String!){\n   createSolutionInstance(input: {\n       solutionId: $solutionId\n       instanceName: $instanceName\n   }) {\n     solutionInstance {\n       id\n       name\n       enabled\n       created\n       workflows {\n           edges {\n               node {\n                   id\n                   triggerUrl\n                   sourceWorkflowId\n               }\n           }\n       }\n     }\n   }\n }"
+                  variables:
+                    solutionId: b3422397-XXXX-XXXX-XXXX-57e7e66771b3
+                    instanceName: Gene Slack star instance 2
+              create-solution-instance--return-authId:
+                summary: Create Solution Instance - return authId
+                value:
+                  query: "mutation ($solutionId: ID!, $instanceName: String!){\n   createSolutionInstance(input: {\n       solutionId: $solutionId\n       instanceName: $instanceName\n   }) {\n     solutionInstance {\n       id\n       name\n       enabled\n       created\n       authValues{\n           authId\n           externalId\n       }\n     }\n   }\n }"
+                  variables:
+                    solutionId: b3422397-XXXX-XXXX-XXXX-57e7e66771b3
+                    instanceName: Gene Salesforce to Slack instance
+        required: true
+      responses:
+        '200':
+          description: OK - InstanceId of the newly created instance is returned
+          content:
+            application/json:
+              examples:
+                create-solution-instance--return-workflow-url:
+                  summary: Create Solution Instance - return workflow URL
+                  value:
+                    $ref: examples/solution-instances/createSolutionInstancesReturnWorkflowURL.json
+                create-solution-instance--return-authId:
+                  summary: Create Solution Instance - return authId
+                  value:
+                    $ref: examples/solution-instances/createSolutionInstancesReturnAuthId.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
+  '/            ':
+    post:
+      tags:
+      - Solution Instances
+      summary: Update solution instance (user token)
+      description:
+        $ref: descriptions/embedded/endpoints/solution-instances/updateSolutionInstance.md
+      operationId: update-solution-instance
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/solution-instances/updateSolutionInstance.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              enable-solution-instance:
+                summary: Enable Solution Instance
+                value:
+                  query: "mutation ($solutionInstanceId: ID!, $instanceName: String!, $enabled: Boolean!) {\n  updateSolutionInstance(input: {\n      solutionInstanceId: $solutionInstanceId,\n      instanceName: $instanceName, \n      enabled: $enabled\n  }) {\n    solutionInstance {\n      id\n      name\n      enabled\n      created\n    }\n  }\n}"
+                  variables:
+                    solutionInstanceId: 2d38b2ec-xxxx-xxx-xxxx-b4ec68084266
+                    instanceName: myCustomersSolutionInstanceName
+                    enabled: true
+        required: true
+      responses:
+        '200':
+          description: OK - Updates the solution instance
+          content:
+            application/json:
+              examples:
+                update-solution-instance-enable:
+                  summary: Update Solution Instance - Enable
+                  value:
+                    $ref: examples/solution-instances/updateSolutionInstanceEnable.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
+  '/             ':
+    post:
+      tags:
+      - Solution Instances
+      summary: Upgrade solution instance (user token)
+      description:
+        $ref: descriptions/embedded/endpoints/solution-instances/upgradeSolutionInstance.md
+      operationId: upgrade-solution-instance
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/solution-instances/upgradeSolutionInstance.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              upgrade-solution-instance:
+                summary: Upgrade Solution Instance
+                value:
+                  query: "mutation ($solutionInstanceId: ID!, $configValues: [ConfigValue!], $authValues: [AuthValue!] ){\n  upgradeSolutionInstance (input: {\n    solutionInstanceId: $solutionInstanceId, \n    configValues: $configValues,\n    authValues: $authValues\n  }) \n    { \n solutionInstance  {\n  id\n  configValues{\n    externalId\n    value\n  }\n  authValues{\n    authId\n    externalId\n  }\n  enabled\n  created\n  }\n }\n}"
+                  variables:
+                    solutionInstanceId: 625xxx-xxx-xxx-xxx-xxx111f
+                    configValues:
+                    - externalId: external_support-email
+                      value: support@example.com
+                    authValues:
+                    - externalId: external_slack_authentication
+                      authId: aaa67786-XXXX-XXXX-XXXX-97dedd1519b3
+        required: true
+      responses:
+        '200':
+          description: OK - Upgrades the solution instance with new auths or configs
+          content:
+            application/json:
+              examples:
+                upgrade-solution-instance:
+                  summary: Upgrade Solution Instance
+                  value:
+                    $ref: examples/solution-instances/upgradeSolutionInstance.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
+  '/              ':
+    post:
+      tags:
+      - Solution Instances
+      summary: Delete Solution Instance (user token)
+      description:
+        $ref: descriptions/embedded/endpoints/solution-instances/deleteSolutionInstance.md
+      operationId: delete-solution-instance
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/solution-instances/deleteSolutionInstance.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              delete-solution-instance:
+                summary: Delete Solution Instance
+                value:
+                  query: "mutation ($solutionInstanceId: ID!){\n  removeSolutionInstance(input: {solutionInstanceId: $solutionInstanceId}) {\n   clientMutationId\n }\n}"
+                  variables:
+                    solutionInstanceId: 2d38b2ec-xxxx-xxx-xxxx-b4ec68084266
+              delete-solution-instance-with-clientMutationId:
+                summary: Delete Solution Instance with clientMutationId
+                value:
+                  query: "mutation ($solutionInstanceId: ID!){\n  removeSolutionInstance(input: {solutionInstanceId: $solutionInstanceId, clientMutationId: $clientMutationId}) {\n   clientMutationId\n }\n}"
+                  variables:
+                    solutionInstanceId: 2d38b2ec-xxxx-xxx-xxxx-b4ec68084266
+                    clientMutationId: some-mutation-id
+        required: true
+      responses:
+        '200':
+          description: OK - Solution instance is deleted
+          content:
+            application/json:
+              examples:
+                delete-solution-instance:
+                  summary: Delete Solution Instance
+                  value:
+                    $ref: examples/solution-instances/deleteSolutionInstance.json
+                delete-solution-instance-with-clientMutationId:
+                  summary: Delete Solution Instance with clientMutationId
+                  value:
+                    $ref: examples/solution-instances/deleteSolutionInstanceWithClientMutationId.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
 components:
   schemas:
-    PageInfo:
-      type: object
-      properties:
-        hasNextPage:
-          type: boolean
-          description: Whether there are more results after the current page
-        endCursor:
-          type: string
-          description: Cursor for fetching the next page
-        hasPreviousPage:
-          type: boolean
-          description: Whether there are results before the current page
-        startCursor:
-          type: string
-          description: Cursor for fetching the previous page
-    GraphQLRequest:
-      type: object
-      required:
-      - query
-      properties:
-        query:
-          type: string
-          description: The GraphQL query or mutation string
-        variables:
-          type: object
-          description: Variables to pass to the GraphQL query or mutation
-        operationName:
-          type: string
-          description: The name of the operation to execute if the query contains multiple operations
     GraphQLError:
       type: object
       properties:
@@ -263,6 +675,35 @@ components:
             hasNewerVersion:
               type: boolean
               description: Whether a newer version of the solution is available
+    PageInfo:
+      type: object
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Whether there are more results after the current page
+        endCursor:
+          type: string
+          description: Cursor for fetching the next page
+        hasPreviousPage:
+          type: boolean
+          description: Whether there are results before the current page
+        startCursor:
+          type: string
+          description: Cursor for fetching the previous page
+    GraphQLRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+          description: The GraphQL query or mutation string
+        variables:
+          type: object
+          description: Variables to pass to the GraphQL query or mutation
+        operationName:
+          type: string
+          description: The name of the operation to execute if the query contains multiple operations
   responses:
     Unauthorized:
       description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
@@ -276,3 +717,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: Use either a master token (obtained from Tray Embedded UI settings) or a user token (obtained via the authorize mutation). Master tokens are required for admin operations like managing users. User tokens are required for user-scoped operations like managing solution instances.
+x-refined-from:
+- tray-ai-embedded-api-openapi.yml
+- tray-ai-embedded-api-published-openapi.yaml

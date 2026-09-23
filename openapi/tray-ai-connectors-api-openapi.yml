@@ -1,15 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Tray.ai Platform Connectors API
-  description: The Tray.ai Platform API (also known as the Connectivity API or Tray APIs) provides direct programmatic REST access to Tray's connectors, authentication management, trigger subscriptions, user and workspace administration, and project/solution lifecycle operations. It enables developers to integrate Tray's 700+ pre-built service connectors into their own applications without using the Builder UI. All endpoints require Bearer token authentication.
+  title: Tray Ai Connectors API
   version: 1.0.0
-  contact:
-    name: Tray.ai Support
-    url: https://tray.ai
-  termsOfService: https://tray.ai/terms
-  license:
-    name: Proprietary
-    url: https://tray.ai/terms
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  description: 'Operations tagged Connectors across 2 of this provider''s published API definitions: tray-ai-platform-api-openapi.yml, tray-ai-platform-api-published-openapi.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.tray.io/core/v1
   description: US Region (Default)
@@ -17,6 +12,12 @@ servers:
   description: EU Region
 - url: https://api.ap1.tray.io/core/v1
   description: APAC Region
+- url: https://api.tray.io
+  description: US
+- url: https://api.eu1.tray.io
+  description: EU
+- url: https://api.ap1.tray.io
+  description: APAC
 security:
 - bearerAuth: []
 tags:
@@ -44,6 +45,13 @@ paths:
                       $ref: '#/components/schemas/Connector'
         '401':
           $ref: '#/components/responses/Unauthorized'
+    servers:
+    - url: https://api.tray.io/core/v1
+      description: US Region (Default)
+    - url: https://api.eu1.tray.io/core/v1
+      description: EU Region
+    - url: https://api.ap1.tray.io/core/v1
+      description: APAC Region
   /connectors/{connectorName}/versions/{connectorVersion}:
     get:
       operationId: getConnectorVersion
@@ -75,6 +83,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           description: Connector or version not found
+    servers:
+    - url: https://api.tray.io/core/v1
+      description: US Region (Default)
+    - url: https://api.eu1.tray.io/core/v1
+      description: EU Region
+    - url: https://api.ap1.tray.io/core/v1
+      description: APAC Region
   /connectors/{connectorName}/versions/{connectorVersion}/call:
     post:
       operationId: callConnector
@@ -115,6 +130,629 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           description: Connector or version not found
+    servers:
+    - url: https://api.tray.io/core/v1
+      description: US Region (Default)
+    - url: https://api.eu1.tray.io/core/v1
+      description: EU Region
+    - url: https://api.ap1.tray.io/core/v1
+      description: APAC Region
+  /core/v1/connectors:
+    get:
+      operationId: get-connectors
+      summary: List Connectors
+      description:
+        $ref: descriptions/trayapi/endpoints/connectors/getConnectors.md
+      tags:
+      - Connectors
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: You can either pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here or <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> of an end user.
+      responses:
+        '200':
+          description: OK - returns an `elements` array which contains the `name` and `version` <br />(required for [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations) and [Call connector](/developer/platform-apis/connectors#endpoint-call-connector))
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicConnectorList'
+              examples:
+                Connector List:
+                  value:
+                    elements:
+                    - title: Slack
+                      description: Slack connector
+                      name: slack
+                      service:
+                        id: 3e21b055-1597-40ae-bcc2-72af0843b283
+                        name: slack
+                        version: 4
+                      version: '9.0'
+                    - name: twilio-output
+                      description: Cloud communication platform for developers
+                      service:
+                        id: 55d1154c-4fd8-4c2c-ba22-041deabfcbfd
+                        name: twilio
+                        version: 1
+                      version: '2.1'
+                      title: Twilio
+                    - name: shopify
+                      service:
+                        id: e0b2cbd7-657d-4917-8362-31d028968e0b
+                        name: shopify
+                        version: 4
+                      title: Shopify
+                      version: '4.1'
+                      description: Shopify gives you everything you need to build a successful online business.
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized - Verify the token validity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/connectors/{connector-name}/versions/{connector-version}/operations:
+    get:
+      operationId: get-connector-operations
+      summary: List Connector Operations
+      description:
+        $ref: descriptions/trayapi/endpoints/connectors/getOperations.md
+      tags:
+      - Connectors
+      responses:
+        '200':
+          description: OK - Returns an `elements` array which contains the input schema for [Call connector](/developer/platform-apis/connectors#endpoint-call-connector)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicConnectorOperationList'
+              examples:
+                Slack Operations List:
+                  value:
+                    elements:
+                    - name: send_message
+                      inputSchema:
+                        properties:
+                          workspace_id:
+                            type: string
+                            description: The workspace id that has the channel where the reminder will be sent
+                            title: Workspace
+                            lookup:
+                              message: list_workspaces_ddl
+                              input: {}
+                          description:
+                            type: string
+                            description: The description of the reminder
+                            title: Description
+                          time:
+                            type: string
+                            description: 'When this reminder should happen. Some examples that work: 1458678068, 20, in 5 minutes, tomorrow, at 3:30pm, on Tuesday, or next week.'
+                            title: Time
+                          channel_id:
+                            type: string
+                            title: Channel
+                            description: The ID of the channel where the reminder will be sent
+                            lookup:
+                              message: list_channels_ddl
+                              input:
+                                include_private_channels: false
+                                workspace_id: '{{{workspace_id}}}'
+                          message:
+                            type: string
+                            description: The content of the reminder
+                            title: Message
+                        required:
+                        - message
+                        - time
+                        - channel_id
+                        type: object
+                        additionalProperties: false
+                        advanced:
+                        - description
+                        $schema: https://api.tray.io/core/v1/connectors/operations/input-schema#
+                      title: Send Message
+                      description: Send a message to a user or channel.
+                      outputSchema:
+                        $schema: https://api.tray.io/core/v1/connectors/operations/output-schema#
+                        type: object
+                        properties:
+                          reminder_id:
+                            type: string
+                            description: The content of the reminder
+                            title: Message
+                      hasDynamicOutput: false
+                      authScopes:
+                      - chat:write:bot
+                      - chat:write:user
+                      - channels:write
+                      - channels:read
+                    - title: Send Reminder
+                      hasDynamicOutput: false
+                      outputSchema:
+                        $schema: https://api.tray.io/core/v1/connectors/operations/output-schema#
+                        type: object
+                        properties:
+                          reminder_id:
+                            type: string
+                            description: The content of the reminder
+                            title: Message
+                      name: send_reminder
+                      authScopes:
+                      - reminder:send
+                      description: Periodically sends a reminder to a channel
+                      inputSchema:
+                        additionalProperties: false
+                        type: object
+                        $schema: https://api.tray.io/core/v1/connectors/operations/input-schema#
+                        advanced:
+                        - description
+                        required:
+                        - message
+                        - time
+                        - channel_id
+                        properties:
+                          workspace_id:
+                            type: string
+                            description: The workspace id that has the channel where the reminder will be sent
+                            title: Workspace
+                            lookup:
+                              message: list_workspaces_ddl
+                              input: {}
+                          channel_id:
+                            type: string
+                            title: Channel
+                            description: The ID of the channel where the reminder will be sent
+                            lookup:
+                              message: list_channels_ddl
+                              input:
+                                include_private_channels: false
+                                workspace_id: '{{{workspace_id}}}'
+                          time:
+                            type: string
+                            description: 'When this reminder should happen. Some examples that work: 1458678068, 20, in 5 minutes, tomorrow, at 3:30pm, on Tuesday, or next week.'
+                            title: Time
+                          description:
+                            type: string
+                            description: The description of the reminder
+                            title: Description
+                          message:
+                            type: string
+                            description: The content of the reminder
+                            title: Message
+                Google Sheets Operations List:
+                  value:
+                    elements:
+                    - name: get_rows
+                      description: Get data from a worksheet of a spreadsheet.
+                      inputSchema:
+                        advanced: []
+                        required:
+                        - spreadsheet_id
+                        - worksheet_name
+                        - number_of_rows
+                        additionalProperties: false
+                        properties:
+                          worksheet_name:
+                            type: string
+                            description: The name of the sheet inside the spreadsheet
+                            lookup:
+                              operation: list_worksheets_ddl_return_name
+                              input:
+                                spreadsheet_id: '{{spreadsheet_id}}'
+                            title: Worksheet name
+                          spreadsheet_id:
+                            type: string
+                            description: The ID of the desired spreadsheet
+                            title: Spreadsheet ID
+                          filter:
+                            type: object
+                            additionalProperties: false
+                            description: The conditions that the row should match. If using a filter, all fields must be filled in.
+                            advanced: []
+                            title: Filter
+                            properties:
+                              column_heading:
+                                type: string
+                                description: The column heading.
+                                lookup:
+                                  operation: list_worksheet_column_headers_ddl
+                                  input:
+                                    spreadsheet_id: '{{spreadsheet_id}}'
+                                    worksheet_name: '{{worksheet_name}}'
+                                title: Column heading
+                              operator:
+                                type: string
+                                enum:
+                                - Equal to
+                                - Not equal to
+                                - Greater than
+                                - Less than
+                                - Greater than or equal to
+                                - Less than or equal to
+                                - Text contains
+                                - Text doesn't contain
+                                - Empty cells
+                                description: How should the value in the column validate against the supplied value. Please check Tray docs for more information on the operators used.
+                                title: Operator
+                              value:
+                                type:
+                                - string
+                                - number
+                                - boolean
+                                description: The condition value.
+                                title: Value
+                              sort_direction:
+                                title: Sort direction
+                                enumLabels:
+                                - Ascending
+                                - Descending
+                                type: string
+                                description: How would you like results to be sorted? Ascending or Descending. This only works for numerical fields.
+                                enum:
+                                - ascending
+                                - descending
+                            required: []
+                          number_of_rows:
+                            type: integer
+                            default: 100
+                            description: The number of the rows you wish to get.
+                            title: Number of rows
+                          format_response:
+                            type: boolean
+                            description: Use the results of the 1st row as keys ('headers') for values of subsequent rows' results.
+                            title: Format response
+                        $schema: https://api.tray.io/core/v1/connectors/operations/input-schema#
+                        type: object
+                      hasDynamicOutput: false
+                      outputSchema:
+                        $schema: https://api.tray.io/core/v1/connectors/operations/output-schema#
+                        type: object
+                        properties:
+                          results:
+                            type: array
+                            items:
+                              type: array
+                      authScopes: []
+                      title: Get Rows
+                    - title: Create Row
+                      outputSchema:
+                        $schema: https://api.tray.io/core/v1/connectors/operations/output-schema#
+                        type: object
+                        properties:
+                          spreadsheetId:
+                            type: string
+                          updates:
+                            type: object
+                            properties:
+                              updatedColumns:
+                                type: number
+                              updatedRows:
+                                type: number
+                              spreadsheetId:
+                                type: string
+                              updatedCells:
+                                type: number
+                              updatedRange:
+                                type: string
+                      name: create_row
+                      inputSchema:
+                        advanced: []
+                        required:
+                        - spreadsheet_id
+                        - worksheet_name
+                        - data
+                        - value_input_option
+                        additionalProperties: false
+                        properties:
+                          spreadsheet_id:
+                            type: string
+                            description: The ID of the desired spreadsheet
+                            title: Spreadsheet ID
+                          worksheet_name:
+                            type: string
+                            description: The name of the sheet inside the spreadsheet
+                            lookup:
+                              operation: list_worksheets_ddl_return_name
+                              input:
+                                spreadsheet_id: '{{spreadsheet_id}}'
+                            title: Worksheet name
+                          data:
+                            type: array
+                            additionalItems: true
+                            description: The row data to insert.
+                            items:
+                              title: Field
+                              advanced: []
+                              properties:
+                                column_heading:
+                                  type: string
+                                  description: The column heading.
+                                  lookup:
+                                    operation: list_worksheet_column_headers_ddl
+                                    input:
+                                      spreadsheet_id: '{{spreadsheet_id}}'
+                                      worksheet_name: '{{worksheet_name}}'
+                                  title: Column heading
+                                value:
+                                  type:
+                                  - string
+                                  - number
+                                  - boolean
+                                  description: What value to insert into this cell.
+                                  title: Value
+                              additionalProperties: false
+                              required:
+                              - column_heading
+                              - value
+                              type: object
+                              description: Select a column by its header, and assign a value to that cell of your new row.
+                            title: Row data
+                          value_input_option:
+                            enum:
+                            - RAW
+                            - USER_ENTERED
+                            default: RAW
+                            title: Value input option
+                            type: string
+                            description: Value Input Option determines how input data should be interpreted. Selecting raw will result in data not being parsed and stored as is, whereas user_entered will result in values being parsed as if the user had typed them directly into a sheet.
+                            enumLabels:
+                            - Raw value
+                            - User entered
+                        type: object
+                        $schema: https://api.tray.io/core/v1/connectors/operations/input-schema#
+                      hasDynamicOutput: false
+                      authScopes: []
+                      description: Add a row to a Google Sheet.
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized - Verify the token validity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      parameters:
+      - name: connector-name
+        in: path
+        required: true
+        schema:
+          type: string
+        example: slack
+        description: The name of the connector
+      - name: connector-version
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '9.1'
+        description: The version of the connector
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: You can either pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here or <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> of an end user.
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/connectors/{connector-name}/versions/{connector-version}/call:
+    post:
+      operationId: call-connector
+      summary: Call Connector
+      description:
+        $ref: descriptions/trayapi/endpoints/connectors/callConnector.md
+      tags:
+      - Connectors
+      parameters:
+      - name: connector-name
+        in: path
+        required: true
+        schema:
+          type: string
+        example: slack
+        description: The name of the connector retrieved from [Get connectors](/developer/platform-apis/connectors#endpoint-get-connectors)
+      - name: connector-version
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '9.1'
+        description: The version of the connector retrieved from [Get connectors](/developer/platform-apis/connectors#endpoint-get-connectors)
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: This must be a <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> to call the connector on behalf of an end user. Note that authID must belong to the end user whose user token is being used. <br/> If <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> is used, you would essentially be calling the connector from your Tray account. Note that authID must belong to your account.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicConnectorCallPayload'
+            examples:
+              Slack Send Message:
+                value:
+                  operation: send_message
+                  authId: fe6ce53d-b414-4f24-b0d5-16a0a75544a0
+                  input:
+                    channel: <aChannel>
+                    text: aText
+              Slack List Users DDL:
+                value:
+                  operation: list_users_and_conversations_ddl
+                  authId: e9c0224b-0e07-46d8-9328-d9bcd44f94fa
+                  input: {}
+              Google Sheets Get Rows:
+                value:
+                  operation: get_rows
+                  authId: 32d32790-3a82-4a22-ad9c-fb1ed40aac92
+                  input:
+                    spreadsheet_id: <aSpreadSheetId>
+                    worksheet_name: <aWorksheetName>
+                    number_of_rows: 100
+        required: true
+      responses:
+        '200':
+          description: OK - will return either `success` or `error` from the 3rd party. <br/> A `success` response will include all relevant data including pagination tokens etc. if relevant. <br/> An `error` response will include details of e.g. 429, 401, 404 from 3rd party (note that this is not currently in standardized format)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicConnectorCallResult'
+              examples:
+                Slack Send Message:
+                  value:
+                    outcome: success
+                    output:
+                      ok: true
+                      channel: <aChannel>
+                      ts: '1654555157.195399'
+                      message:
+                        username: <defaultUsername>
+                        text: test
+                        type: message
+                        ts: '1654555157.195399'
+                        app_id: <anAppId>
+                        subtype: bot_message
+                        bot_id: <aBotId>
+                Slack List Users DDL:
+                  value:
+                    outcome: success
+                    output:
+                      result:
+                      - value: <aUserId>
+                        text: A User Name
+                      - value: <anotherUserId>
+                        text: Another User Name
+                Google Sheets Get Rows:
+                  value:
+                    outcome: success
+                    output:
+                      results:
+                      - row_number: 1
+                        result:
+                        - value1.1
+                        - value1.2
+                      - row_number: 2
+                        result:
+                        - value2.1
+                        - value2.2
+        '400':
+          description: Invalid input - Use [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations) to find correct schema. <br/> You can also use the [Operations explorer tool](/developer/developer-tools/operations-explorer) to quickly find the input schema. <br/> Finally, you can use the [Form builder app](/developer/developer-tools/connector-tester) to see input schema getting generated live as you fill the form.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized - Verify the token validity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not found - Indicates incorrect connector name, connector version, or auth id<br/>Use [Get Connectors](/developer/platform-apis/connectors#endpoint-get-connectors) to retrieve correct service details and <a target="_blank" href="/developer/embedded-apis/authentications#graphql-get-authentications">Get User Auths</a> to check auth exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
 components:
   responses:
     Unauthorized:
@@ -124,6 +762,22 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    ConnectorVersion:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The connector name identifier
+        version:
+          type: string
+          description: The connector version
+        title:
+          type: string
+          description: Display name of the connector
+        operations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Operation'
     Operation:
       type: object
       properties:
@@ -142,6 +796,32 @@ components:
         outputSchema:
           type: object
           description: JSON Schema defining the operation output
+    CallConnectorRequest:
+      type: object
+      required:
+      - operation
+      properties:
+        operation:
+          type: string
+          description: The name of the connector operation to execute
+        authId:
+          type: string
+          description: The ID of a previously created authentication to use for the connector call
+        input:
+          type: object
+          description: Input data for the operation. Must conform to the operation's input schema.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type
+        message:
+          type: string
+          description: Human-readable error message
+        statusCode:
+          type: integer
+          description: HTTP status code
     Connector:
       type: object
       properties:
@@ -167,51 +847,247 @@ components:
                 type: string
               isLatest:
                 type: boolean
-    ConnectorVersion:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The connector name identifier
-        version:
-          type: string
-          description: The connector version
-        title:
-          type: string
-          description: Display name of the connector
-        operations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Operation'
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type
-        message:
-          type: string
-          description: Human-readable error message
-        statusCode:
-          type: integer
-          description: HTTP status code
-    CallConnectorRequest:
+    InvalidInput:
+      title: InvalidInput
       type: object
       required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Unauthorized:
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    ConnectorServiceReference:
+      required:
+      - id
+      - name
+      - version
+      type: object
+      properties:
+        id:
+          type: string
+          description: The `serviceId` required for the auth-only dialog url
+        name:
+          type: string
+          description: Name of the service in Tray. Can be used in combination with service version below to get `serviceEnvironmentId` using <a href="/developer/platform-apis/authentications#endpoint-get-service-environments">GET service environments</a>
+        version:
+          type: integer
+          format: int32
+          description: Version of the service in Tray. Can be used in combination with service name above to get `serviceEnvironmentId` using <a href="/developer/platform-apis/authentications#endpoint-get-service-environments">GET service environments</a>
+      description: Contains underlying Tray service details.
+    PublicConnectorList:
+      type: object
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicConnector'
+          description: Contains all connector details
+    PublicConnectorOperationList:
+      type: object
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicConnectorOperation'
+          description: ''
+      description: ''
+    PublicConnector:
+      required:
+      - name
+      - version
+      - title
+      - description
+      - service
+      type: object
+      properties:
+        description:
+          type: string
+          description: ''
+        name:
+          type: string
+          description: The programmatic name of the connector
+        service:
+          $ref: '#/components/schemas/ConnectorServiceReference'
+        title:
+          type: string
+          description: ''
+        version:
+          type: string
+          description: The connector version required by [Get Connector Operations](/developer/platform-apis/connectors#endpoint-get-connector-operations) and [Call Connector](/developer/platform-apis/connectors#endpoint-call-connector)
+      description: Array of connector objects
+    LimitExceeded:
+      title: LimitExceeded
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    ResourceNotFound:
+      title: ResourceNotFound
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    PublicConnectorCallResult:
+      required:
+      - outcome
+      - output
+      type: object
+      properties:
+        outcome:
+          $ref: '#/components/schemas/PublicConnectorCallResultOutcome'
+        output:
+          type: object
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+          description: ''
+      description: ''
+    InternalError:
+      title: InternalError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    PublicConnectorCallResultOutcome:
+      type: string
+      enum:
+      - success
+      - error
+      description: ''
+    PublicConnectorOperation:
+      required:
+      - name
+      - title
+      - description
+      - inputSchema
+      - outputSchema
+      - hasDynamicOutput
+      type: object
+      properties:
+        title:
+          type: string
+          description: The full title of the operation - not required for any other endpoints
+        authScopes:
+          type: array
+          items:
+            type: string
+          description: Array of Auth Scopes if the underlying service uses OAuth
+        description:
+          type: string
+          description: Brief description of what the operation does
+        name:
+          type: string
+          description: The programmatic name of the operation to be used as input for [Call connector](/developer/platform-apis/connectors#endpoint-call-connector)
+        hasDynamicOutput:
+          type: boolean
+          description: A boolean which indicates that the structure of the output depends on the input. Please see our <a href='/developer/getting-started/calling-connectors/dynamic-outputs' target='_blank'>Dynamic outputs documentation</a> for more details
+        outputSchema:
+          type: object
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+          description: All potential fields returned by the operation
+        inputSchema:
+          type: object
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+          description: 'All available input fields for the operation<br />Key properties include:<br />**required**: a list of the mandatory fields<br />**lookup**: indicates a field which is dependent on the result of another operation e.g. a channel selected from a list. Please see our <a href=''/developer/getting-started/calling-connectors/ddl-operations'' target=''_blank''>DDL documentation</a> for more details<br />**enumLabels**: some fields have a set array of enum values which you can allow the user to choose from'
+      description: ''
+    PublicConnectorCallPayload:
+      required:
       - operation
+      - input
+      type: object
       properties:
         operation:
           type: string
-          description: The name of the connector operation to execute
+          description: The name of the operation obtained using [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations)
         authId:
           type: string
-          description: The ID of a previously created authentication to use for the connector call
+          format: uuid
+          description: The End User-specific auth id obtained when using [Create user authentication](/developer/platform-apis/authentications#endpoint-create-user-authentication)
         input:
           type: object
-          description: Input data for the operation. Must conform to the operation's input schema.
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+          description: The exact schema of inputs must be retrieved from [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations)
+        returnOutputSchema:
+          type: boolean
+          description: Only applicable if [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations) has returned true for `hasDynamicOutput` - indicating that the output changes depending on the input
+      description: ''
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
       description: Bearer token authentication. Use a master token for admin operations or a user token for user-scoped operations. Tokens are obtained from the Tray platform settings or via the Embedded API authorize mutation.
+x-refined-from:
+- tray-ai-platform-api-openapi.yml
+- tray-ai-platform-api-published-openapi.yaml

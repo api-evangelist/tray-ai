@@ -29,6 +29,7 @@
 
 - [Customer stories](https://tray.ai/customers): Named customer outcomes across industries.
 - [Customer awards](https://tray.ai/customers/awards): Annual awards recognising customer outcomes.
+- [Abridge](https://tray.ai/customers/abridge): How Abridge orchestrates responsible AI across go-to-market
 - [Apollo](https://tray.ai/customers/apollo): Apollo deflects nearly 40% of IT tickets with Tray AI agents
 - [Zuora](https://tray.ai/customers/zuora): How Zuora unified AI across 200+ SaaS apps with orchestration
 - [J.W. Pepper](https://tray.ai/customers/jw-pepper): How J.W. Pepper centralized MCP tools without slowing teams down
@@ -43,7 +44,6 @@
 - [Eventbrite](https://tray.ai/customers/eventbrite): Eventbrite accelerates high-quality integration delivery at scale and lifts customer satisfaction
 - [GitHub](https://tray.ai/customers/github): GitHub syncs customer data at scale to grow engagement and build robust marketing attribution
 - [Mixpanel](https://tray.ai/customers/mixpanel): Mixpanel accelerates mission-critical order-to-cash process 25%
-- [Udemy](https://tray.ai/customers/udemy): Udemy streamlines self-service to enterprise sales process
 
 ## Customer attestations
 
@@ -93,16 +93,16 @@
 - [Guides](https://tray.ai/resources/guides): Playbooks, frameworks, and templates.
 - [Events](https://tray.ai/events): Upcoming events and on-demand recordings.
 - [Glossary](https://tray.ai/glossary): Definitions for AI orchestration, MCP, iPaaS, and related terms.
+- [AI platforms return $1.98 for every dollar invested](https://tray.ai/resources/guides/ai-platforms-deliver-measurable-roi): Nucleus Research reviewed ROI case studies from enterprise AI platform deployments and found organizations returned $1.98 for every dollar spent, with a 7-month payback period and production deployment averaging 4.9 months. Productivity gains reached 50%, and data quality improved by up to 37% — without specialized AI expertise.
+- [The Workato Renewal-O-Meter](https://tray.ai/resources/guides/are-you-overpaying-for-workato): You did not have a requirements list when you bought Workato. You have one now. Tick what you actually run and see where the needle lands.
+- [The n8n operating cost calculator](https://tray.ai/resources/guides/n8n-cost-calculator): Work out what your self-hosted n8n instance costs to run. Your hours, your infrastructure spend, your loaded rate.
 - [Five signs you've outgrown n8n](https://tray.ai/resources/guides/five-signs-outgrown-n8n): A practical guide to moving n8n workflows into production: the five signs a pilot has outgrown self-hosting, what each one costs if left unaddressed, and a checklist to score where your setup stands today.
 - [The n8n production readiness checklist](https://tray.ai/resources/guides/n8n-production-readiness-checklist): 25 questions to ask before your n8n pilot becomes a system the business depends on. Score yourself across security, compliance, governance, reliability, cost, and support.
+- [AI powered integration improves user productivity by 27 to 58 percent](https://tray.ai/resources/guides/ai-powered-integration-improves-productivity): Nucleus Research analyzed AI-powered iPaaS deployments across multiple organizations and found integration developers gained 27–58% productivity improvements, with up to 90% faster time to deployment. Business users gained self-service capabilities that previously required IT involvement.
 - [iPaaS is going headless. Here's your guide to doing it right.](https://tray.ai/resources/guides/ipaas-going-headless): A practical guide to headless iPaaS: what it is, why it's now the critical layer for AI development, and the architectural decisions that separate first-class from retrofitted.
 - [Gartner® Report: How to Choose the Best-Fit Integration Platform as a Service Vendor](https://tray.ai/resources/guides/gartner-how-to-choose-a-ipaas-vendor): Get the Gartner report on how to choose the best-fit iPaaS vendor. Learn how to evaluate AI readiness, governance, and success measures for your integration platform selection.
 - [Not everything needs AI. A framework for knowing what does.](https://tray.ai/resources/guides/not-everything-needs-ai-framework): Not every workflow needs an AI agent. A framework for knowing when to use rule-based, AI-powered, or agentic automation — before you build.
 - [Tray named a Leader in the 2026 Nucleus iPaaS Value Matrix for seventh consecutive year](https://tray.ai/resources/guides/nucleus-ipaas-matrix): For the seventh consecutive year, Nucleus Research recognizes Tray in the Leader quadrant — this year for its AI orchestration platform, MCP governance capabilities, and strong agent infrastructure for enterprise deployment.
-- [Getting MCP right: The five properties every enterprise deployment needs](https://tray.ai/resources/guides/getting-mcp-right-five-properties-enterprise-deployment): Learn the five critical properties that distinguish sustainable MCP deployments from those vulnerable to security or compliance failures.
-- [Gartner® Report: Hype Cycle™ for Agentic AI, 2026](https://tray.ai/resources/guides/gartner-hype-cycle-agentic-ai-2026): Get the latest Gartner® 2026 Hype Cycle™ for Agentic AI report to learn about the fast-moving innovations in the space, from AI Coding Agents to No-code Agent Builders.
-- [AI agent strategy playbook: How to run agents at enterprise scale](https://tray.ai/resources/guides/ai-agent-strategy-playbook): Learn how teams move AI agents from pilots to production with the right operating models, governance, and orchestration strategies.
-- [The difference between chatbots, copilots, and AI agents](https://tray.ai/resources/guides/ai-agent-vs-copilot-vs-chatbot): See the difference between AI agents, copilots, and chatbots in action. This visual shows what happens when each gets the same enterprise request and why only agents can act across systems.
 
 ## Glossary
 
@@ -156,6 +156,10 @@
 - [Trust](https://tray.ai/trust): Security, compliance, and uptime.
 - [Connectors](https://tray.ai/connectors): 700+ pre-built connectors directory.
 - [Contact](https://tray.ai/contact): Book a demo.
+
+## Machine-readable pages
+
+Guide and connector pages are also available as clean markdown — append `.md` to the URL (e.g. https://tray.ai/connectors/salesforce-integrations.md, https://tray.ai/guides/ai-agent-strategy-playbook.md).
 
 ## Scale
 

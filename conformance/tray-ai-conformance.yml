@@ -1,0 +1,140 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://api.tray.io/.well-known/oauth-authorization-server,
+  https://api.tray.io/.well-known/oauth-protected-resource/mcp,
+  live POST https://api.tray.io/mcp,
+  https://trust.tray.ai/, https://tray.ai/trust,
+  openapi/_original/tray-ai-platform-api-published-openapi.yaml
+provider: Tray.ai
+providerId: tray-ai
+description: >-
+  Cross-cutting standards conformance for Tray.ai, assessed from probed artifacts and the
+  provider's own contracts. The strongest signals are on the MCP/OAuth side, where Tray implements
+  the current MCP authorization stack end to end (RFC 8414 + RFC 9728 + RFC 7591 + PKCE). The REST
+  and GraphQL surfaces are conventional bearer-token APIs with a plain JSON error envelope and no
+  RFC 9457 problem details.
+standards:
+  - id: openapi-3.1
+    conforms: true
+    evidence:
+      - Provider-published spec https://tray.ai/documentation/files/openapi/trayapi.yaml declares openapi 3.1.0.
+      - Repo copy openapi/_original/tray-ai-platform-api-published-openapi.yaml
+  - id: openapi-3.0
+    conforms: true
+    evidence:
+      - Provider-published spec https://tray.ai/documentation/files/openapi/embeddedapi.yaml declares openapi 3.0.3.
+  - id: graphql
+    conforms: true
+    evidence:
+      - 'Embedded API is GraphQL over POST https://tray.io/graphql; introspection is bearer-token gated.'
+      - graphql/tray-ai-graphql.md
+  - id: mcp
+    conforms: true
+    evidence:
+      - 'POST https://api.tray.io/mcp -> 401 with WWW-Authenticate Bearer, scope="mcp:list_tools mcp:call_tools" (probed 2026-09-02).'
+      - Regional endpoints api.eu1.tray.io/mcp and api.ap1.tray.io/mcp documented.
+      - https://tray.ai/documentation/platform/tray-headless/tray-headless-mcp
+  - id: oauth2
+    conforms: true
+    evidence:
+      - 'authorization_code + refresh_token grants, response_type code (RFC 6749).'
+      - https://api.tray.io/.well-known/oauth-authorization-server
+  - id: rfc8414-oauth-authorization-server-metadata
+    conforms: true
+    evidence:
+      - 'HTTP 200 at https://api.tray.io/.well-known/oauth-authorization-server and https://auth.tray.io/.well-known/oauth-authorization-server.'
+  - id: rfc9728-oauth-protected-resource-metadata
+    conforms: true
+    evidence:
+      - 'HTTP 200 at https://api.tray.io/.well-known/oauth-protected-resource/mcp, and the URL is advertised in the resource_metadata parameter of the 401 challenge.'
+  - id: rfc7591-dynamic-client-registration
+    conforms: true
+    evidence:
+      - 'registration_endpoint https://auth.tray.io/server/oauth2/register advertised in AS metadata.'
+      - 'client_id_metadata_document_supported: true'
+  - id: rfc7636-pkce
+    conforms: true
+    evidence:
+      - 'code_challenge_methods_supported: ["S256"] — S256 only, plain not offered.'
+  - id: rfc7009-token-revocation
+    conforms: true
+    evidence:
+      - 'revocation_endpoint https://auth.tray.io/server/oauth2/revoke advertised in AS metadata.'
+  - id: oidc
+    conforms: false
+    evidence:
+      - 'https://auth.tray.io/.well-known/openid-configuration -> 404 ("Cannot GET /.well-known/openid-configuration").'
+      - 'https://api.tray.io/.well-known/openid-configuration -> 404. OAuth 2.0 only; no OIDC discovery document.'
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence:
+      - >-
+        Error bodies are a plain JSON envelope {"message": "...", "code": null} with content-type
+        application/json, not application/problem+json. See
+        https://tray.ai/documentation/developer/getting-started/troubleshooting/error-handling-tray
+        and the live 401 from https://api.tray.io/core/v1/connectors.
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence:
+      - '404 on /.well-known/security.txt for tray.ai, tray.io and api.tray.io (probed 2026-09-02).'
+  - id: rfc8594-sunset-header
+    conforms: unknown
+    evidence:
+      - >-
+        Tray publishes dated deprecation notices in its release notes (e.g. Connector Builder
+        deprecation, 2026-02-09) but documents no Sunset or Deprecation response headers and none
+        appear in the published specs.
+  - id: rfc6750-bearer-token
+    conforms: true
+    evidence:
+      - 'Both published specs declare securitySchemes.bearerAuth (http/bearer, JWT).'
+      - 'The MCP 401 emits a conformant WWW-Authenticate: Bearer challenge with error and error_description.'
+  - id: hmac-webhook-signing
+    conforms: true
+    evidence:
+      - >-
+        Trigger API subscriptions return a signingKey once; Tray signs each delivered event with
+        HMAC-SHA256 (base64) and sends it in the x-tray-signature header.
+      - https://tray.ai/documentation/developer/getting-started/using-triggers/verifying-subcription-payloads
+  - id: pagination
+    conforms: partial
+    evidence:
+      - >-
+        Tray's own REST endpoints publish no pagination contract. Pagination is documented only as
+        a PASS-THROUGH concern of the Call Connector endpoint, where the parameters (batch_size,
+        page_offset, next_page_token) belong to the third-party service being called.
+      - https://tray.ai/documentation/developer/getting-started/implementation-notes/pagination
+  - id: idempotency
+    conforms: false
+    evidence:
+      - >-
+        No Idempotency-Key header, no idempotent-retry semantics and no idempotency page anywhere
+        in Tray's developer documentation or in either published spec.
+  - id: rate-limit-headers
+    conforms: false
+    evidence:
+      - >-
+        Limits are published in prose (30 rps / 1800 rpm, 50 rps burst, 1000 concurrent on Call
+        Connector) but no RateLimit-* or X-RateLimit-* response headers are documented, and none
+        appear on a live 401 from https://api.tray.io/core/v1/connectors.
+compliance:
+  frameworks: [SOC 1 Type 2, SOC 2 Type 2, HIPAA, GDPR, CCPA, EU-US DPF, Swiss-US DPF, UK Extension to EU-US DPF]
+  trust_center: https://trust.tray.ai/
+  evidence:
+    - url: https://trust.tray.ai/
+      status: 200
+    - url: https://tray.ai/trust
+      status: 200
+domain_standard:
+  assessed: true
+  standard: none
+  note: >-
+    iPaaS / workflow orchestration has no domain interchange standard of the SCIM / OData / FHIR /
+    OpenRTB / ISO-20022 class, and Tray declares none in either contract. This is recorded as an
+    honest absence, not a gap — the reward-only domain_standard_conformance check simply does not
+    apply to this market. The nearest thing to a domain standard Tray does implement is MCP, which
+    is captured above and is the reason its agent surface is legible at all.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

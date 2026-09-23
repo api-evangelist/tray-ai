@@ -1,0 +1,146 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://tray.ai/documentation/developer/connector-development-kit/reference/cli-reference,
+  https://tray.ai/documentation/developer/developer-tools/tray-sync-cli
+provider: Tray.ai
+providerId: tray-ai
+description: >-
+  Tray.ai ships two first-party CLIs, and they solve different problems. `tray-cdk` is the
+  Connector Development Kit CLI — scaffold, build, test, deploy and share custom connectors, and
+  it is now the only supported path for new connectors since Connector Builder was deprecated in
+  February 2026. `tray` (Tray Sync CLI) is newer, shipped 2026-08-19, and does lifecycle
+  management: clone projects to disk for version control and promote them between environments.
+clis:
+  - name: tray-cdk
+    binary: tray-cdk
+    package: '@trayio/cdk-cli'
+    version: 5.32.0
+    published: '2026-09-01'
+    license: MIT
+    install:
+      - npm install -g @trayio/cdk-cli
+    docs: https://tray.ai/documentation/developer/connector-development-kit/reference/cli-reference
+    purpose: Connector Development Kit — author, test and deploy custom Tray connectors.
+    global_flags:
+      - '--json — format output as JSON'
+      - '--verbose — architecture, node version, OS and plugin versions'
+    region_flags: ['--us', '--eu', '--ap']
+    command_groups:
+      - group: root
+        commands:
+          - command: tray-cdk version
+            description: Print the CLI version.
+          - command: tray-cdk help [COMMANDS]
+            description: Display help for tray-cdk. -n includes nested commands.
+          - command: tray-cdk autocomplete [SHELL]
+            description: Autocomplete installation instructions for zsh, bash or powershell.
+      - group: namespace
+        commands:
+          - command: tray-cdk namespace get ORGID
+            description: Retrieve the connector namespace for an organization, if one exists.
+          - command: tray-cdk namespace create ORGID NAMESPACE
+            description: Create a new connector namespace for an organization.
+      - group: connector
+        commands:
+          - command: tray-cdk connector init [CONNECTOR_NAME]
+            description: Initialize a connector project. -i runs npm install afterwards.
+          - command: tray-cdk connector import [OPENAPI_SPEC] [CONNECTOR_NAME]
+            description: Create a connector FROM an OpenAPI specification.
+          - command: tray-cdk connector add-operation [OPERATION_NAME] [OPERATION_TYPE]
+            description: Add an http or composite operation to a connector project.
+          - command: tray-cdk connector test [OPERATION_NAME]
+            description: Build and test the project, or one operation. -v logs operation input and output.
+          - command: tray-cdk connector build
+            description: Build a connector project.
+      - group: deployment
+        commands:
+          - command: tray-cdk deployment create
+            description: Create a new deployment for a connector project.
+          - command: tray-cdk deployment get CONNECTOR_NAME CONNECTOR_VERSION UUID
+            description: Retrieve the status of a connector deployment.
+      - group: permissions
+        commands:
+          - command: tray-cdk permissions add [CONNECTOR_NAME] [CONNECTOR_VERSION]
+            description: Share a connector version with users by email (-e / --email).
+          - command: tray-cdk permissions list [CONNECTOR_NAME] [CONNECTOR_VERSION]
+            description: List the emails that have access to a connector.
+    key_flows:
+      - 'OpenAPI to connector: tray-cdk connector import ./openapi.yaml my-connector, then build, test, deployment create.'
+      - 'Auth: deployment requires an RBAC API token.'
+    backing_api:
+      - create-deployment
+      - get-deployment-status
+      - share-with-emails
+  - name: tray (Tray Sync CLI)
+    binary: tray
+    package: '@trayai/tray-sync-cli'
+    version: 1.0.5
+    published: '2026-09-01'
+    license: Apache-2.0
+    released: '2026-08-19'
+    requirements: Node.js >= 22
+    install:
+      - npm install -g @trayai/tray-sync-cli
+    docs: https://tray.ai/documentation/developer/developer-tools/tray-sync-cli
+    purpose: >-
+      Clone Tray projects and related assets to a local directory for version control, and promote
+      them between Tray environments.
+    command_groups:
+      - group: root
+        commands:
+          - command: tray init -r <region> -w <workspace-id>
+            description: Scaffold a new tray-sync-cli repository (tray.yaml, environments.json).
+          - command: tray pull
+            description: Export tracked projects from Tray and materialise them on disk.
+          - command: tray promote <env>
+            description: Reconstruct local projects and import them into a target Tray environment.
+          - command: tray status
+            description: Local checksum-based drift detection, zero API calls.
+          - command: tray --version
+            description: Print the installed CLI version.
+          - command: tray --help
+            description: Show help for the CLI or a specific command.
+      - group: project
+        commands:
+          - command: tray project remove <project-id>
+            description: Untrack a project and delete its local directory.
+          - command: tray project list
+            description: List managed projects with directory names and last-pulled timestamps.
+      - group: env
+        commands:
+          - command: tray env add <name>
+            description: Add a target environment.
+          - command: tray env list
+            description: List source and target environments with connectivity status.
+          - command: tray env remove <name>
+            description: Remove a target environment and its per-project mappings.
+          - command: tray env discover [env]
+            description: List an environment's projects and/or matching authentications.
+          - command: tray env resolve <env-name>
+            description: Report unresolved auth requirements for a target env, with candidate matches.
+      - group: auth
+        commands:
+          - command: tray auth set -w <workspace-id> -r <region> -t <token>
+            description: Set or overwrite a workspace's API token.
+          - command: tray auth remove -w <workspace-id>
+            description: Remove a workspace's stored token.
+          - command: tray auth list
+            description: List workspaces with stored credentials.
+    key_flows:
+      - 'Dev-to-prod promotion: tray init, tray pull, tray env add PROD, tray env resolve PROD, tray promote PROD.'
+      - 'Safety: a promotion is refused outright if any project or authentication mapping is unresolved.'
+    backing_api:
+      - listProjectVersions
+      - exportAProjectVersion
+      - PublicApiProjectController.getProjectImportRequirements
+      - PublicApiProjectController.previewProjectImport
+      - PublicApiProjectController.importProject
+related:
+  - name: '@trayio/tray-mcp'
+    kind: setup utility, not a general-purpose CLI
+    description: 'One-shot `npx @trayio/tray-mcp` that writes local MCP client config for an API-token connection.'
+    cross_ref: mcp/tray-ai-mcp.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

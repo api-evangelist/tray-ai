@@ -1,0 +1,154 @@
+generated: '2026-09-02'
+method: searched
+source: https://registry.npmjs.org (metadata endpoint per package), https://github.com/trayio, https://tray.ai/documentation/developer/
+provider: Tray.ai
+providerId: tray-ai
+description: >-
+  First-party Tray.ai client libraries, connector-development packages and CLIs published to npm
+  under the @trayio and @trayai scopes, plus the two open-source connector frameworks published
+  from the trayio GitHub organization. Versions and publish dates were read from
+  registry.npmjs.org on 2026-09-02. No first-party Tray package exists on PyPI, RubyGems,
+  crates.io, Maven Central, NuGet or pkg.go.dev — Tray's SDK surface is Node.js only.
+registries_checked:
+  - npm
+  - PyPI
+  - RubyGems
+  - crates.io
+  - Maven Central
+  - NuGet
+  - pkg.go.dev
+packages:
+  - name: '@trayio/tray-client'
+    registry: npm
+    official: true
+    language: JavaScript
+    version: 5.32.0
+    published: '2026-09-01'
+    license: MIT
+    url: https://www.npmjs.com/package/@trayio/tray-client
+    description: A client for the Tray.io API.
+  - name: '@trayio/tray-api'
+    registry: npm
+    official: true
+    language: JavaScript
+    version: 5.32.0
+    published: '2026-09-01'
+    license: MIT
+    url: https://www.npmjs.com/package/@trayio/tray-api
+    description: A library for interacting with the Tray.io API.
+  - name: '@trayio/cdk-cli'
+    registry: npm
+    official: true
+    language: JavaScript
+    kind: cli
+    version: 5.32.0
+    published: '2026-09-01'
+    license: MIT
+    url: https://www.npmjs.com/package/@trayio/cdk-cli
+    description: The tray-cdk CLI for Connector Development Kit connector projects.
+    docs: https://tray.ai/documentation/developer/connector-development-kit/reference/cli-reference
+  - name: '@trayio/cdk-dsl'
+    registry: npm
+    official: true
+    language: TypeScript
+    version: 5.32.0
+    published: '2026-09-01'
+    license: MIT
+    url: https://www.npmjs.com/package/@trayio/cdk-dsl
+    description: A DSL for connector development.
+  - name: '@trayio/cdk-runtime'
+    registry: npm
+    official: true
+    language: TypeScript
+    version: 5.32.0
+    published: '2026-09-01'
+    license: MIT
+    url: https://www.npmjs.com/package/@trayio/cdk-runtime
+    description: Runtime that executes connector operations defined using the CDK DSL.
+  - name: '@trayai/tray-sync-cli'
+    registry: npm
+    official: true
+    language: JavaScript
+    kind: cli
+    version: 1.0.5
+    published: '2026-09-01'
+    license: Apache-2.0
+    url: https://www.npmjs.com/package/@trayai/tray-sync-cli
+    description: >-
+      Tray Sync CLI — clone Tray projects to a local directory for version control and promote
+      them between Tray environments. Installed as `npm install -g @trayai/tray-sync-cli`, binary
+      `tray`.
+    docs: https://tray.ai/documentation/developer/developer-tools/tray-sync-cli
+  - name: '@trayio/tray-mcp'
+    registry: npm
+    official: true
+    language: JavaScript
+    kind: mcp-setup
+    version: 1.4.0
+    published: '2025-12-08'
+    license: MIT
+    url: https://www.npmjs.com/package/@trayio/tray-mcp
+    description: >-
+      Setup utility for the local (API-token) Tray MCP server configuration in Claude Desktop,
+      Cursor, VS Code and Windsurf. Run as `npx @trayio/tray-mcp`.
+    docs: https://tray.ai/documentation/platform/artificial-intelligence/agent-gateway/connecting-clients
+    note: >-
+      Last published 2025-12-08 — nine months behind the @trayio/cdk-* line and behind the
+      2026-06/2026-07 Tray Headless MCP releases it sits alongside. Treat the remote OAuth2
+      endpoint as the current path.
+  - name: '@trayio/falafel'
+    registry: npm
+    official: true
+    language: JavaScript
+    version: 1.39.0
+    published: '2026-09-02'
+    license: MIT
+    url: https://www.npmjs.com/package/@trayio/falafel
+    repository: https://github.com/trayio/falafel
+    description: A Node.js framework for building connectors on the Tray platform.
+  - name: '@trayio/threadneedle'
+    registry: npm
+    official: true
+    language: JavaScript
+    version: 1.19.0
+    published: '2026-09-02'
+    license: MIT
+    url: https://www.npmjs.com/package/@trayio/threadneedle
+    repository: https://github.com/trayio/threadneedle
+    description: An ORM-style abstraction layer for interacting with third-party HTTP APIs.
+  - name: '@trayio/needle'
+    registry: npm
+    official: true
+    language: JavaScript
+    version: 4.0.0
+    published: '2023-07-05'
+    license: MIT
+    url: https://www.npmjs.com/package/@trayio/needle
+    repository: https://github.com/trayio/needle
+    description: Tray's fork of the needle HTTP client, used inside connectors.
+    note: Last published 2023-07-05; a maintenance fork rather than an actively developed SDK.
+  - name: generator-trayio-nodejs-connector
+    registry: npm
+    official: true
+    language: JavaScript
+    version: 4.3.1
+    published: '2023-08-01'
+    license: ISC
+    url: https://www.npmjs.com/package/generator-trayio-nodejs-connector
+    description: Yeoman generator for Node.js connectors on the Tray platform.
+    note: >-
+      Last published 2023-08-01. Superseded in practice by `tray-cdk connector init` in the CDK
+      CLI, which is the path Tray's current connector docs describe.
+not_found:
+  - registry: PyPI
+    queried: [tray, tray-sdk, trayio]
+    result: 404 on every candidate — no first-party Python SDK.
+  - registry: npm
+    name: tray-mcp-server
+    result: >-
+      Present on npm (1.1.3, repository github.com/guilherme-x/tray-mcp-server) but NOT
+      first-party — it is outside the @trayio / @trayai scopes and is not referenced anywhere in
+      Tray's documentation. Deliberately excluded rather than credited to Tray.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

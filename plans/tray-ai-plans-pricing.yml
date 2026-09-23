@@ -6,15 +6,15 @@ providerId: tray-ai
 created: '2026-05-04'
 # Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
 # bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-22'
+method: searched
+modified: '2026-09-02'
 tags:
   - Automation
   - Integration
   - iPaaS
   - AI Agents
   - MCP
-sourceUrl: https://tray.ai/packages
+sourceUrl: https://tray.ai/pricing
 publishedPricing: false
 description: >-
   Machine-readable plans definition for Tray.ai. Tray publishes three packages — Pro, Team, and
@@ -23,6 +23,29 @@ description: >-
   you need. Contact our sales team for a customized quote based on your specific requirements and
   expected usage." All entries below reflect the published feature set; price fields are intentionally
   set to "contact-sales" to avoid inventing dollar values that Tray does not publish.
+  Re-verified 2026-09-02 against https://tray.ai/pricing (HTTP 200) and Tray's own llms.txt, which
+  states verbatim: "Enterprise / quote-based. Three tiers - Pro, Team, Enterprise - plus add-ons
+  (Tray Agent Gateway for MCP, Agent Builder, Intelligent Document Processing, Data Engineering,
+  SSO, HIPAA, Regional Hosting, Log Streaming)." https://tray.ai/packages now redirects to
+  /pricing. Still no published dollar amounts.
+addOns:
+  - name: Tray Agent Gateway for MCP
+  - name: Agent Builder
+  - name: Intelligent Document Processing
+  - name: Data Engineering
+  - name: SSO
+  - name: HIPAA
+  - name: Regional Hosting
+  - name: Log Streaming
+addOnsSource: https://tray.ai/llms.txt
+evidence:
+  - url: https://tray.ai/pricing
+    status: 200
+  - url: https://tray.ai/packages
+    status: 200
+    note: Redirects to the Pricing page.
+  - url: https://tray.ai/llms.txt
+    status: 200
 plans:
   - id: tray-ai-pro
     name: Pro
@@ -30,7 +53,7 @@ plans:
     description: >-
       For specific use cases. Includes 3 workspaces, 7-day insights, 7-day log retention, and access
       to 700+ connectors. List price is not published; contact sales for a quote.
-    sourceUrl: https://tray.ai/packages
+    sourceUrl: https://tray.ai/pricing
     entries:
       - label: Workspaces
         description: Maximum number of workspaces included in the Pro package.
@@ -98,7 +121,7 @@ plans:
       For multiple use cases within a department. Includes 20 workspaces, 30-day insights, 7-day
       expandable log retention, and all add-ons available for purchase. Marked as the "Popular" tier
       on tray.ai/packages. List price is not published; contact sales for a quote.
-    sourceUrl: https://tray.ai/packages
+    sourceUrl: https://tray.ai/pricing
     popular: true
     entries:
       - label: Workspaces
@@ -166,7 +189,7 @@ plans:
       For multiple departments and partner integrations. Includes unlimited workspaces, 180-day
       insights, Advanced on-premise, SSO, HIPAA, Regional hosting, Log streaming, and Data
       engineering. List price is not published; contracted by Tray sales with negotiated terms.
-    sourceUrl: https://tray.ai/packages
+    sourceUrl: https://tray.ai/pricing
     entries:
       - label: Workspaces
         description: Workspaces included in the Enterprise package; published as unlimited.

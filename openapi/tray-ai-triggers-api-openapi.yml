@@ -1,15 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Tray.ai Platform Triggers API
-  description: The Tray.ai Platform API (also known as the Connectivity API or Tray APIs) provides direct programmatic REST access to Tray's connectors, authentication management, trigger subscriptions, user and workspace administration, and project/solution lifecycle operations. It enables developers to integrate Tray's 700+ pre-built service connectors into their own applications without using the Builder UI. All endpoints require Bearer token authentication.
+  title: Tray Ai Triggers API
   version: 1.0.0
-  contact:
-    name: Tray.ai Support
-    url: https://tray.ai
-  termsOfService: https://tray.ai/terms
-  license:
-    name: Proprietary
-    url: https://tray.ai/terms
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  description: 'Operations tagged Triggers across 2 of this provider''s published API definitions: tray-ai-platform-api-openapi.yml, tray-ai-platform-api-published-openapi.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.tray.io/core/v1
   description: US Region (Default)
@@ -17,6 +12,12 @@ servers:
   description: EU Region
 - url: https://api.ap1.tray.io/core/v1
   description: APAC Region
+- url: https://api.tray.io
+  description: US
+- url: https://api.eu1.tray.io
+  description: EU
+- url: https://api.ap1.tray.io
+  description: APAC
 security:
 - bearerAuth: []
 tags:
@@ -44,6 +45,13 @@ paths:
                       $ref: '#/components/schemas/Trigger'
         '401':
           $ref: '#/components/responses/Unauthorized'
+    servers:
+    - url: https://api.tray.io/core/v1
+      description: US Region (Default)
+    - url: https://api.eu1.tray.io/core/v1
+      description: EU Region
+    - url: https://api.ap1.tray.io/core/v1
+      description: APAC Region
   /subscriptions:
     post:
       operationId: createSubscription
@@ -68,6 +76,13 @@ paths:
           description: Invalid input
         '401':
           $ref: '#/components/responses/Unauthorized'
+    servers:
+    - url: https://api.tray.io/core/v1
+      description: US Region (Default)
+    - url: https://api.eu1.tray.io/core/v1
+      description: EU Region
+    - url: https://api.ap1.tray.io/core/v1
+      description: APAC Region
   /subscriptions/{subscriptionId}:
     delete:
       operationId: deleteSubscription
@@ -89,7 +104,505 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           description: Subscription not found
+    servers:
+    - url: https://api.tray.io/core/v1
+      description: US Region (Default)
+    - url: https://api.eu1.tray.io/core/v1
+      description: EU Region
+    - url: https://api.ap1.tray.io/core/v1
+      description: APAC Region
+  /core/v1/triggers:
+    get:
+      operationId: get-triggers
+      summary: List Triggers
+      description:
+        $ref: descriptions/trayapi/endpoints/triggers/getTriggers.md
+      tags:
+      - Triggers
+      responses:
+        '200':
+          description: OK - returns an `elements` array which contains the `name` and `version` <br />(required for [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) [Get trigger operations](/developer/platform-apis/triggers#endpoint-get-trigger-operations) and [Create subscription](/developer/platform-apis/triggers#endpoint-create-subscription))
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicConnectorEventsTriggerList'
+              examples:
+                trigger-list:
+                  summary: Trigger List
+                  value:
+                    elements:
+                    - name: slack-trigger
+                      description: Slack brings all your communication together in one place. It's real-time messaging, archiving and search for modern teams.
+                      service:
+                        id: 3e21b055-xxxx-xxxx-xxxx-72af0843b283
+                        name: slack
+                        version: 4
+                      version: '7.0'
+                      title: Slack trigger
+                    - name: shopify-trigger
+                      service:
+                        id: e0b2cbd7-xxxx-xxxx-xxxx-31d028968e0b
+                        name: shopify
+                        version: 4
+                      title: Shopify
+                      version: '4.1'
+                      description: Shopify gives you everything you need to build a successful online business.
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized - Verify the token validity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: You can either pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here or <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> of an end user.
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/triggers/{trigger-name}/versions/{trigger-version}/operations:
+    get:
+      operationId: get-trigger-operations
+      summary: List Trigger Operations
+      description:
+        $ref: descriptions/trayapi/endpoints/triggers/getOperations.md
+      tags:
+      - Triggers
+      parameters:
+      - name: trigger-name
+        in: path
+        required: true
+        schema:
+          type: string
+        example: slack
+        description: The name of the trigger
+      - name: trigger-version
+        in: path
+        required: true
+        schema:
+          type: string
+        example: '9.1'
+        description: The version of the trigger
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: You can either pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here or <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> of an end user.
+      responses:
+        '200':
+          description: OK - Returns an `elements` array which contains the input schema for [Create subscription](/developer/platform-apis/triggers#endpoint-create-subscription)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicConnectorEventsTriggerOperationList'
+              examples:
+                slack-trigger-operations-list:
+                  summary: Slack trigger operations list
+                  value:
+                    $ref: examples/triggers/getTriggerOperations.json
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized - Verify the token validity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/subscriptions:
+    post:
+      operationId: create-subscription
+      summary: Create Subscription
+      description:
+        $ref: descriptions/trayapi/endpoints/triggers/createSubscription.md
+      tags:
+      - Triggers
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: This must be a <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> to call the connector on behalf of an end user. Note that authID must belong to the end user whose user token is being used. <br/> If <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> is used, you would essentially be calling the connector from your Tray account. Note that authID must belong to your account.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicCreateConnectorEventsSubscription'
+            examples:
+              typeform-create-subscription-request:
+                summary: Typeform create webhook request
+                value:
+                  $ref: examples/triggers/typeformCreateSubscription.json
+      responses:
+        '200':
+          description: Ok - Returns the deatils of the Subscription object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePublicConnectorEventsSubscriptionResult'
+              examples:
+                create-subscription-success:
+                  summary: Create Subscription (Success)
+                  value:
+                    $ref: examples/triggers/createSubscriptionSuccess.json
+                create-subscription-failure:
+                  summary: Create Subscription (Failure)
+                  value:
+                    $ref: examples/triggers/createSubscriptionFailure.json
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized - Verify the token validity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    get:
+      operationId: get-subscriptions
+      summary: List Subscriptions
+      description:
+        $ref: descriptions/trayapi/endpoints/triggers/getSubscriptions.md
+      tags:
+      - Triggers
+      parameters:
+      - name: first
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 1
+      - name: last
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 10
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+        example: slack25052023
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: You can either pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here or <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> of an end user.
+      responses:
+        '200':
+          description: OK - Returns an `elements` array of all the trigger subscriptions and pageInfo for pagination
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicConnectorEventsSubscriptionPage'
+              examples:
+                get-subcriptions:
+                  summary: Get Subscriptions
+                  value:
+                    $ref: examples/triggers/getSubscriptions.json
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized - Verify the token validity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /core/v1/subscriptions/{subscription-id}:
+    get:
+      operationId: get-subscription-by-id
+      summary: Get Subscription
+      description:
+        $ref: descriptions/trayapi/endpoints/triggers/getSubscriptionById.md
+      tags:
+      - Triggers
+      parameters:
+      - name: subscription-id
+        in: path
+        schema:
+          type: string
+          format: uuid
+        required: true
+        example: 1a71daf1-XXXX-XXXX-XXXX-dbb4ab325a55
+        description: ''
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: You can either pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here or <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> of an end user.
+      responses:
+        '200':
+          description: OK - Returns a `Subscription` object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicConnectorEventsSubscription'
+              examples:
+                get-subcription-by-id:
+                  summary: Get Subscription by Id
+                  value:
+                    $ref: examples/triggers/getSubscriptionById.json
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized - Verify the token validity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '429':
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    delete:
+      operationId: delete-connector-events-subscription
+      summary: Delete Subscription
+      description:
+        $ref: descriptions/trayapi/endpoints/triggers/deleteSubscriptionById.md
+      tags:
+      - Triggers
+      parameters:
+      - name: subscription-id
+        in: path
+        schema:
+          type: string
+          format: uuid
+        required: true
+        example: 1a71daf1-XXXX-XXXX-XXXX-dbb4ab325a55
+        description: ''
+      - name: Authorization
+        in: header
+        required: false
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: You can either pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here or <a target="_blank" href="/developer/embedded-apis/users#graphql-create-user-token">user token</a> of an end user.
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '429':
+          description: Limit Exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '204':
+          description: No content - The subscription was deleted successfully
+          content:
+            text/html:
+              example: ''
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
 components:
+  responses:
+    Unauthorized:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Trigger:
       type: object
@@ -109,6 +622,30 @@ components:
         inputSchema:
           type: object
           description: JSON Schema defining the trigger input
+    CreateSubscriptionRequest:
+      type: object
+      required:
+      - triggerName
+      - connectorName
+      - connectorVersion
+      - authId
+      - input
+      properties:
+        triggerName:
+          type: string
+          description: The name of the trigger operation
+        connectorName:
+          type: string
+          description: The connector associated with the trigger
+        connectorVersion:
+          type: string
+          description: The version of the connector
+        authId:
+          type: string
+          description: The authentication ID to use
+        input:
+          type: object
+          description: Input data for the subscription. Must conform to the trigger's input schema.
     Subscription:
       type: object
       properties:
@@ -140,40 +677,404 @@ components:
         statusCode:
           type: integer
           description: HTTP status code
-    CreateSubscriptionRequest:
+    InvalidInput:
+      title: InvalidInput
       type: object
       required:
-      - triggerName
-      - connectorName
-      - connectorVersion
-      - authId
-      - input
+      - message
       properties:
-        triggerName:
+        message:
           type: string
-          description: The name of the trigger operation
-        connectorName:
+        code:
           type: string
-          description: The connector associated with the trigger
-        connectorVersion:
+    PublicConnectorEventsTriggerOperationList:
+      type: object
+      description: List of Operations that can be used for this Trigger
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicConnectorEventsTriggerOperation'
+    SubscriptionErrorCode:
+      type: string
+      enum:
+      - user_input_error
+      - api_error
+      - timeout_error
+      - oauth_refresh
+      - no_trigger
+      - internal_error
+    LimitExceeded:
+      title: LimitExceeded
+      type: object
+      required:
+      - message
+      properties:
+        message:
           type: string
-          description: The version of the connector
-        authId:
+        code:
           type: string
-          description: The authentication ID to use
+    PublicConnectorEventsSubscription:
+      type: object
+      required:
+      - id
+      - name
+      - trigger
+      - operation
+      - endpoint
+      - input
+      - state
+      properties:
+        externalId:
+          type: string
+          description: Unique ID of the Subscription on your end that you can use to query Subscriptions using [Get Subscriptions](/developer/platform-apis/triggers#endpoint-get-subscriptions)
+        id:
+          type: string
+          description: Unique ID of the Subscription on Tray's end
+        trigger:
+          $ref: '#/components/schemas/PublicConnectorEventsTriggerReference'
+        state:
+          $ref: '#/components/schemas/SubscriptionState'
+        error:
+          required:
+          - code
+          - message
+          type: object
+          description: Details about error if any in creating the subscription
+          properties:
+            code:
+              $ref: '#/components/schemas/SubscriptionErrorCode'
+            message:
+              type: string
+        authenticationId:
+          type: string
+          format: uuid
+          description: Unique id of the auth returned by [Create Authentication](/developer/platform-apis/authentications#endpoint-create-user-authentication)
+        operation:
+          type: string
+          description: Programmatic name of the Trigger operation. Obtained using [Get Trigger operations](/developer/platform-apis/triggers#endpoint-get-trigger-operations)
         input:
           type: object
-          description: Input data for the subscription. Must conform to the trigger's input schema.
-  responses:
+          description: A JSON object that follows that input schema of the above operation returned by [Get Trigger operations](/developer/platform-apis/triggers#endpoint-get-trigger-operations)
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+        name:
+          type: string
+          description: Name of the Subscription e.g. `Slack subscription USER_832782`
+        endpoint:
+          type: string
+          description: Your URL where Tray would post events
+    PublicConnectorEventsTriggerList:
+      type: object
+      description: List of available Triggers
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicConnectorEventsTrigger'
+    ConnectorServiceReference:
+      required:
+      - id
+      - name
+      - version
+      type: object
+      properties:
+        id:
+          type: string
+          description: The `serviceId` required for the auth-only dialog url
+        name:
+          type: string
+          description: Name of the service in Tray. Can be used in combination with service version below to get `serviceEnvironmentId` using <a href="/developer/platform-apis/authentications#endpoint-get-service-environments">GET service environments</a>
+        version:
+          type: integer
+          format: int32
+          description: Version of the service in Tray. Can be used in combination with service name above to get `serviceEnvironmentId` using <a href="/developer/platform-apis/authentications#endpoint-get-service-environments">GET service environments</a>
+      description: Contains underlying Tray service details.
+    PublicCreateConnectorEventsSubscription:
+      required:
+      - name
+      - trigger
+      - operation
+      - input
+      - endpoint
+      type: object
+      properties:
+        trigger:
+          $ref: '#/components/schemas/PublicConnectorEventsTriggerReference'
+        operation:
+          type: string
+          description: programmatic name of the Trigger operation. Obtained using [Get Trigger operations](/developer/platform-apis/triggers#endpoint-get-trigger-operations)
+        authenticationId:
+          type: string
+          format: uuid
+          description: Unique id of the auth returned by [Create Authentication](/developer/platform-apis/authentications#endpoint-create-user-authentication)
+        input:
+          type: object
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+        externalId:
+          type: string
+          description: Unique identifier for the subscription in your database.
+        endpoint:
+          type: string
+          description: The URL where you want to receive the payloads from the Subscription.
+        name:
+          type: string
+          description: Name of the Subscription. Can be used to display in the UI.
+    PublicConnectorEventsTriggerOperation:
+      required:
+      - name
+      - title
+      - description
+      - inputSchema
+      - outputSchema
+      - hasDynamicOutput
+      type: object
+      properties:
+        name:
+          type: string
+          description: The programmatic name of the Trigger
+        title:
+          type: string
+        authScopes:
+          type: array
+          description: Array of Auth Scopes if the underlying service uses OAuth
+          items:
+            type: string
+        inputSchema:
+          type: object
+          description: 'All available input fields for the operation<br />Key properties include:<br />**required**: a list of the mandatory fields<br />**lookup**: indicates a field which is dependent on the result of another operation e.g. a channel selected from a list. Please see our <a href=''https://developer.tray.io/developer/getting-started/calling-connectors/ddl-operations'' target=''_blank''>DDL documentation</a> for more details<br />**enumLabels**: some fields have a set array of enum values which you can allow the user to choose from'
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+        hasDynamicOutput:
+          type: boolean
+          description: A boolean which indicates that the structure of the output depends on the input. Please see our <a href='/developer/getting-started/calling-connectors/dynamic-outputs' target='_blank'>Dynamic outputs documentation</a> for more details
+        outputSchema:
+          type: object
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+          description: All potential fields returned by the operation
+        description:
+          type: string
+          description: Brief description of what the operation does
+    PublicConnectorEventsTriggerReference:
+      required:
+      - name
+      - version
+      type: object
+      description: Reference to link the Trigger
+      properties:
+        name:
+          type: string
+          description: programmatic name of the Trigger
+        version:
+          type: string
+          description: version of the Trigger
     Unauthorized:
-      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    PublicPageInfo:
+      required:
+      - hasNextPage
+      type: object
+      properties:
+        startCursor:
+          type: string
+          description: pagination parameter that can be passed in `cursor` query parameter
+        endCursor:
+          type: string
+          description: pagination parameter that can be passed in `cursor` query parameter
+        hasNextPage:
+          type: boolean
+          description: indicates the existence of another page of response that can be obtained by passing endCursor value in `cursor` query parameter
+        hasPreviousPage:
+          type: boolean
+          description: indicates the existence of another page of response that can be obtained by passing startCursor value in `cursor` query parameter
+    ResourceNotFound:
+      title: ResourceNotFound
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    SubscriptionState:
+      type: string
+      description: Indicated current state of the Subscription
+      enum:
+      - creating
+      - creation_failed
+      - deleted
+      - active
+    PublicConnectorEventsSubscriptionPage:
+      required:
+      - pageInfo
+      type: object
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicConnectorEventsSubscription'
+        pageInfo:
+          $ref: '#/components/schemas/PublicPageInfo'
+    PublicConnectorEventsTrigger:
+      required:
+      - name
+      - version
+      - title
+      - description
+      - service
+      type: object
+      properties:
+        service:
+          $ref: '#/components/schemas/ConnectorServiceReference'
+        version:
+          type: string
+          description: The connector version required by [Get Trigger operations](/developer/platform-apis/triggers#endpoint-get-trigger-operations) and [Create Subscription](/developer/platform-apis/triggers#endpoint-create-subscription)
+        name:
+          type: string
+          description: The programmatic name of the Trigger
+        title:
+          type: string
+          description: ''
+        description:
+          type: string
+          description: ''
+    InternalError:
+      title: InternalError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    CreatePublicConnectorEventsSubscriptionResult:
+      properties:
+        authenticationId:
+          format: uuid
+          type: string
+          description: Unique id of the auth returned by [Create Authentication](/developer/platform-apis/authentications#endpoint-create-user-authentication)
+        endpoint:
+          type: string
+          description: The URL where you want to receive the payloads from the Subscription.
+        error:
+          properties:
+            code:
+              $ref: '#/components/schemas/SubscriptionErrorCode'
+            message:
+              type: string
+          required:
+          - code
+          - message
+          type: object
+          description: This is returned when subscripton creation fails on the third party service. `state` will be 'creation_failed'.
+        externalId:
+          type: string
+          description: Unique identifier for the subscription in your database. Will only be returned if you passed it in the request.
+        id:
+          type: string
+          description: Unique ID of the subscription in Tray's database.
+        input:
+          additionalProperties:
+            oneOf:
+            - items:
+                type: object
+              type: array
+            - type: boolean
+            - type: integer
+            - additionalProperties:
+                type: object
+              type: object
+            - type: string
+          type: object
+        name:
+          type: string
+          description: Name of the subcription
+        operation:
+          type: string
+          description: Trigger operation used to create subscription
+        signingKey:
+          type: string
+          description: Unique key that can be used to verify the source of payload was Tray. Read the guide [here](/developer/getting-started/using-triggers/creating-subscriptions) for explanation.
+        state:
+          $ref: '#/components/schemas/SubscriptionState'
+          description: Current state of the subcription
+        trigger:
+          $ref: '#/components/schemas/PublicConnectorEventsTriggerReference'
+          description: Details about the trigger name and version
+      required:
+      - id
+      - name
+      - trigger
+      - operation
+      - endpoint
+      - input
+      - state
+      - signingKey
+      type: object
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
       description: Bearer token authentication. Use a master token for admin operations or a user token for user-scoped operations. Tokens are obtained from the Tray platform settings or via the Embedded API authorize mutation.
+x-refined-from:
+- tray-ai-platform-api-openapi.yml
+- tray-ai-platform-api-published-openapi.yaml

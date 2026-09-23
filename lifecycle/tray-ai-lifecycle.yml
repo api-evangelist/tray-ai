@@ -1,0 +1,93 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://tray.ai/documentation/releases,
+  https://status.tray.ai/,
+  https://tray.ai/legal/sla/,
+  openapi/_original/tray-ai-platform-api-published-openapi.yaml
+provider: Tray.ai
+providerId: tray-ai
+description: >-
+  Versioning, deprecation, status and support-commitment posture for Tray.ai's APIs. Tray keeps a
+  dated public release-notes feed with a first-class Deprecations category, and runs a public
+  status page with Atom and RSS history feeds. What it does NOT publish is an API version policy:
+  the REST path prefixes (/core/v1, /cdk/v1) are the only version signal, both published specs
+  carry info.version 1.0.0, and no Deprecation or Sunset response header is documented.
+versioning:
+  scheme: url-path
+  api_versions:
+    - path_prefix: /core/v1
+      api: Tray.ai Platform API
+    - path_prefix: /cdk/v1
+      api: Tray.ai Platform API (CDK deployments/permissions)
+  spec_versions:
+    - spec: https://tray.ai/documentation/files/openapi/trayapi.yaml
+      info_version: 1.0.0
+      openapi: 3.1.0
+    - spec: https://tray.ai/documentation/files/openapi/embeddedapi.yaml
+      info_version: 1.0.0
+      openapi: 3.0.3
+  policy_published: false
+  note: >-
+    Tray versions CONNECTORS explicitly (every connector has a version, and connector versions are
+    a documented first-class concept) but publishes no versioning policy for the APIs themselves.
+  connector_versioning_docs: https://tray.ai/documentation/platform/automation-integration/building-workflows/configuring-steps/connector-versions
+deprecation:
+  policy_published: false
+  channel: release notes, "Deprecations" category
+  url: https://tray.ai/documentation/releases
+  headers:
+    deprecation: not documented
+    sunset: not documented
+    rfc8594: false
+  notice_period: >-
+    Not committed to in writing. The live Connector Builder notice gives a phased timeline with the
+    final date explicitly "to be confirmed".
+  deprecated_operations_in_spec: 0
+  note: 'Neither published OpenAPI marks any operation with deprecated: true.'
+  announcements:
+    - date: '2026-02-09'
+      title: Connector Builder deprecation
+      url: https://tray.ai/documentation/releases/deprecations/connector-builder-deprecation.md
+      status: in-progress
+      timeline:
+        - 'February 2026: creating new connectors in Connector Builder is no longer available.'
+        - 'Date to be confirmed: editing existing Connector Builder connectors will be permanently disabled.'
+      impact: >-
+        Existing Connector Builder connectors keep running in workflows without disruption; future
+        connector development must use the Connector Development Kit (CDK).
+      migration_target: Connector Development Kit (CDK)
+status_page:
+  url: https://status.tray.ai/
+  http_status: 200
+  feeds:
+    atom: https://status.tray.ai/history.atom
+    rss: https://status.tray.ai/history.rss
+  machine_readable_api: not published
+sla:
+  support_terms: https://tray.ai/legal/sla/
+  msa: https://tray.ai/legal/msa/
+  published_uptime_claim: '100% execution uptime (tray.ai/trust and llms.txt "Scale" section)'
+  note: >-
+    The /legal/sla/ page is titled "Support Terms" — it covers support response commitments.
+    Numeric availability targets are contractual and not published on the public site.
+release_cadence:
+  feed: https://tray.ai/documentation/releases.md
+  archives:
+    - year: 2024
+      entries: 68
+      url: https://tray.ai/documentation/releases-2024.md
+    - year: 2023
+      entries: 129
+      url: https://tray.ai/documentation/releases-2023.md
+  categories: [Features, Connector updates, New connectors, Fixes, Deprecations]
+  note: >-
+    The releases feed is published as clean markdown at a stable URL and split per year — one of
+    the more machine-readable changelogs in the iPaaS cohort.
+gaps:
+  - No written API versioning or deprecation policy.
+  - No Deprecation / Sunset response headers (RFC 8594).
+  - No status page JSON/summary endpoint (Atom and RSS only).
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

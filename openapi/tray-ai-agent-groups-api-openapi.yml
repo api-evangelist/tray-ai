@@ -1,0 +1,436 @@
+openapi: 3.2.0
+info:
+  title: Tray Agent Groups API
+  version: 1.0.0
+  x-logo:
+    url: ../images/tray-dev-logo.svg
+    altText: Tray.ai logo
+  description:
+    $ref: descriptions/trayapi/tags/agent-groups.md
+servers:
+- url: https://api.tray.io
+  description: US
+- url: https://api.eu1.tray.io
+  description: EU
+- url: https://api.ap1.tray.io
+  description: APAC
+security:
+- bearerAuth: []
+tags:
+- name: Agent Groups
+  x-displayName: Agent Groups
+  description:
+    $ref: descriptions/trayapi/tags/agent-groups.md
+paths:
+  /core/v1/workspaces/{workspace-id}/on-prem-agent-groups:
+    get:
+      operationId: getCoreV1WorkspacesWorkspace-idOn-prem-agent-groups
+      summary: Retrieve Agent Groups
+      description: Returns paginated list of agent groups from a workspace using `workspace-id`
+      tags:
+      - Agent Groups
+      parameters:
+      - name: workspace-id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: first
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: last
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasePage_PublicOnPremAgentGroupHttpResponse'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '408':
+          description: Request Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timeout'
+        '409':
+          description: Concurrency Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConcurrencyConflict'
+        '413':
+          description: Content Too Large
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLarge'
+        '429':
+          description: Limit Exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+    post:
+      operationId: postCoreV1WorkspacesWorkspace-idOn-prem-agent-groups
+      summary: Create Agent Group
+      description: Creates an agent group in the specified workspace
+      tags:
+      - Agent Groups
+      parameters:
+      - name: workspace-id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPublicCreateOnPremAgentGroupHttpRequest'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicOnPremAgentGroupHttpResponse'
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '408':
+          description: Request Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timeout'
+        '409':
+          description: Concurrency Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConcurrencyConflict'
+        '413':
+          description: Content Too Large
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLarge'
+        '429':
+          description: Limit Exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+  /core/v1/workspaces/{workspace-id}/on-prem-agent-groups/{agent-group-id}:
+    delete:
+      operationId: deleteCoreV1WorkspacesWorkspace-idOn-prem-agent-groupsAgent-group-id
+      summary: Delete Agent Group
+      description: Deletes an agent group using `agent-group-id` and `workspace-id`
+      tags:
+      - Agent Groups
+      parameters:
+      - name: workspace-id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: agent-group-id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+        '400':
+          description: Invalid Input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidInput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forbidden'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '408':
+          description: Request Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timeout'
+        '409':
+          description: Concurrency Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConcurrencyConflict'
+        '413':
+          description: Content Too Large
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentTooLarge'
+        '429':
+          description: Limit Exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitExceeded'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+components:
+  schemas:
+    Unauthorized:
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    InvalidInput:
+      title: InvalidInput
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    ContentTooLarge:
+      title: ContentTooLarge
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    BasePage_PublicOnPremAgentGroupHttpResponse:
+      title: BasePage_PublicOnPremAgentGroupHttpResponse
+      type: object
+      required:
+      - pageInfo
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicOnPremAgentGroupHttpResponse'
+        pageInfo:
+          $ref: '#/components/schemas/BasePageInfo_PublicOnPremAgentGroupHttpResponse'
+    LimitExceeded:
+      title: LimitExceeded
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    ResourceNotFound:
+      title: ResourceNotFound
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    InternalError:
+      title: InternalError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Timeout:
+      title: Timeout
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    PublicOnPremAgentGroupHttpResponse:
+      title: PublicOnPremAgentGroupHttpResponse
+      type: object
+      required:
+      - id
+      - name
+      - workspaceId
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        workspaceId:
+          type: string
+    BasePageInfo_PublicOnPremAgentGroupHttpResponse:
+      title: BasePageInfo_PublicOnPremAgentGroupHttpResponse
+      type: object
+      properties:
+        startCursor:
+          type: string
+        endCursor:
+          type: string
+        hasNextPage:
+          type: boolean
+        hasPreviousPage:
+          type: boolean
+    NewPublicCreateOnPremAgentGroupHttpRequest:
+      title: NewPublicCreateOnPremAgentGroupHttpRequest
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+    ConcurrencyConflict:
+      title: ConcurrencyConflict
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+x-tagGroups:
+- name: Introduction
+  tags:
+  - overview
+  - authentication
+  - regionality
+  - collection
+  - rate-limits
+- name: Core
+  tags:
+  - authentications
+  - connectors
+  - triggers
+  - workspaces
+  - users
+  - projects
+  - solutions
+- name: CDK
+  tags:
+  - deployments
+  - permissions
+- name: On Premise
+  tags:
+  - agent-groups
+  - agent-instances

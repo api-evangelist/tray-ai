@@ -1,18 +1,117 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/tray-ai-embedded-api-openapi.yml, openapi/tray-ai-platform-api-openapi.yml
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://tray.ai/documentation/developer/getting-started/prerequisites/master-and-user-tokens,
+  https://tray.ai/documentation/platform/enterprise-core/organisation-management/api-users-tokens,
+  https://tray.ai/documentation/platform/artificial-intelligence/agent-gateway/authentication-and-access,
+  https://api.tray.io/.well-known/oauth-authorization-server,
+  openapi/_original/tray-ai-platform-api-published-openapi.yaml,
+  openapi/_original/tray-ai-embedded-api-published-openapi.yaml
+docs: https://tray.ai/documentation/developer/getting-started/prerequisites/master-and-user-tokens
+provider: Tray.ai
+providerId: tray-ai
+description: >-
+  Tray.ai has two authentication models on one platform, and they do not overlap. The REST Platform
+  API and the GraphQL Embedded API take a bearer token and have NO scope surface — authority comes
+  from the token TYPE (master vs user) and from the RBAC role attached to the API user. The MCP
+  server is a separate, modern OAuth 2.1 surface with dynamic client registration, PKCE S256 and
+  three real scopes. A third layer sits underneath both: the per-service AUTHENTICATIONS Tray stores
+  on behalf of end users, which is what a connector call actually executes under.
 summary:
   types:
-  - http
+    - http
+    - oauth2
 schemes:
-- name: bearerAuth
-  type: http
-  scheme: bearer
-  bearerFormat: JWT
-  description: Use either a master token (obtained from Tray Embedded UI settings) or a user
-    token (obtained via the authorize mutation). Master tokens are required for admin operations
-    like managing users. User tokens are required for user-scoped operations like managing solution
-    instances.
-  sources:
-  - openapi/tray-ai-embedded-api-openapi.yml
-  - openapi/tray-ai-platform-api-openapi.yml
+  - name: bearerAuth
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
+    applies_to: [Tray.ai Platform API, Tray.ai Embedded API]
+    description: >-
+      Use either a master token (obtained from Tray Embedded UI settings / API Users & Tokens) or a
+      user token (obtained via the Embedded authorize mutation). Master tokens are required for
+      admin operations like managing users. User tokens are required for user-scoped operations
+      like managing solution instances.
+    sources:
+      - openapi/_original/tray-ai-platform-api-published-openapi.yaml
+      - openapi/_original/tray-ai-embedded-api-published-openapi.yaml
+    scopes: none
+  - name: trayMcpOAuth
+    type: oauth2
+    applies_to: [Tray MCP Server]
+    flow: authorization_code
+    pkce: S256 (required; plain not offered)
+    issuer: https://auth.tray.io
+    authorization_endpoint: https://auth.tray.io/server/oauth2/authorize
+    token_endpoint: https://auth.tray.io/server/oauth2/token
+    registration_endpoint: https://auth.tray.io/server/oauth2/register
+    revocation_endpoint: https://auth.tray.io/server/oauth2/revoke
+    refresh: supported
+    token_endpoint_auth_methods: [client_secret_basic, none]
+    scopes: [mcp:list_tools, mcp:call_tools, api:full]
+    metadata: https://api.tray.io/.well-known/oauth-authorization-server
+    resource_metadata: https://api.tray.io/.well-known/oauth-protected-resource/mcp
+    verified: probed
+    cross_ref: scopes/tray-ai-scopes.yml
+token_types:
+  - name: master token
+    surface: [Platform API, Embedded API]
+    obtained_from: Tray Embedded UI settings / Organisation management > API Users & Tokens
+    acts_as: the organization
+    required_for: creating end users, issuing user tokens, org-level administration
+    rotation: manual
+  - name: user token
+    surface: [Platform API, Embedded API]
+    obtained_from: 'Embedded `authorize` mutation (create-user-token), exchanged with a master token'
+    acts_as: one end user
+    required_for: user-scoped operations — the user's authentications and solution instances
+    guidance: >-
+      Mint server-side and hand only the user token to a browser. Never ship a master token to a
+      front end.
+  - name: RBAC API token
+    surface: [Platform API, CDK CLI, Tray Sync CLI]
+    obtained_from: API Users & Tokens (workspace or account scope)
+    acts_as: an API user with a role
+    required_for: 'tray-cdk deployments, tray-sync-cli pull/promote'
+    docs: https://tray.ai/documentation/platform/enterprise-core/organisation-management/api-users-tokens
+  - name: OAuth2 access token
+    surface: [Tray MCP Server]
+    obtained_from: https://auth.tray.io/server/oauth2/authorize
+    acts_as: the signed-in Tray user, in the workspace chosen at sign-in
+    required_for: tools/list and tools/call on api.tray.io/mcp
+end_user_authentications:
+  description: >-
+    Distinct from the tokens above. An "authentication" is a stored credential for a THIRD-PARTY
+    service (Salesforce, Slack, ...) that Tray holds on behalf of a user, identified by a UUID and
+    passed as `authId` on every connector call.
+  operations: [create-user-authentication, get-user-authentication, update-user-authentication, delete-user-authentication, get-full-authentication, get-service-environments]
+  graphql_operations: [get-authentications, create-authentication, delete-authentication]
+  collection_ui: 'Hosted auth dialog (popup) — see components/tray-ai-components.yml'
+  custom_oauth_apps: https://tray.ai/documentation/developer/getting-started/prerequisites/custom-oauth-apps
+  note: >-
+    Partners can white-label these with their own OAuth apps so end users see the partner's brand on
+    the third-party consent screen, not Tray's.
+agent_gateway_layers:
+  client_authentication:
+    - method: OAuth2
+      note: Required for dynamic (user-provided) tool authentication. Tray currently names Claude Desktop as the supported OAuth2 client, with more expanding.
+    - method: API token
+      note: Static bearer; works with all MCP clients; cannot use dynamic authentication — tools must use service-account credentials.
+  tool_authentication:
+    - mode: service account
+      note: One shared credential for every execution of the tool, whoever triggered it.
+    - mode: dynamic (user-provided)
+      note: The end user authenticates with their own credentials at runtime; actions execute with their permissions and are auditable to them. Mapping is valid for 7 days.
+  access_management: >-
+    Only users explicitly added on the MCP server's Access Management tab can execute its tools —
+    workspace membership alone is not sufficient.
+  docs: https://tray.ai/documentation/platform/artificial-intelligence/agent-gateway/authentication-and-access
+regions:
+  note: A token is region-bound. US api.tray.io / tray.io, EU api.eu1.tray.io / eu1.tray.io, APAC api.ap1.tray.io / ap1.tray.io.
+gaps:
+  - No OIDC discovery document — /.well-known/openid-configuration 404s on api.tray.io and auth.tray.io.
+  - No scopes on the REST or GraphQL surfaces; a master token is all-or-nothing.
+  - No documented token rotation or expiry policy for master and RBAC tokens.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

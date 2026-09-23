@@ -1,15 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Tray.ai Platform Deployments API
-  description: The Tray.ai Platform API (also known as the Connectivity API or Tray APIs) provides direct programmatic REST access to Tray's connectors, authentication management, trigger subscriptions, user and workspace administration, and project/solution lifecycle operations. It enables developers to integrate Tray's 700+ pre-built service connectors into their own applications without using the Builder UI. All endpoints require Bearer token authentication.
+  title: Tray Ai Deployments API
   version: 1.0.0
-  contact:
-    name: Tray.ai Support
-    url: https://tray.ai
-  termsOfService: https://tray.ai/terms
-  license:
-    name: Proprietary
-    url: https://tray.ai/terms
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  description: 'Operations tagged Deployments across 2 of this provider''s published API definitions: tray-ai-platform-api-openapi.yml, tray-ai-platform-api-published-openapi.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.tray.io/core/v1
   description: US Region (Default)
@@ -17,6 +12,12 @@ servers:
   description: EU Region
 - url: https://api.ap1.tray.io/core/v1
   description: APAC Region
+- url: https://api.tray.io
+  description: US
+- url: https://api.eu1.tray.io
+  description: EU
+- url: https://api.ap1.tray.io
+  description: APAC
 security:
 - bearerAuth: []
 tags:
@@ -71,6 +72,194 @@ paths:
           description: Invalid deployment request
         '401':
           $ref: '#/components/responses/Unauthorized'
+    servers:
+    - url: https://api.tray.io/core/v1
+      description: US Region (Default)
+    - url: https://api.eu1.tray.io/core/v1
+      description: EU Region
+    - url: https://api.ap1.tray.io/core/v1
+      description: APAC Region
+  /cdk/v1/deployments/connectors/{connector-name}/versions/{connector-version}/deploy-connector-from-source:
+    post:
+      operationId: create-deployment
+      summary: Deploy Connector
+      description:
+        $ref: descriptions/trayapi/endpoints/deployments/createDeployment.md
+      tags:
+      - Deployments
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+        description: The RBAC token. Follow this [page](https://docs.tray.ai/platform/enterprise-core/organisation-management/api-users-tokens) to know how to generate one.
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+      - in: path
+        name: connector-name
+        required: true
+        schema:
+          type: string
+        description: The hypenated name of the connector being deployed.
+        example: my-connector
+      - in: path
+        name: connector-version
+        required: true
+        schema:
+          type: string
+        description: The version of the connector being deployed.
+        example: '1.0'
+      responses:
+        200:
+          description: OK - Connector deployment request recieved, your connector deployment will now be in progress unless you recieved `repeatDeployment` with a value of `true` in your response, which indicates a skipped deployment because there is already a deployment in progress for this connector.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeployConnectorFromSourceResponse'
+              example:
+                id: 3c5exxx-xxxx-xxxx-xxxx-xxxxxxxx2387
+                deploymentStatus: Deploying
+                connectorName: my-connector
+                connectorVersion: '1.0'
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFailed'
+        401:
+          description: Unauthorized - Verify the token validity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFailed'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFailed'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFailed'
+        429:
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFailed'
+        500:
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFailed'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
+  /cdk/v1/deployments/connectors/{connector-name}/versions/{connector-version}/{id}:
+    get:
+      operationId: get-deployment-status
+      summary: Check status
+      description:
+        $ref: descriptions/trayapi/endpoints/deployments/getDeploymentStatus.md
+      tags:
+      - Deployments
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+        description: The RBAC token. Follow this [page](https://docs.tray.ai/platform/enterprise-core/organisation-management/api-users-tokens) to know how to generate one.
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+      - in: path
+        name: connector-name
+        required: true
+        schema:
+          type: string
+        description: The hypenated name of the connector being deployed.
+        example: my-connector
+      - in: path
+        name: connector-version
+        required: true
+        schema:
+          type: string
+        description: The version of the connector being deployed.
+        example: '1.0'
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The deployment id given to you in the response from the original deployment request. <br /> You can also pass `latest` to retrive status of last deployment of the connector.
+        examples:
+          For status of a particular deployment:
+            value: 3c5exxx-xxxx-xxxx-xxxx-xxxxxxxx2387
+          For status of the latest deployment:
+            value: latest
+      responses:
+        200:
+          description: OK - Returns the deployment status for the connector version.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetConnectorDeploymentResponse'
+              example:
+                id: 3c5exxx-xxxx-xxxx-xxxx-xxxxxxxx2387
+                deploymentStatus: Deploying
+                connectorName: my-connector
+                connectorVersion: '1.0'
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFailed'
+        401:
+          description: Unauthorized - Verify the token validity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFailed'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFailed'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFailed'
+        429:
+          description: Limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFailed'
+        500:
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFailed'
+    servers:
+    - url: https://api.tray.io
+      description: US
+    - url: https://api.eu1.tray.io
+      description: EU
+    - url: https://api.ap1.tray.io
+      description: APAC
 components:
   responses:
     Unauthorized:
@@ -92,9 +281,60 @@ components:
         statusCode:
           type: integer
           description: HTTP status code
+    RequestFailed:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    GetConnectorDeploymentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The deployment id of the connector deployment request.
+        deploymentStatus:
+          type: string
+          description: The status of the deployment request.
+          enum:
+          - Deployed
+          - Failed
+          - Deploying
+        connectorName:
+          type: string
+          description: The name of the connector being deployed.
+        connectorVersion:
+          type: string
+          description: The version of the connector being deployed.
+    DeployConnectorFromSourceResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The deployment id of the connector deployment request.
+        repeatDeployment:
+          type: boolean
+          description: Indicates that the deployment request was skipped because there is already a deployment in progress for this connector.
+        deploymentStatus:
+          type: string
+          description: The status of the deployment request.
+          enum:
+          - Deployed
+          - Failed
+          - Deploying
+        connectorName:
+          type: string
+          description: The name of the connector being deployed.
+        connectorVersion:
+          type: string
+          description: The version of the connector being deployed.
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
       description: Bearer token authentication. Use a master token for admin operations or a user token for user-scoped operations. Tokens are obtained from the Tray platform settings or via the Embedded API authorize mutation.
+x-refined-from:
+- tray-ai-platform-api-openapi.yml
+- tray-ai-platform-api-published-openapi.yaml

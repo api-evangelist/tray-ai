@@ -2,7 +2,9 @@
   "provider": "tray-ai",
   "sources": [
     "_original/tray-ai-embedded-api-openapi.yml",
-    "_original/tray-ai-platform-api-openapi.yml"
+    "_original/tray-ai-embedded-api-published-openapi.yaml",
+    "_original/tray-ai-platform-api-openapi.yml",
+    "_original/tray-ai-platform-api-published-openapi.yaml"
   ],
   "outputs": [
     "tray-ai-authentication-api-openapi.yml",
@@ -12,28 +14,46 @@
     "tray-ai-solutions-api-openapi.yml",
     "tray-ai-users-api-openapi.yml",
     "tray-ai-workflows-api-openapi.yml",
+    "tray-ai-projects-api-openapi.yml",
     "tray-ai-connectors-api-openapi.yml",
     "tray-ai-deployments-api-openapi.yml",
-    "tray-ai-projects-api-openapi.yml",
     "tray-ai-triggers-api-openapi.yml",
-    "tray-ai-workspaces-api-openapi.yml"
+    "tray-ai-workspaces-api-openapi.yml",
+    "tray-ai-agent-groups-api-openapi.yml",
+    "tray-ai-agent-instances-api-openapi.yml",
+    "tray-ai-permissions-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
-    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "sourced from openapi/_original/ (4 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "tray-ai-embedded-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "tray-ai-embedded-api-published-openapi.yaml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
     "tray-ai-platform-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "tag 'Authentications' spans 2 source specs (tray-ai-embedded-api-openapi.yml, tray-ai-platform-api-openapi.yml): per-path servers applied",
-    "tag 'Users' spans 2 source specs (tray-ai-embedded-api-openapi.yml, tray-ai-platform-api-openapi.yml): per-path servers applied"
+    "tray-ai-platform-api-published-openapi.yaml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "tag 'Authentications' spans 4 source specs (tray-ai-embedded-api-openapi.yml, tray-ai-embedded-api-published-openapi.yaml, tray-ai-platform-api-openapi.yml, tray-ai-platform-api-published-openapi.yaml): per-path servers applied",
+    "tag 'Call Connector' spans 2 source specs (tray-ai-embedded-api-openapi.yml, tray-ai-embedded-api-published-openapi.yaml): per-path servers applied",
+    "tag 'Solution Instances' spans 2 source specs (tray-ai-embedded-api-openapi.yml, tray-ai-embedded-api-published-openapi.yaml): per-path servers applied",
+    "tag 'Solutions' spans 3 source specs (tray-ai-embedded-api-openapi.yml, tray-ai-embedded-api-published-openapi.yaml, tray-ai-platform-api-published-openapi.yaml): per-path servers applied",
+    "tag 'Users' spans 4 source specs (tray-ai-embedded-api-openapi.yml, tray-ai-embedded-api-published-openapi.yaml, tray-ai-platform-api-openapi.yml, tray-ai-platform-api-published-openapi.yaml): per-path servers applied",
+    "tag 'Workflows' spans 2 source specs (tray-ai-embedded-api-openapi.yml, tray-ai-embedded-api-published-openapi.yaml): per-path servers applied",
+    "tag 'projects' spans 3 source specs (tray-ai-embedded-api-published-openapi.yaml, tray-ai-platform-api-openapi.yml, tray-ai-platform-api-published-openapi.yaml): per-path servers applied",
+    "tag 'Connectors' spans 2 source specs (tray-ai-platform-api-openapi.yml, tray-ai-platform-api-published-openapi.yaml): per-path servers applied",
+    "tag 'Deployments' spans 2 source specs (tray-ai-platform-api-openapi.yml, tray-ai-platform-api-published-openapi.yaml): per-path servers applied",
+    "tag 'Triggers' spans 2 source specs (tray-ai-platform-api-openapi.yml, tray-ai-platform-api-published-openapi.yaml): per-path servers applied",
+    "tag 'Workspaces' spans 2 source specs (tray-ai-platform-api-openapi.yml, tray-ai-platform-api-published-openapi.yaml): per-path servers applied",
+    "apis.yml register: already-registered"
   ],
   "skipped": [
+    "tray-ai-agent-groups-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tray-ai-agent-instances-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "tray-ai-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "tray-ai-authentications-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "tray-ai-call-connector-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "tray-ai-connectors-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "tray-ai-deployments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "tray-ai-permissions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "tray-ai-projects-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "tray-ai-solution-instances-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "tray-ai-solutions-api-openapi.yml: previously refined output, superseded by openapi/_original/",

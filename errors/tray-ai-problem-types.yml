@@ -1,0 +1,146 @@
+generated: '2026-09-02'
+method: derived
+source: >-
+  openapi/_original/tray-ai-platform-api-published-openapi.yaml,
+  openapi/_original/tray-ai-embedded-api-published-openapi.yaml,
+  https://tray.ai/documentation/developer/getting-started/troubleshooting/error-handling-tray,
+  live 401 from https://api.tray.io/core/v1/connectors
+provider: Tray.ai
+providerId: tray-ai
+format: json
+rfc9457: false
+description: >-
+  Tray's error catalogue, derived from the 4xx/5xx responses declared across the 70 operations in
+  the two provider-published OpenAPI documents and enriched with the verbatim bodies in Tray's
+  own error-handling pages. Tray does NOT use RFC 9457 problem+json: every error is the same flat
+  JSON envelope with a human-readable `message` and a `code` that is, in every published example,
+  null. There is no machine-readable error code registry — an agent has to string-match `message`,
+  and Tray's own examples show `message` carrying multi-line JSON-Schema validation output.
+envelope:
+  content_type: application/json
+  shape:
+    message: string — human-readable description; may embed raw JSON Schema validation errors.
+    code: 'string|null — present in the envelope but null in every published example and in the live 401.'
+  example:
+    message: The request is unauthorized
+    code: null
+  observed:
+    url: https://api.tray.io/core/v1/connectors
+    status: 401
+    body: '{"message":"The request is unauthorized"}'
+    probed: '2026-09-02'
+    note: The live 401 omits `code` entirely rather than sending null.
+problem_types:
+  - status: 400
+    title: Invalid input
+    occurrences: 49
+    apis: [Tray.ai Platform API]
+    meaning: >-
+      The request body failed Tray's input-schema validation, or a path/query value was malformed.
+      For the Call Connector endpoint the message embeds the JSON Schema failure verbatim.
+    examples:
+      - message: 'Connector input validation failed. Schema validation errors: [ 1 - #: required key [channel] not found ]'
+        cause: Required input missing for the connector operation.
+      - message: 'Connector input validation failed. Schema validation errors: [ 1 - #/number_of_rows: expected type: Integer, found: String ]'
+        cause: Input value of the wrong JSON type.
+      - message: "Invalid value for: body (Couldn't decode a valid UUID at 'authId')"
+        cause: authId is not a UUID / no such authentication exists.
+      - message: "Invalid value for: body (Got value '\"5e7b53b2\"' with wrong type, expecting string at 'authId')"
+        cause: Badly formed authId.
+    remediation: >-
+      Read the operation's inputSchema from GET /core/v1/connectors/{connector-name}/versions/{connector-version}/operations
+      and re-shape the `input` object. Do not retry unchanged.
+    retryable: false
+  - status: 401
+    title: Unauthorized
+    occurrences: 70
+    apis: [Tray.ai Platform API, Tray.ai Embedded API, Tray MCP Server]
+    meaning: Missing, malformed or expired bearer token.
+    examples:
+      - message: The request is unauthorized
+    mcp_variant:
+      body: '{"error":"invalid_token","error_description":"Missing Authorization header"}'
+      headers:
+        WWW-Authenticate: 'Bearer error="invalid_token", error_description="Missing Authorization header", scope="mcp:list_tools mcp:call_tools", resource_metadata="https://api.tray.io/.well-known/oauth-protected-resource/mcp"'
+      note: >-
+        The MCP endpoint uses an OAuth-shaped error object (error/error_description) rather than
+        the REST `message` envelope — two different error shapes on the same host.
+    remediation: Re-issue a master or user token; for MCP, run the OAuth2 flow named in resource_metadata.
+    retryable: false
+  - status: 403
+    title: Forbidden
+    occurrences: 70
+    apis: [Tray.ai Platform API, Tray.ai Embedded API]
+    meaning: >-
+      The token is valid but lacks access. On Call Connector this specifically means the authId
+      exists but does not have access to the service being called.
+    examples:
+      - message: The request is forbidden
+    remediation: Check the RBAC role on the token and the authentication's scopes.
+    retryable: false
+  - status: 404
+    title: Not found
+    occurrences: 49
+    apis: [Tray.ai Platform API]
+    meaning: >-
+      Incorrect connector name, connector version, authentication id, subscription id, workspace
+      id or user id — or the caller has no access to it.
+    remediation: Verify the identifier against the corresponding list endpoint.
+    retryable: false
+  - status: 408
+    title: Request Timeout
+    occurrences: 8
+    apis: [Tray.ai Platform API]
+    meaning: The upstream call did not complete in time. Declared on the connector/deployment operations.
+    retryable: true
+    remediation: Retry with exponential backoff.
+  - status: 409
+    title: Concurrency Conflict
+    occurrences: 8
+    apis: [Tray.ai Platform API]
+    meaning: A conflicting operation is already in flight for the same resource.
+    retryable: true
+    remediation: Back off and retry; serialize writes to the same connector/deployment.
+  - status: 413
+    title: Content Too Large
+    occurrences: 8
+    apis: [Tray.ai Platform API]
+    meaning: The request payload exceeded Tray's size ceiling.
+    retryable: false
+    remediation: Reduce the payload; for large files use Tray's temporary file storage flow.
+  - status: 429
+    title: Limit Exceeded
+    occurrences: 49
+    apis: [Tray.ai Platform API]
+    meaning: >-
+      The 30 requests-per-second / 1800 requests-per-minute rate limit was exceeded, or (on Call
+      Connector) the 1000-concurrent-request ceiling was hit.
+    retryable: true
+    remediation: >-
+      Exponential backoff. Tray publishes no RateLimit-* or Retry-After response headers, so the
+      client must own the backoff schedule — see rate-limits/tray-ai-rate-limits.yml.
+    note: >-
+      A 429 surfaced INSIDE a 200 Call Connector response body belongs to the third-party service,
+      not to Tray. See the pass-through note below.
+  - status: 500
+    title: Internal Error
+    occurrences: 70
+    apis: [Tray.ai Platform API, Tray.ai Embedded API]
+    meaning: Unhandled server-side failure.
+    retryable: true
+pass_through_errors:
+  note: >-
+    This is the single most important error-handling fact about Tray and it is easy to get wrong.
+    A 200 from the Call Connector endpoint means only that the input payload and the authentication
+    passed TRAY's validation. The third-party service's own error is returned INSIDE the 200 body.
+    An agent that branches on HTTP status alone will read a failed Salesforce or Slack call as a
+    success.
+  source: https://tray.ai/documentation/developer/getting-started/troubleshooting/error-handling-3rd-party
+  envelope_hint: 'Call Connector success bodies carry an `outcome` field (e.g. "outcome": "success") alongside `output`.'
+gaps:
+  - No stable machine-readable error code — `code` is null in every published example.
+  - No application/problem+json, no `type` URI, no error documentation URLs in responses.
+  - No error code index page; errors are described narratively across two troubleshooting pages.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

@@ -1,0 +1,123 @@
+generated: '2026-09-02'
+method: searched
+source: >-
+  https://tray.ai/documentation/developer/getting-started/using-triggers/creating-subscriptions,
+  https://tray.ai/documentation/developer/getting-started/using-triggers/verifying-subcription-payloads,
+  https://tray.ai/documentation/developer/getting-started/using-triggers/discovering-triggers-and-operations,
+  https://tray.ai/documentation/platform/embedded/advanced-features/whitelabelling/public-urls,
+  openapi/_original/tray-ai-platform-api-published-openapi.yaml
+provider: Tray.ai
+providerId: tray-ai
+asyncapi_published: false
+description: >-
+  Tray publishes no AsyncAPI document — probed and absent. It does publish a real, well-documented
+  webhook surface in two directions, and both are captured here. OUTBOUND: the Trigger API, where
+  you create a subscription against a third-party trigger operation and Tray delivers normalised,
+  HMAC-signed events to an endpoint you own. INBOUND: every Embedded workflow instance gets an
+  auto-generated public URL that third-party services post to. The event CATALOGUE itself is not
+  enumerable as a fixed list — the events are whatever the 700+ connectors' trigger operations
+  emit, discovered at runtime through GET /core/v1/triggers and GET /core/v1/triggers/{name}/versions/{version}/operations.
+outbound:
+  name: Trigger API subscriptions
+  transport: HTTPS POST to a subscriber-supplied endpoint
+  create:
+    operationId: create-subscription
+    method: POST
+    path: /core/v1/subscriptions
+    request_fields:
+      - name: name
+        description: Display name for the subscription.
+      - name: externalId
+        description: Caller's own unique id for the subscription; usable to query it later.
+      - name: 'trigger (name + version)'
+        description: The trigger to subscribe to, from GET /core/v1/triggers.
+      - name: authenticationId
+        description: The authentication the subscription runs under.
+      - name: operation
+        description: Which trigger operation, from GET /core/v1/triggers/{name}/versions/{version}/operations.
+      - name: input
+        description: JSON matching the trigger operation's input schema.
+      - name: endpoint
+        description: The URL Tray delivers formatted event payloads to.
+    response_fields:
+      - name: signingKey
+        description: >-
+          Returned ONCE, on creation only. It cannot be retrieved later through GET
+          /core/v1/subscriptions or GET /core/v1/subscriptions/{subscription-id}. Store it against
+          the subscription id at creation time or the subscription becomes unverifiable.
+  manage:
+    - operationId: get-subscriptions
+      method: GET
+      path: /core/v1/subscriptions
+    - operationId: get-subscription-by-id
+      method: GET
+      path: /core/v1/subscriptions/{subscription-id}
+    - operationId: delete-connector-events-subscription
+      method: DELETE
+      path: /core/v1/subscriptions/{subscription-id}
+  discovery:
+    - operationId: get-triggers
+      method: GET
+      path: /core/v1/triggers
+    - operationId: get-trigger-operations
+      method: GET
+      path: /core/v1/triggers/{trigger-name}/versions/{trigger-version}/operations
+  payload:
+    shape: >-
+      Tray receives the third-party payload and forwards it after formatting it to match the
+      OUTPUT SCHEMA of the subscribed trigger operation — so the consumer codes against Tray's
+      normalised schema, not the vendor's raw payload.
+    schema_source: outputSchema on the trigger operation
+  signature:
+    header: x-tray-signature
+    algorithm: HMAC-SHA256
+    encoding: base64
+    signed_over: the raw event payload as plain text
+    key: 'the base64 signingKey from Create Subscription, decoded to a Buffer before use'
+    verification_example_language: Node.js
+    docs: https://tray.ai/documentation/developer/getting-started/using-triggers/verifying-subcription-payloads
+    optional: 'Documented as optional but recommended by Tray.'
+  delivery:
+    rate_limited: false
+    retry: exponential backoff
+    guarantee: >-
+      Tray states events are not lost even when the subscriber endpoint rate-limits — delivery is
+      retried with exponential backoff.
+    docs: https://tray.ai/documentation/developer/getting-started/troubleshooting/rate-limiting-tray
+  guidance: >-
+    Tray's own docs say event processing should happen in your infrastructure, not inside a Tray
+    workflow; if you want to process events inside Tray, use Tray Embedded directly and skip the
+    round trip.
+inbound:
+  name: Workflow public / webhook URLs
+  description: >-
+    Every Embedded workflow instance is allocated an automatically-generated public URL that
+    third-party services call to trigger it.
+  url_patterns:
+    - region: US
+      pattern: 'https://{uuid}.trayapp.io'
+      debranded: 'https://{uuid}.integration-hook.com'
+    - region: EU
+      pattern: 'https://{uuid}.eu1.trayapp.io'
+      debranded: 'https://{uuid}.eu1.integration-hook.com'
+  configuration: Settings & people > Embedded settings
+  docs: https://tray.ai/documentation/platform/embedded/advanced-features/whitelabelling/public-urls
+event_catalogue:
+  enumerable: false
+  reason: >-
+    Tray is an integration platform: the events are the trigger operations of its 700+ connectors,
+    plus platform triggers (Scheduled, Alerting, Slack App Trigger, Microsoft Teams App Trigger,
+    Project Queue and so on). The catalogue is discovered at runtime through the Trigger API rather
+    than published as a static list, which is why no AsyncAPI document exists and why authoring one
+    would be fabrication.
+  runtime_discovery:
+    - GET /core/v1/triggers
+    - GET /core/v1/triggers/{trigger-name}/versions/{trigger-version}/operations
+  connector_listing: https://tray.ai/documentation/connectors/llms.txt
+gaps:
+  - No AsyncAPI document at /asyncapi.yaml, /asyncapi.json or anywhere in the docs or GitHub org.
+  - No published event-type registry or event-name vocabulary.
+  - No replay or dead-letter API for undelivered subscription events.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

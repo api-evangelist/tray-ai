@@ -1,0 +1,80 @@
+generated: '2026-09-02'
+provider: Tray.ai
+providerId: tray-ai
+description: >-
+  Agent Skills for Tray.ai. Two sets. `_published/` holds Tray's OWN skills, saved verbatim from
+  github.com/trayio/tray-plugins (Apache-2.0) — these are the operating instructions Tray ships for
+  its remote MCP server, and they should be preferred for any workflow-building task. The
+  top-level files are API Evangelist skills covering the marquee REST and GraphQL flows the plugin
+  does not touch: the Trigger/webhook pipeline, Embedded end-user onboarding, and project promotion.
+skills:
+  - file: tray-ai-call-connector-for-an-end-user.md
+    name: tray-ai-call-connector-for-an-end-user
+    method: generated
+    api: Tray.ai Platform API
+    operations: [get-connectors, get-connector-operations, get-service-environments, create-user-authentication, get-user-authentication, call-connector]
+    summary: >-
+      Call any of Tray's 700+ connector operations under a stored end-user authentication, including
+      the pass-through error trap where a 200 can carry a third-party failure.
+  - file: tray-ai-subscribe-to-trigger-events.md
+    name: tray-ai-subscribe-to-trigger-events
+    method: generated
+    api: Tray.ai Platform API
+    operations: [get-triggers, get-trigger-operations, create-subscription, get-subscriptions, get-subscription-by-id, delete-connector-events-subscription]
+    summary: >-
+      Subscribe to third-party events, capture the once-only signingKey, and verify the
+      x-tray-signature HMAC on every delivery.
+  - file: tray-ai-embedded-end-user-onboarding.md
+    name: tray-ai-embedded-end-user-onboarding
+    method: generated
+    api: Tray.ai Embedded API
+    operations: [create-user, create-user-token, create-config-wizard-auth-code, get-solutions, create-solution-instance, get-solution-instances, update-solution-instance, get-authentications, delete-solution-instance]
+    summary: Register a partner's end user, mint a user token, and stand up a configured Solution Instance.
+  - file: tray-ai-promote-a-project-between-environments.md
+    name: tray-ai-promote-a-project-between-environments
+    method: generated
+    api: Tray.ai Platform API
+    operations: [PublicApiProjectController.createProjectVersion, listProjectVersions, exportAProjectVersion, PublicApiProjectController.getProjectImportRequirements, PublicApiProjectController.previewProjectImport, PublicApiProjectController.importProject]
+    summary: Version, export, preflight and import a Tray project from dev to prod — the one Tray flow with a real dry run.
+  - file: tray-ai-connect-an-agent-over-mcp.md
+    name: tray-ai-connect-an-agent-over-mcp
+    method: generated
+    api: Tray MCP Server
+    endpoint: https://api.tray.io/mcp
+    summary: >-
+      OAuth2 (PKCE S256 + dynamic client registration) onto Tray's hosted MCP server, the 22
+      published tool names, and the limits and guardrails to design around.
+published_by_provider:
+  source: https://github.com/trayio/tray-plugins
+  license: Apache-2.0
+  plugin: tray-workflows
+  method: searched
+  retrieved: '2026-09-02'
+  note: >-
+    Saved verbatim. These are Tray's own skills for the tray-workflows plugin, which is a guided
+    client over the same remote MCP server at api.tray.io/mcp.
+  files:
+    - file: _published/tray-ai-AGENTS.md
+      upstream: AGENTS.md
+    - file: _published/tray-ai-build-workflow.md
+      upstream: plugins/tray-workflows/skills/build-workflow/SKILL.md
+      summary: The entry point for all workflow creation and modification — plan, research, build, validate, test.
+    - file: _published/tray-ai-research-connector.md
+      upstream: plugins/tray-workflows/skills/research-connector/SKILL.md
+      summary: Systematic connector research via DDL discovery; documents the real tool parameter names.
+    - file: _published/tray-ai-tray-connectors.md
+      upstream: plugins/tray-workflows/skills/tray-connectors/SKILL.md
+      summary: Core connector names and versions, the property type-wrapper format, trigger names, common jsonpath shapes.
+    - file: _published/tray-ai-tray-patterns.md
+      upstream: plugins/tray-workflows/skills/tray-patterns/SKILL.md
+      summary: Workflow structure patterns — branches, loops, callable workflows, scheduled triggers, manual error handling.
+    - file: _published/tray-ai-tray-gotchas.md
+      upstream: plugins/tray-workflows/skills/tray-gotchas/SKILL.md
+      summary: Debugging guide for known edge cases and tricky surfaces.
+  subagent:
+    name: tray-researcher
+    upstream: plugins/tray-workflows/agents/tray-researcher.md
+    note: Not copied — it is an agent definition, not a skill.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

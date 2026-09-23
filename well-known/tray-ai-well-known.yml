@@ -1,0 +1,108 @@
+generated: '2026-09-19'
+method: probed
+source: live GET probes of /.well-known/* on every apis.yml and OpenAPI servers[] host
+provider: Tray.ai
+providerId: tray-ai
+description: 'Probe record of the RFC 8615 well-known namespace on every Tray.ai host in this repo. Two
+  documents are served, both on the API host api.tray.io and both part of Tray''s remote MCP (Agent Gateway
+  / Tray Headless MCP) OAuth surface: the RFC 8414 authorization server metadata and the RFC 9728 protected
+  resource metadata for https://api.tray.io/mcp. The marketing and documentation host tray.ai answers
+  every /.well-known/ path with its Astro 404 page, so no security.txt, api-catalog, openid-configuration,
+  ai-plugin.json or agent card is served there.'
+hosts:
+- host: api.tray.io
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: tray-ai-oauth-authorization-server.json
+    note: RFC 8414 authorization server metadata. issuer https://auth.tray.io, dynamic client registration
+      enabled (registration_endpoint), PKCE S256 required, scopes_supported mcp:list_tools, mcp:call_tools,
+      api:full.
+  - path: /.well-known/oauth-protected-resource/mcp
+    status: 200
+    content_type: application/json
+    file: tray-ai-oauth-protected-resource-mcp.json
+    note: RFC 9728 protected resource metadata named in the WWW-Authenticate challenge returned by POST
+      https://api.tray.io/mcp. resource_name "Tray MCP Server".
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: tray-ai-api-oauth-protected-resource.json
+    bytes: 176
+  path_echo_control: passed
+- host: auth.tray.io
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: tray-ai-oauth-authorization-server.json
+    note: Identical body to the api.tray.io copy; auth.tray.io is the issuer itself.
+  - path: /.well-known/openid-configuration
+    status: 404
+    note: 'Express 404 body: "Cannot GET /.well-known/openid-configuration" — OAuth 2.0 only, no OIDC
+      discovery.'
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: tray-ai-auth-oauth-authorization-server.json
+    bytes: 663
+  path_echo_control: passed
+- host: tray.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+- host: tray.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+notes:
+- No A2A agent card was found on any host. Every /.well-known/ path on tray.ai and tray.io returns HTTP
+  404 with the site's Astro "Page not found" HTML, so there is no SPA catch-all false positive to guard
+  against here — the 404 status is genuine.
+- Tray publishes no /.well-known/security.txt. Its vulnerability disclosure route is the HackerOne form
+  linked from the Conveyor trust center; see security/tray-ai-vulnerability-disclosure.yml.
+x-mcp-probe:
+  probed: '2026-09-19'
+  issue: roadmap#321, roadmap#337
+  documents:
+  - host: https://api.tray.io
+    path: /.well-known/oauth-protected-resource
+    file: tray-ai-api-oauth-protected-resource.json
+  - host: https://auth.tray.io
+    path: /.well-known/oauth-authorization-server
+    file: tray-ai-auth-oauth-authorization-server.json
+  validated_on: resource (RFC 9728) / issuer (RFC 8414, OIDC)
+  negative_control: one per host; a 2xx JSON object at an impossible path discards the host
+note: 'MCP-host OAuth discovery added 2026-09-19 (roadmap#321/#337): the harvest visits a provider''s
+  primary hosts, and RFC 9728 protected-resource metadata lives on the MCP host, so these documents existed
+  and were invisible to the scorer. Fetched live and validated on `resource`/`issuer`; one negative control
+  per host.'

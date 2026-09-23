@@ -1,15 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Tray.ai Embedded Call Connector API
-  description: 'The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences using Tray''s UI components. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations. All API calls are made via HTTP POST to the GraphQL endpoint with Bearer token authentication. The API supports two token types: master tokens (for admin operations like managing users) and user tokens (for user-scoped operations like managing solution instances). This is a backend-only API; client-side JavaScript calls are blocked by CORS.'
+  title: Tray Ai Call Connector API
   version: 1.0.0
-  contact:
-    name: Tray.ai Support
-    url: https://tray.ai
-  termsOfService: https://tray.ai/terms
-  license:
-    name: Proprietary
-    url: https://tray.ai/terms
+  x-refined-note:
+  - x-logo differs across the merged source definitions and was not carried
+  description: 'Operations tagged Call Connector across 2 of this provider''s published API definitions: tray-ai-embedded-api-openapi.yml, tray-ai-embedded-api-published-openapi.yaml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://tray.io
   description: US Region (Default)
@@ -17,6 +12,12 @@ servers:
   description: EU Region
 - url: https://ap1.tray.io
   description: APAC Region
+- url: https://tray.io/graphql
+  description: US
+- url: https://eu1.tray.io/graphql
+  description: EU
+- url: https://ap1.tray.io/graphql
+  description: APAC
 security:
 - bearerAuth: []
 tags:
@@ -57,6 +58,103 @@ paths:
                             description: The output from the connector operation, structure varies by connector and operation
         '401':
           $ref: '#/components/responses/Unauthorized'
+    servers:
+    - url: https://tray.io
+      description: US Region (Default)
+    - url: https://eu1.tray.io
+      description: EU Region
+    - url: https://ap1.tray.io
+      description: APAC Region
+  '/                    ':
+    post:
+      tags:
+      - Call Connector
+      summary: Call a Tray connector
+      description:
+        $ref: descriptions/embedded/endpoints/call-connector.md
+      operationId: call-connector
+      x-codeSamples:
+      - lang: cURL
+        label: curl
+        source:
+          $ref: code_samples/call-connector.curl
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+        example: Bearer 3fd74d349xxxxxxxxxxxxxxxxxxxxxxxxd90df521
+        description: Pass your <a target="_blank" href="https://tray.ai/documentation/tray-uac/embedded-integrations/setup-notes/">master token</a> here
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                variables:
+                  type: object
+            examples:
+              list-all-leads-in-Salesforce:
+                summary: List all leads in Salesforce
+                value:
+                  query: "mutation listLeads(\n  $connector: String!, \n  $version: String!, \n  $operation: String!, \n  $authId: String, \n){ listAllLeads: callConnector(input: {\n    connector: $connector,\n    version: $version,\n    operation: $operation,\n    authId: $authId,\n    input: \"{\\\"limit\\\":10,\\\"conditions_type\\\":\\\"Match all conditions\\\",\\\"fields\\\":[\\\"Id\\\",\\\"Name\\\"],\\\"object\\\":\\\"Lead\\\"}\"\n  }) {\n    output\n  }\n}"
+                  variables:
+                    connector: salesforce
+                    version: '8.7'
+                    operation: find_records
+                    authId: 062af7e2-b5xxx-xxx-xxx-xxx-xxxxx46d912
+              find-warm-leads-in-Salesforce:
+                summary: List warm leads in Salesforce
+                value:
+                  query: "mutation listLeads(\n  $connector: String!, \n  $version: String!, \n  $operation: String!, \n  $authId: String, \n){ \n  listWarmLeads: callConnector(input: {\n    connector: $connector,\n    version: $version,\n    operation: $operation,\n    authId: $authId,\n    input: \"{\\\"conditions_type\\\":\\\"Match all conditions\\\",\\\"fields\\\":[\\\"Id\\\",\\\"Name\\\"],\\\"conditions\\\":[{\\\"field\\\":\\\"Rating\\\",\\\"operator\\\":\\\"Equal to\\\",\\\"value\\\":\\\"Warm\\\"}],\\\"object\\\":\\\"Lead\\\"}\"\n  }) {\n    output\n  }\n}"
+                  variables:
+                    connector: salesforce
+                    version: '8.7'
+                    operation: find_records
+                    authId: 062af7e2-b5xxx-xxx-xxx-xxx-xxxxx46d912
+        required: true
+      responses:
+        '200':
+          description: OK - Response of the connector operation is returned
+          content:
+            application/json:
+              examples:
+                list-all-leads-in-Salesforce:
+                  summary: List all leads from Salesforce
+                  value:
+                    $ref: examples/listAllLeads.json
+                list-warm-leads-in-Salesforce:
+                  summary: List warm leads from Salesforce
+                  value:
+                    $ref: examples/listWarmLeads.json
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                $ref: examples/401.json
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                $ref: examples/403.json
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              example:
+                $ref: examples/500.json
+    servers:
+    - url: https://tray.io/graphql
+      description: US
+    - url: https://eu1.tray.io/graphql
+      description: EU
+    - url: https://ap1.tray.io/graphql
+      description: APAC
 components:
   schemas:
     GraphQLError:
@@ -110,3 +208,6 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: Use either a master token (obtained from Tray Embedded UI settings) or a user token (obtained via the authorize mutation). Master tokens are required for admin operations like managing users. User tokens are required for user-scoped operations like managing solution instances.
+x-refined-from:
+- tray-ai-embedded-api-openapi.yml
+- tray-ai-embedded-api-published-openapi.yaml
