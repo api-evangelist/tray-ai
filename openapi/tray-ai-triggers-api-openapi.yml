@@ -596,14 +596,26 @@ paths:
     - url: https://api.ap1.tray.io
       description: APAC
 components:
-  responses:
-    Unauthorized:
-      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Subscription:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique subscription identifier
+        triggerName:
+          type: string
+          description: The trigger operation name
+        connectorName:
+          type: string
+          description: The connector name
+        status:
+          type: string
+          description: Current subscription status
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the subscription was created
     Trigger:
       type: object
       properties:
@@ -646,25 +658,6 @@ components:
         input:
           type: object
           description: Input data for the subscription. Must conform to the trigger's input schema.
-    Subscription:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique subscription identifier
-        triggerName:
-          type: string
-          description: The trigger operation name
-        connectorName:
-          type: string
-          description: The connector name
-        status:
-          type: string
-          description: Current subscription status
-        createdAt:
-          type: string
-          format: date-time
-          description: Timestamp when the subscription was created
     Error:
       type: object
       properties:
@@ -677,43 +670,6 @@ components:
         statusCode:
           type: integer
           description: HTTP status code
-    InvalidInput:
-      title: InvalidInput
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    PublicConnectorEventsTriggerOperationList:
-      type: object
-      description: List of Operations that can be used for this Trigger
-      properties:
-        elements:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicConnectorEventsTriggerOperation'
-    SubscriptionErrorCode:
-      type: string
-      enum:
-      - user_input_error
-      - api_error
-      - timeout_error
-      - oauth_refresh
-      - no_trigger
-      - internal_error
-    LimitExceeded:
-      title: LimitExceeded
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
     PublicConnectorEventsSubscription:
       type: object
       required:
@@ -773,72 +729,6 @@ components:
         endpoint:
           type: string
           description: Your URL where Tray would post events
-    PublicConnectorEventsTriggerList:
-      type: object
-      description: List of available Triggers
-      properties:
-        elements:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicConnectorEventsTrigger'
-    ConnectorServiceReference:
-      required:
-      - id
-      - name
-      - version
-      type: object
-      properties:
-        id:
-          type: string
-          description: The `serviceId` required for the auth-only dialog url
-        name:
-          type: string
-          description: Name of the service in Tray. Can be used in combination with service version below to get `serviceEnvironmentId` using <a href="/developer/platform-apis/authentications#endpoint-get-service-environments">GET service environments</a>
-        version:
-          type: integer
-          format: int32
-          description: Version of the service in Tray. Can be used in combination with service name above to get `serviceEnvironmentId` using <a href="/developer/platform-apis/authentications#endpoint-get-service-environments">GET service environments</a>
-      description: Contains underlying Tray service details.
-    PublicCreateConnectorEventsSubscription:
-      required:
-      - name
-      - trigger
-      - operation
-      - input
-      - endpoint
-      type: object
-      properties:
-        trigger:
-          $ref: '#/components/schemas/PublicConnectorEventsTriggerReference'
-        operation:
-          type: string
-          description: programmatic name of the Trigger operation. Obtained using [Get Trigger operations](/developer/platform-apis/triggers#endpoint-get-trigger-operations)
-        authenticationId:
-          type: string
-          format: uuid
-          description: Unique id of the auth returned by [Create Authentication](/developer/platform-apis/authentications#endpoint-create-user-authentication)
-        input:
-          type: object
-          additionalProperties:
-            oneOf:
-            - type: array
-              items:
-                type: object
-            - type: boolean
-            - type: integer
-            - type: object
-              additionalProperties:
-                type: object
-            - type: string
-        externalId:
-          type: string
-          description: Unique identifier for the subscription in your database.
-        endpoint:
-          type: string
-          description: The URL where you want to receive the payloads from the Subscription.
-        name:
-          type: string
-          description: Name of the Subscription. Can be used to display in the UI.
     PublicConnectorEventsTriggerOperation:
       required:
       - name
@@ -893,21 +783,8 @@ components:
         description:
           type: string
           description: Brief description of what the operation does
-    PublicConnectorEventsTriggerReference:
-      required:
-      - name
-      - version
-      type: object
-      description: Reference to link the Trigger
-      properties:
-        name:
-          type: string
-          description: programmatic name of the Trigger
-        version:
-          type: string
-          description: version of the Trigger
-    Unauthorized:
-      title: Unauthorized
+    LimitExceeded:
+      title: LimitExceeded
       type: object
       required:
       - message
@@ -916,23 +793,26 @@ components:
           type: string
         code:
           type: string
-    PublicPageInfo:
-      required:
-      - hasNextPage
+    InvalidInput:
+      title: InvalidInput
       type: object
+      required:
+      - message
       properties:
-        startCursor:
+        message:
           type: string
-          description: pagination parameter that can be passed in `cursor` query parameter
-        endCursor:
+        code:
           type: string
-          description: pagination parameter that can be passed in `cursor` query parameter
-        hasNextPage:
-          type: boolean
-          description: indicates the existence of another page of response that can be obtained by passing endCursor value in `cursor` query parameter
-        hasPreviousPage:
-          type: boolean
-          description: indicates the existence of another page of response that can be obtained by passing startCursor value in `cursor` query parameter
+    InternalError:
+      title: InternalError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
     ResourceNotFound:
       title: ResourceNotFound
       type: object
@@ -943,35 +823,46 @@ components:
           type: string
         code:
           type: string
-    Forbidden:
-      title: Forbidden
-      type: object
+    PublicCreateConnectorEventsSubscription:
       required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    SubscriptionState:
-      type: string
-      description: Indicated current state of the Subscription
-      enum:
-      - creating
-      - creation_failed
-      - deleted
-      - active
-    PublicConnectorEventsSubscriptionPage:
-      required:
-      - pageInfo
+      - name
+      - trigger
+      - operation
+      - input
+      - endpoint
       type: object
       properties:
-        elements:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicConnectorEventsSubscription'
-        pageInfo:
-          $ref: '#/components/schemas/PublicPageInfo'
+        trigger:
+          $ref: '#/components/schemas/PublicConnectorEventsTriggerReference'
+        operation:
+          type: string
+          description: programmatic name of the Trigger operation. Obtained using [Get Trigger operations](/developer/platform-apis/triggers#endpoint-get-trigger-operations)
+        authenticationId:
+          type: string
+          format: uuid
+          description: Unique id of the auth returned by [Create Authentication](/developer/platform-apis/authentications#endpoint-create-user-authentication)
+        input:
+          type: object
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+        externalId:
+          type: string
+          description: Unique identifier for the subscription in your database.
+        endpoint:
+          type: string
+          description: The URL where you want to receive the payloads from the Subscription.
+        name:
+          type: string
+          description: Name of the Subscription. Can be used to display in the UI.
     PublicConnectorEventsTrigger:
       required:
       - name
@@ -995,8 +886,25 @@ components:
         description:
           type: string
           description: ''
-    InternalError:
-      title: InternalError
+    PublicPageInfo:
+      required:
+      - hasNextPage
+      type: object
+      properties:
+        startCursor:
+          type: string
+          description: pagination parameter that can be passed in `cursor` query parameter
+        endCursor:
+          type: string
+          description: pagination parameter that can be passed in `cursor` query parameter
+        hasNextPage:
+          type: boolean
+          description: indicates the existence of another page of response that can be obtained by passing endCursor value in `cursor` query parameter
+        hasPreviousPage:
+          type: boolean
+          description: indicates the existence of another page of response that can be obtained by passing startCursor value in `cursor` query parameter
+    Forbidden:
+      title: Forbidden
       type: object
       required:
       - message
@@ -1005,6 +913,37 @@ components:
           type: string
         code:
           type: string
+    PublicConnectorEventsTriggerReference:
+      required:
+      - name
+      - version
+      type: object
+      description: Reference to link the Trigger
+      properties:
+        name:
+          type: string
+          description: programmatic name of the Trigger
+        version:
+          type: string
+          description: version of the Trigger
+    ConnectorServiceReference:
+      required:
+      - id
+      - name
+      - version
+      type: object
+      properties:
+        id:
+          type: string
+          description: The `serviceId` required for the auth-only dialog url
+        name:
+          type: string
+          description: Name of the service in Tray. Can be used in combination with service version below to get `serviceEnvironmentId` using <a href="/developer/platform-apis/authentications#endpoint-get-service-environments">GET service environments</a>
+        version:
+          type: integer
+          format: int32
+          description: Version of the service in Tray. Can be used in combination with service name above to get `serviceEnvironmentId` using <a href="/developer/platform-apis/authentications#endpoint-get-service-environments">GET service environments</a>
+      description: Contains underlying Tray service details.
     CreatePublicConnectorEventsSubscriptionResult:
       properties:
         authenticationId:
@@ -1069,6 +1008,67 @@ components:
       - state
       - signingKey
       type: object
+    PublicConnectorEventsTriggerOperationList:
+      type: object
+      description: List of Operations that can be used for this Trigger
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicConnectorEventsTriggerOperation'
+    PublicConnectorEventsTriggerList:
+      type: object
+      description: List of available Triggers
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicConnectorEventsTrigger'
+    Unauthorized:
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    SubscriptionErrorCode:
+      type: string
+      enum:
+      - user_input_error
+      - api_error
+      - timeout_error
+      - oauth_refresh
+      - no_trigger
+      - internal_error
+    SubscriptionState:
+      type: string
+      description: Indicated current state of the Subscription
+      enum:
+      - creating
+      - creation_failed
+      - deleted
+      - active
+    PublicConnectorEventsSubscriptionPage:
+      required:
+      - pageInfo
+      type: object
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicConnectorEventsSubscription'
+        pageInfo:
+          $ref: '#/components/schemas/PublicPageInfo'
+  responses:
+    Unauthorized:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

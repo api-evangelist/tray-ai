@@ -768,6 +768,34 @@ paths:
       description: APAC
 components:
   schemas:
+    Workspace:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique workspace identifier
+        name:
+          type: string
+          description: Display name of the workspace
+        description:
+          type: string
+          description: Description of the workspace
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the workspace was created
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type
+        message:
+          type: string
+          description: Human-readable error message
+        statusCode:
+          type: integer
+          description: HTTP status code
     PlatformUser:
       type: object
       properties:
@@ -787,36 +815,46 @@ components:
         status:
           type: string
           description: Account status (active, invited, etc.)
-    Error:
+    RoleExternalApiModel:
+      title: RoleExternalApiModel
       type: object
-      properties:
-        error:
-          type: string
-          description: Error type
-        message:
-          type: string
-          description: Human-readable error message
-        statusCode:
-          type: integer
-          description: HTTP status code
-    Workspace:
-      type: object
+      required:
+      - id
+      - name
       properties:
         id:
           type: string
-          description: Unique workspace identifier
+          format: uuid
         name:
           type: string
-          description: Display name of the workspace
-        description:
+    Organization:
+      title: Organization
+      type: object
+    ResourceNotFound:
+      title: ResourceNotFound
+      type: object
+      required:
+      - message
+      properties:
+        message:
           type: string
-          description: Description of the workspace
-        createdAt:
+        code:
           type: string
-          format: date-time
-          description: Timestamp when the workspace was created
-    Shared:
-      title: Shared
+    InternalError:
+      title: InternalError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Partner:
+      title: Partner
+      type: object
+    Embedded:
+      title: Embedded
       type: object
     InvalidInput:
       title: InvalidInput
@@ -828,6 +866,79 @@ components:
           type: string
         code:
           type: string
+    TooManyRequestsError:
+      title: TooManyRequestsError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    External:
+      title: External
+      type: object
+    WorkspaceType:
+      title: WorkspaceType
+      oneOf:
+      - $ref: '#/components/schemas/Embedded'
+      - $ref: '#/components/schemas/Organization'
+      - $ref: '#/components/schemas/Personal'
+      - $ref: '#/components/schemas/PersonalExternal'
+      - $ref: '#/components/schemas/Shared'
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    PersonalExternal:
+      title: PersonalExternal
+      type: object
+    Integration:
+      title: Integration
+      type: object
+    WorkspaceUserExternalApiModel:
+      title: WorkspaceUserExternalApiModel
+      type: object
+      required:
+      - workspaceId
+      - id
+      - accountType
+      - role
+      properties:
+        workspaceId:
+          type: string
+        id:
+          type: string
+        email:
+          type: string
+        accountType:
+          $ref: '#/components/schemas/AccountType'
+        role:
+          $ref: '#/components/schemas/RoleExternalApiModel'
+    System:
+      title: System
+      type: object
+    API:
+      title: API
+      type: object
+    Unauthorized:
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Shared:
+      title: Shared
+      type: object
     AddUserToWorkspaceExternalApiBody:
       title: AddUserToWorkspaceExternalApiBody
       type: object
@@ -850,8 +961,47 @@ components:
         roleId:
           type: string
           format: uuid
-    PersonalExternal:
-      title: PersonalExternal
+    Personal:
+      title: Personal
+      type: object
+    ExternalApiPageInfoModel:
+      title: ExternalApiPageInfoModel
+      type: object
+      required:
+      - hasNextPage
+      - hasPreviousPage
+      properties:
+        startCursor:
+          type: string
+        endCursor:
+          type: string
+        hasNextPage:
+          type: boolean
+        hasPreviousPage:
+          type: boolean
+    AccountType:
+      title: AccountType
+      oneOf:
+      - $ref: '#/components/schemas/API'
+      - $ref: '#/components/schemas/External'
+      - $ref: '#/components/schemas/Integration'
+      - $ref: '#/components/schemas/Partner'
+      - $ref: '#/components/schemas/Regular'
+      - $ref: '#/components/schemas/System'
+    ExternalApiDataPage_ENT:
+      title: ExternalApiDataPage_ENT
+      type: object
+      required:
+      - pageInfo
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceExternalApiModel'
+        pageInfo:
+          $ref: '#/components/schemas/ExternalApiPageInfoModel'
+    Regular:
+      title: Regular
       type: object
     WorkspaceExternalApiModel:
       title: WorkspaceExternalApiModel
@@ -872,156 +1022,6 @@ components:
         monthlyTaskLimit:
           type: integer
           format: int64
-    Integration:
-      title: Integration
-      type: object
-    Partner:
-      title: Partner
-      type: object
-    WorkspaceType:
-      title: WorkspaceType
-      oneOf:
-      - $ref: '#/components/schemas/Embedded'
-      - $ref: '#/components/schemas/Organization'
-      - $ref: '#/components/schemas/Personal'
-      - $ref: '#/components/schemas/PersonalExternal'
-      - $ref: '#/components/schemas/Shared'
-    ExternalApiPageInfoModel:
-      title: ExternalApiPageInfoModel
-      type: object
-      required:
-      - hasNextPage
-      - hasPreviousPage
-      properties:
-        startCursor:
-          type: string
-        endCursor:
-          type: string
-        hasNextPage:
-          type: boolean
-        hasPreviousPage:
-          type: boolean
-    API:
-      title: API
-      type: object
-    Embedded:
-      title: Embedded
-      type: object
-    Unauthorized:
-      title: Unauthorized
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    RoleExternalApiModel:
-      title: RoleExternalApiModel
-      type: object
-      required:
-      - id
-      - name
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-    AccountType:
-      title: AccountType
-      oneOf:
-      - $ref: '#/components/schemas/API'
-      - $ref: '#/components/schemas/External'
-      - $ref: '#/components/schemas/Integration'
-      - $ref: '#/components/schemas/Partner'
-      - $ref: '#/components/schemas/Regular'
-      - $ref: '#/components/schemas/System'
-    System:
-      title: System
-      type: object
-    ResourceNotFound:
-      title: ResourceNotFound
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    Regular:
-      title: Regular
-      type: object
-    WorkspaceUserExternalApiModel:
-      title: WorkspaceUserExternalApiModel
-      type: object
-      required:
-      - workspaceId
-      - id
-      - accountType
-      - role
-      properties:
-        workspaceId:
-          type: string
-        id:
-          type: string
-        email:
-          type: string
-        accountType:
-          $ref: '#/components/schemas/AccountType'
-        role:
-          $ref: '#/components/schemas/RoleExternalApiModel'
-    Forbidden:
-      title: Forbidden
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    TooManyRequestsError:
-      title: TooManyRequestsError
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-    Organization:
-      title: Organization
-      type: object
-    External:
-      title: External
-      type: object
-    ExternalApiDataPage_ENT:
-      title: ExternalApiDataPage_ENT
-      type: object
-      required:
-      - pageInfo
-      properties:
-        elements:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkspaceExternalApiModel'
-        pageInfo:
-          $ref: '#/components/schemas/ExternalApiPageInfoModel'
-    InternalError:
-      title: InternalError
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    Personal:
-      title: Personal
-      type: object
   responses:
     Unauthorized:
       description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.

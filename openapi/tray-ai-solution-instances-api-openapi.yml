@@ -610,30 +610,6 @@ paths:
       description: APAC
 components:
   schemas:
-    GraphQLError:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              message:
-                type: string
-                description: Error message
-              locations:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    line:
-                      type: integer
-                    column:
-                      type: integer
-              path:
-                type: array
-                items:
-                  type: string
     SolutionInstance:
       type: object
       properties:
@@ -690,6 +666,30 @@ components:
         startCursor:
           type: string
           description: Cursor for fetching the previous page
+    GraphQLError:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: Error message
+              locations:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    line:
+                      type: integer
+                    column:
+                      type: integer
+              path:
+                type: array
+                items:
+                  type: string
     GraphQLRequest:
       type: object
       required:

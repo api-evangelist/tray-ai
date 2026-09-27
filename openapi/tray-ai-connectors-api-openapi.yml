@@ -754,14 +754,33 @@ paths:
     - url: https://api.ap1.tray.io
       description: APAC
 components:
-  responses:
-    Unauthorized:
-      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    CallConnectorRequest:
+      type: object
+      required:
+      - operation
+      properties:
+        operation:
+          type: string
+          description: The name of the connector operation to execute
+        authId:
+          type: string
+          description: The ID of a previously created authentication to use for the connector call
+        input:
+          type: object
+          description: Input data for the operation. Must conform to the operation's input schema.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type
+        message:
+          type: string
+          description: Human-readable error message
+        statusCode:
+          type: integer
+          description: HTTP status code
     ConnectorVersion:
       type: object
       properties:
@@ -796,32 +815,6 @@ components:
         outputSchema:
           type: object
           description: JSON Schema defining the operation output
-    CallConnectorRequest:
-      type: object
-      required:
-      - operation
-      properties:
-        operation:
-          type: string
-          description: The name of the connector operation to execute
-        authId:
-          type: string
-          description: The ID of a previously created authentication to use for the connector call
-        input:
-          type: object
-          description: Input data for the operation. Must conform to the operation's input schema.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type
-        message:
-          type: string
-          description: Human-readable error message
-        statusCode:
-          type: integer
-          description: HTTP status code
     Connector:
       type: object
       properties:
@@ -847,115 +840,6 @@ components:
                 type: string
               isLatest:
                 type: boolean
-    InvalidInput:
-      title: InvalidInput
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    Forbidden:
-      title: Forbidden
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    Unauthorized:
-      title: Unauthorized
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    ConnectorServiceReference:
-      required:
-      - id
-      - name
-      - version
-      type: object
-      properties:
-        id:
-          type: string
-          description: The `serviceId` required for the auth-only dialog url
-        name:
-          type: string
-          description: Name of the service in Tray. Can be used in combination with service version below to get `serviceEnvironmentId` using <a href="/developer/platform-apis/authentications#endpoint-get-service-environments">GET service environments</a>
-        version:
-          type: integer
-          format: int32
-          description: Version of the service in Tray. Can be used in combination with service name above to get `serviceEnvironmentId` using <a href="/developer/platform-apis/authentications#endpoint-get-service-environments">GET service environments</a>
-      description: Contains underlying Tray service details.
-    PublicConnectorList:
-      type: object
-      properties:
-        elements:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicConnector'
-          description: Contains all connector details
-    PublicConnectorOperationList:
-      type: object
-      properties:
-        elements:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicConnectorOperation'
-          description: ''
-      description: ''
-    PublicConnector:
-      required:
-      - name
-      - version
-      - title
-      - description
-      - service
-      type: object
-      properties:
-        description:
-          type: string
-          description: ''
-        name:
-          type: string
-          description: The programmatic name of the connector
-        service:
-          $ref: '#/components/schemas/ConnectorServiceReference'
-        title:
-          type: string
-          description: ''
-        version:
-          type: string
-          description: The connector version required by [Get Connector Operations](/developer/platform-apis/connectors#endpoint-get-connector-operations) and [Call Connector](/developer/platform-apis/connectors#endpoint-call-connector)
-      description: Array of connector objects
-    LimitExceeded:
-      title: LimitExceeded
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    ResourceNotFound:
-      title: ResourceNotFound
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
     PublicConnectorCallResult:
       required:
       - outcome
@@ -979,6 +863,75 @@ components:
             - type: string
           description: ''
       description: ''
+    PublicConnectorCallPayload:
+      required:
+      - operation
+      - input
+      type: object
+      properties:
+        operation:
+          type: string
+          description: The name of the operation obtained using [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations)
+        authId:
+          type: string
+          format: uuid
+          description: The End User-specific auth id obtained when using [Create user authentication](/developer/platform-apis/authentications#endpoint-create-user-authentication)
+        input:
+          type: object
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+          description: The exact schema of inputs must be retrieved from [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations)
+        returnOutputSchema:
+          type: boolean
+          description: Only applicable if [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations) has returned true for `hasDynamicOutput` - indicating that the output changes depending on the input
+      description: ''
+    ConnectorServiceReference:
+      required:
+      - id
+      - name
+      - version
+      type: object
+      properties:
+        id:
+          type: string
+          description: The `serviceId` required for the auth-only dialog url
+        name:
+          type: string
+          description: Name of the service in Tray. Can be used in combination with service version below to get `serviceEnvironmentId` using <a href="/developer/platform-apis/authentications#endpoint-get-service-environments">GET service environments</a>
+        version:
+          type: integer
+          format: int32
+          description: Version of the service in Tray. Can be used in combination with service name above to get `serviceEnvironmentId` using <a href="/developer/platform-apis/authentications#endpoint-get-service-environments">GET service environments</a>
+      description: Contains underlying Tray service details.
+    LimitExceeded:
+      title: LimitExceeded
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    InvalidInput:
+      title: InvalidInput
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
     InternalError:
       title: InternalError
       type: object
@@ -989,12 +942,24 @@ components:
           type: string
         code:
           type: string
-    PublicConnectorCallResultOutcome:
-      type: string
-      enum:
-      - success
-      - error
-      description: ''
+    ResourceNotFound:
+      title: ResourceNotFound
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    PublicConnectorList:
+      type: object
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicConnector'
+          description: Contains all connector details
     PublicConnectorOperation:
       required:
       - name
@@ -1051,37 +1016,72 @@ components:
             - type: string
           description: 'All available input fields for the operation<br />Key properties include:<br />**required**: a list of the mandatory fields<br />**lookup**: indicates a field which is dependent on the result of another operation e.g. a channel selected from a list. Please see our <a href=''/developer/getting-started/calling-connectors/ddl-operations'' target=''_blank''>DDL documentation</a> for more details<br />**enumLabels**: some fields have a set array of enum values which you can allow the user to choose from'
       description: ''
-    PublicConnectorCallPayload:
-      required:
-      - operation
-      - input
+    PublicConnectorOperationList:
       type: object
       properties:
-        operation:
-          type: string
-          description: The name of the operation obtained using [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations)
-        authId:
-          type: string
-          format: uuid
-          description: The End User-specific auth id obtained when using [Create user authentication](/developer/platform-apis/authentications#endpoint-create-user-authentication)
-        input:
-          type: object
-          additionalProperties:
-            oneOf:
-            - type: array
-              items:
-                type: object
-            - type: boolean
-            - type: integer
-            - type: object
-              additionalProperties:
-                type: object
-            - type: string
-          description: The exact schema of inputs must be retrieved from [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations)
-        returnOutputSchema:
-          type: boolean
-          description: Only applicable if [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations) has returned true for `hasDynamicOutput` - indicating that the output changes depending on the input
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicConnectorOperation'
+          description: ''
       description: ''
+    PublicConnectorCallResultOutcome:
+      type: string
+      enum:
+      - success
+      - error
+      description: ''
+    Unauthorized:
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    PublicConnector:
+      required:
+      - name
+      - version
+      - title
+      - description
+      - service
+      type: object
+      properties:
+        description:
+          type: string
+          description: ''
+        name:
+          type: string
+          description: The programmatic name of the connector
+        service:
+          $ref: '#/components/schemas/ConnectorServiceReference'
+        title:
+          type: string
+          description: ''
+        version:
+          type: string
+          description: The connector version required by [Get Connector Operations](/developer/platform-apis/connectors#endpoint-get-connector-operations) and [Call Connector](/developer/platform-apis/connectors#endpoint-call-connector)
+      description: Array of connector objects
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+  responses:
+    Unauthorized:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

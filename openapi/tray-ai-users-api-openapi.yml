@@ -1065,7 +1065,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalError'
     post:
-      operationId: create-user
+      operationId: postCoreV1Users
       summary: Create User
       description: 'Creates a user in the organization.
 
@@ -1125,6 +1125,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InternalError'
+      x-operation-id-source: normalized
+      x-operation-id-original: create-user
     servers:
     - url: https://api.tray.io
       description: US
@@ -1348,6 +1350,36 @@ paths:
       description: APAC
 components:
   schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Tray internal user identifier
+        name:
+          type: string
+          description: Display name of the user
+        externalUserId:
+          type: string
+          description: External user identifier set during creation
+        isTestUser:
+          type: boolean
+          description: Whether the user is marked as a test user (excluded from billing)
+    PageInfo:
+      type: object
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Whether there are more results after the current page
+        endCursor:
+          type: string
+          description: Cursor for fetching the next page
+        hasPreviousPage:
+          type: boolean
+          description: Whether there are results before the current page
+        startCursor:
+          type: string
+          description: Cursor for fetching the previous page
     GraphQLError:
       type: object
       properties:
@@ -1372,36 +1404,6 @@ components:
                 type: array
                 items:
                   type: string
-    PageInfo:
-      type: object
-      properties:
-        hasNextPage:
-          type: boolean
-          description: Whether there are more results after the current page
-        endCursor:
-          type: string
-          description: Cursor for fetching the next page
-        hasPreviousPage:
-          type: boolean
-          description: Whether there are results before the current page
-        startCursor:
-          type: string
-          description: Cursor for fetching the previous page
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Tray internal user identifier
-        name:
-          type: string
-          description: Display name of the user
-        externalUserId:
-          type: string
-          description: External user identifier set during creation
-        isTestUser:
-          type: boolean
-          description: Whether the user is marked as a test user (excluded from billing)
     GraphQLRequest:
       type: object
       required:
@@ -1416,18 +1418,6 @@ components:
         operationName:
           type: string
           description: The name of the operation to execute if the query contains multiple operations
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type
-        message:
-          type: string
-          description: Human-readable error message
-        statusCode:
-          type: integer
-          description: HTTP status code
     InviteUserRequest:
       type: object
       required:
@@ -1443,6 +1433,18 @@ components:
         workspaceId:
           type: string
           description: Optional workspace to assign the user to
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error type
+        message:
+          type: string
+          description: Human-readable error message
+        statusCode:
+          type: integer
+          description: HTTP status code
     PlatformUser:
       type: object
       properties:
@@ -1462,18 +1464,17 @@ components:
         status:
           type: string
           description: Account status (active, invited, etc.)
-    Shared:
-      title: Shared
-      type: object
-    InvalidInput:
-      title: InvalidInput
+    RoleExternalApiModel:
+      title: RoleExternalApiModel
       type: object
       required:
-      - message
+      - id
+      - name
       properties:
-        message:
+        id:
           type: string
-        code:
+          format: uuid
+        name:
           type: string
     CreateUserEndpointBody:
       title: CreateUserEndpointBody
@@ -1491,33 +1492,136 @@ components:
         organizationRoleId:
           type: string
           format: uuid
-    PersonalExternal:
-      title: PersonalExternal
+    Organization:
+      title: Organization
       type: object
-    WorkspaceExternalApiModel:
-      title: WorkspaceExternalApiModel
+    ResourceNotFound:
+      title: ResourceNotFound
       type: object
       required:
-      - id
-      - name
-      - type
+      - message
       properties:
-        id:
+        message:
           type: string
-        name:
+        code:
           type: string
-        type:
-          $ref: '#/components/schemas/WorkspaceType'
-        description:
+    InternalError:
+      title: InternalError
+      type: object
+      required:
+      - message
+      properties:
+        message:
           type: string
-        monthlyTaskLimit:
-          type: integer
-          format: int64
-    Integration:
-      title: Integration
+        code:
+          type: string
+    InvalidInput:
+      title: InvalidInput
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Embedded:
+      title: Embedded
       type: object
     Partner:
       title: Partner
+      type: object
+    TooManyRequestsError:
+      title: TooManyRequestsError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    External:
+      title: External
+      type: object
+    WorkspaceType:
+      title: WorkspaceType
+      oneOf:
+      - $ref: '#/components/schemas/Embedded'
+      - $ref: '#/components/schemas/Organization'
+      - $ref: '#/components/schemas/Personal'
+      - $ref: '#/components/schemas/PersonalExternal'
+      - $ref: '#/components/schemas/Shared'
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    PersonalExternal:
+      title: PersonalExternal
+      type: object
+    InviteUserExternalEndpointBody:
+      title: InviteUserExternalEndpointBody
+      type: object
+      required:
+      - email
+      - organizationRoleId
+      properties:
+        email:
+          type: string
+          pattern: ^[a-zA-Z0-9\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$
+        organizationRoleId:
+          type: string
+          format: uuid
+    Integration:
+      title: Integration
+      type: object
+    System:
+      title: System
+      type: object
+    UpdateUserOrganizationRoleExternalEndpointBody:
+      title: UpdateUserOrganizationRoleExternalEndpointBody
+      type: object
+      required:
+      - roleId
+      properties:
+        roleId:
+          type: string
+          format: uuid
+    API:
+      title: API
+      type: object
+    Unauthorized:
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Shared:
+      title: Shared
+      type: object
+    InviteCreatedExternalApiModel:
+      title: InviteCreatedExternalApiModel
+      type: object
+      required:
+      - inviteId
+      - expires
+      properties:
+        inviteId:
+          type: string
+          format: uuid
+        expires:
+          type: string
+          format: date-time
+    Personal:
+      title: Personal
       type: object
     UserExternalApiModel:
       title: UserExternalApiModel
@@ -1554,55 +1658,6 @@ components:
           type: boolean
         hasPreviousPage:
           type: boolean
-    WorkspaceType:
-      title: WorkspaceType
-      oneOf:
-      - $ref: '#/components/schemas/Embedded'
-      - $ref: '#/components/schemas/Organization'
-      - $ref: '#/components/schemas/Personal'
-      - $ref: '#/components/schemas/PersonalExternal'
-      - $ref: '#/components/schemas/Shared'
-    API:
-      title: API
-      type: object
-    Embedded:
-      title: Embedded
-      type: object
-    InviteCreatedExternalApiModel:
-      title: InviteCreatedExternalApiModel
-      type: object
-      required:
-      - inviteId
-      - expires
-      properties:
-        inviteId:
-          type: string
-          format: uuid
-        expires:
-          type: string
-          format: date-time
-    Unauthorized:
-      title: Unauthorized
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    RoleExternalApiModel:
-      title: RoleExternalApiModel
-      type: object
-      required:
-      - id
-      - name
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
     AccountType:
       title: AccountType
       oneOf:
@@ -1612,55 +1667,6 @@ components:
       - $ref: '#/components/schemas/Partner'
       - $ref: '#/components/schemas/Regular'
       - $ref: '#/components/schemas/System'
-    System:
-      title: System
-      type: object
-    ResourceNotFound:
-      title: ResourceNotFound
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    Regular:
-      title: Regular
-      type: object
-    Forbidden:
-      title: Forbidden
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    TooManyRequestsError:
-      title: TooManyRequestsError
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-    UpdateUserOrganizationRoleExternalEndpointBody:
-      title: UpdateUserOrganizationRoleExternalEndpointBody
-      type: object
-      required:
-      - roleId
-      properties:
-        roleId:
-          type: string
-          format: uuid
-    Organization:
-      title: Organization
-      type: object
-    External:
-      title: External
-      type: object
     ExternalApiDataPage_ENT:
       title: ExternalApiDataPage_ENT
       type: object
@@ -1673,32 +1679,28 @@ components:
             $ref: '#/components/schemas/WorkspaceExternalApiModel'
         pageInfo:
           $ref: '#/components/schemas/ExternalApiPageInfoModel'
-    InternalError:
-      title: InternalError
+    Regular:
+      title: Regular
+      type: object
+    WorkspaceExternalApiModel:
+      title: WorkspaceExternalApiModel
       type: object
       required:
-      - message
+      - id
+      - name
+      - type
       properties:
-        message:
+        id:
           type: string
-        code:
+        name:
           type: string
-    Personal:
-      title: Personal
-      type: object
-    InviteUserExternalEndpointBody:
-      title: InviteUserExternalEndpointBody
-      type: object
-      required:
-      - email
-      - organizationRoleId
-      properties:
-        email:
+        type:
+          $ref: '#/components/schemas/WorkspaceType'
+        description:
           type: string
-          pattern: ^[a-zA-Z0-9\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$
-        organizationRoleId:
-          type: string
-          format: uuid
+        monthlyTaskLimit:
+          type: integer
+          format: int64
   responses:
     Unauthorized:
       description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.

@@ -108,6 +108,13 @@ paths:
                 $ref: '#/components/schemas/RequestFailed'
 components:
   schemas:
+    RequestFailed:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
     ShareWithEmailsRequest:
       title: ShareWithEmailsRequest
       type: object
@@ -118,13 +125,6 @@ components:
           type: array
           items:
             type: string
-    RequestFailed:
-      type: object
-      properties:
-        message:
-          type: string
-        code:
-          type: string
     ShareWithEmailsResponse:
       title: ShareWithEmailsResponse
       type: object

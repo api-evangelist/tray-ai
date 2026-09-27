@@ -682,7 +682,7 @@ tags:
 - AI Agents
 - MCP
 - Orchestration
-- Workflow-Automation
+- Workflow Automation
 - Connectors
 - Agent Gateway
 - Embedded Integration
@@ -700,6 +700,7 @@ tags_raw:
 - Embedded Integration
 - Enterprise Automation
 - Model Context Protocol
+- Workflow-Automation
 type: Index
 deliveryModel:
   model: saas

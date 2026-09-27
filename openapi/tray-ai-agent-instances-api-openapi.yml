@@ -456,38 +456,37 @@ paths:
                 $ref: '#/components/schemas/InternalError'
 components:
   schemas:
-    ConcurrencyConflict:
-      title: ConcurrencyConflict
+    BasePageInfo_PublicOnPremAgentInstanceHttpResponse:
+      title: BasePageInfo_PublicOnPremAgentInstanceHttpResponse
+      type: object
+      properties:
+        startCursor:
+          type: string
+        endCursor:
+          type: string
+        hasNextPage:
+          type: boolean
+        hasPreviousPage:
+          type: boolean
+    PublicCreateOnPremAgentInstanceHttpResponse:
+      title: PublicCreateOnPremAgentInstanceHttpResponse
       type: object
       required:
-      - message
+      - id
+      - agentGroupId
+      - name
+      - registrationToken
       properties:
-        message:
+        id:
           type: string
-        code:
+        agentGroupId:
           type: string
-    Unauthorized:
-      title: Unauthorized
-      type: object
-      required:
-      - message
-      properties:
-        message:
+        name:
           type: string
-        code:
+        registrationToken:
           type: string
-    Forbidden:
-      title: Forbidden
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    ContentTooLarge:
-      title: ContentTooLarge
+    Timeout:
+      title: Timeout
       type: object
       required:
       - message
@@ -519,24 +518,6 @@ components:
           type: boolean
         enabled:
           type: boolean
-    InvalidInput:
-      title: InvalidInput
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    PublicCreateOnPremAgentInstanceHttpRequest:
-      title: PublicCreateOnPremAgentInstanceHttpRequest
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
     LimitExceeded:
       title: LimitExceeded
       type: object
@@ -547,8 +528,8 @@ components:
           type: string
         code:
           type: string
-    ResourceNotFound:
-      title: ResourceNotFound
+    InternalError:
+      title: InternalError
       type: object
       required:
       - message
@@ -557,36 +538,24 @@ components:
           type: string
         code:
           type: string
-    Timeout:
-      title: Timeout
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    BasePageInfo_PublicOnPremAgentInstanceHttpResponse:
-      title: BasePageInfo_PublicOnPremAgentInstanceHttpResponse
-      type: object
-      properties:
-        startCursor:
-          type: string
-        endCursor:
-          type: string
-        hasNextPage:
-          type: boolean
-        hasPreviousPage:
-          type: boolean
     PublicUpdateOnPremAgentInstanceHttpRequest:
       title: PublicUpdateOnPremAgentInstanceHttpRequest
       type: object
       properties:
         enabled:
           type: boolean
-    InternalError:
-      title: InternalError
+    InvalidInput:
+      title: InvalidInput
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    ResourceNotFound:
+      title: ResourceNotFound
       type: object
       required:
       - message
@@ -607,22 +576,53 @@ components:
             $ref: '#/components/schemas/PublicOnPremAgentInstanceHttpResponse'
         pageInfo:
           $ref: '#/components/schemas/BasePageInfo_PublicOnPremAgentInstanceHttpResponse'
-    PublicCreateOnPremAgentInstanceHttpResponse:
-      title: PublicCreateOnPremAgentInstanceHttpResponse
+    ConcurrencyConflict:
+      title: ConcurrencyConflict
       type: object
       required:
-      - id
-      - agentGroupId
-      - name
-      - registrationToken
+      - message
       properties:
-        id:
+        message:
           type: string
-        agentGroupId:
+        code:
           type: string
+    Unauthorized:
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    ContentTooLarge:
+      title: ContentTooLarge
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    PublicCreateOnPremAgentInstanceHttpRequest:
+      title: PublicCreateOnPremAgentInstanceHttpRequest
+      type: object
+      required:
+      - name
+      properties:
         name:
           type: string
-        registrationToken:
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
           type: string
   securitySchemes:
     bearerAuth:
