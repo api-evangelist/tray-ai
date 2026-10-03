@@ -456,18 +456,6 @@ paths:
                 $ref: '#/components/schemas/InternalError'
 components:
   schemas:
-    BasePageInfo_PublicOnPremAgentInstanceHttpResponse:
-      title: BasePageInfo_PublicOnPremAgentInstanceHttpResponse
-      type: object
-      properties:
-        startCursor:
-          type: string
-        endCursor:
-          type: string
-        hasNextPage:
-          type: boolean
-        hasPreviousPage:
-          type: boolean
     PublicCreateOnPremAgentInstanceHttpResponse:
       title: PublicCreateOnPremAgentInstanceHttpResponse
       type: object
@@ -485,8 +473,24 @@ components:
           type: string
         registrationToken:
           type: string
-    Timeout:
-      title: Timeout
+    LimitExceeded:
+      title: LimitExceeded
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    PublicUpdateOnPremAgentInstanceHttpRequest:
+      title: PublicUpdateOnPremAgentInstanceHttpRequest
+      type: object
+      properties:
+        enabled:
+          type: boolean
+    Forbidden:
+      title: Forbidden
       type: object
       required:
       - message
@@ -518,44 +522,8 @@ components:
           type: boolean
         enabled:
           type: boolean
-    LimitExceeded:
-      title: LimitExceeded
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    InternalError:
-      title: InternalError
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    PublicUpdateOnPremAgentInstanceHttpRequest:
-      title: PublicUpdateOnPremAgentInstanceHttpRequest
-      type: object
-      properties:
-        enabled:
-          type: boolean
-    InvalidInput:
-      title: InvalidInput
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    ResourceNotFound:
-      title: ResourceNotFound
+    ConcurrencyConflict:
+      title: ConcurrencyConflict
       type: object
       required:
       - message
@@ -576,8 +544,50 @@ components:
             $ref: '#/components/schemas/PublicOnPremAgentInstanceHttpResponse'
         pageInfo:
           $ref: '#/components/schemas/BasePageInfo_PublicOnPremAgentInstanceHttpResponse'
-    ConcurrencyConflict:
-      title: ConcurrencyConflict
+    ContentTooLarge:
+      title: ContentTooLarge
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Timeout:
+      title: Timeout
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    BasePageInfo_PublicOnPremAgentInstanceHttpResponse:
+      title: BasePageInfo_PublicOnPremAgentInstanceHttpResponse
+      type: object
+      properties:
+        startCursor:
+          type: string
+        endCursor:
+          type: string
+        hasNextPage:
+          type: boolean
+        hasPreviousPage:
+          type: boolean
+    ResourceNotFound:
+      title: ResourceNotFound
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    InvalidInput:
+      title: InvalidInput
       type: object
       required:
       - message
@@ -596,8 +606,8 @@ components:
           type: string
         code:
           type: string
-    ContentTooLarge:
-      title: ContentTooLarge
+    InternalError:
+      title: InternalError
       type: object
       required:
       - message
@@ -613,16 +623,6 @@ components:
       - name
       properties:
         name:
-          type: string
-    Forbidden:
-      title: Forbidden
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
           type: string
   securitySchemes:
     bearerAuth:

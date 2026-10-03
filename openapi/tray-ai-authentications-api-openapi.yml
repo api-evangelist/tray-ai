@@ -1092,21 +1092,6 @@ paths:
       description: APAC
 components:
   schemas:
-    PageInfo:
-      type: object
-      properties:
-        hasNextPage:
-          type: boolean
-          description: Whether there are more results after the current page
-        endCursor:
-          type: string
-          description: Cursor for fetching the next page
-        hasPreviousPage:
-          type: boolean
-          description: Whether there are results before the current page
-        startCursor:
-          type: string
-          description: Cursor for fetching the previous page
     Authentication:
       type: object
       properties:
@@ -1133,6 +1118,35 @@ components:
               type: string
             title:
               type: string
+    PageInfo:
+      type: object
+      properties:
+        hasNextPage:
+          type: boolean
+          description: Whether there are more results after the current page
+        endCursor:
+          type: string
+          description: Cursor for fetching the next page
+        hasPreviousPage:
+          type: boolean
+          description: Whether there are results before the current page
+        startCursor:
+          type: string
+          description: Cursor for fetching the previous page
+    GraphQLRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+          description: The GraphQL query or mutation string
+        variables:
+          type: object
+          description: Variables to pass to the GraphQL query or mutation
+        operationName:
+          type: string
+          description: The name of the operation to execute if the query contains multiple operations
     GraphQLError:
       type: object
       properties:
@@ -1157,38 +1171,18 @@ components:
                 type: array
                 items:
                   type: string
-    GraphQLRequest:
+    Error:
       type: object
-      required:
-      - query
       properties:
-        query:
+        error:
           type: string
-          description: The GraphQL query or mutation string
-        variables:
-          type: object
-          description: Variables to pass to the GraphQL query or mutation
-        operationName:
+          description: Error type
+        message:
           type: string
-          description: The name of the operation to execute if the query contains multiple operations
-    CreateAuthenticationRequest:
-      type: object
-      required:
-      - name
-      - serviceEnvironmentId
-      properties:
-        name:
-          type: string
-          description: Display name for the authentication
-        serviceEnvironmentId:
-          type: string
-          description: The ID of the service environment to authenticate against
-        userData:
-          type: object
-          description: User-specific data for the authentication
-        credentials:
-          type: object
-          description: Credentials for the authentication (e.g., API key, OAuth tokens)
+          description: Human-readable error message
+        statusCode:
+          type: integer
+          description: HTTP status code
     PlatformAuthentication:
       type: object
       properties:
@@ -1210,31 +1204,95 @@ components:
           type: string
           format: date-time
           description: Timestamp when the authentication was created
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type
-        message:
-          type: string
-          description: Human-readable error message
-        statusCode:
-          type: integer
-          description: HTTP status code
-    UpdatePublicUserAuthenticationHttp:
-      title: UpdatePublicUserAuthenticationHttp
+    CreateAuthenticationRequest:
       type: object
       required:
       - name
-      - credentials
+      - serviceEnvironmentId
       properties:
         name:
           type: string
-          description: Name of the auth in Tray (e.g. `John Doe's Slack Auth 10th Oct`)
+          description: Display name for the authentication
+        serviceEnvironmentId:
+          type: string
+          description: The ID of the service environment to authenticate against
         userData:
           type: object
-          description: Data regarding base url, company id, table id etc.<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
+          description: User-specific data for the authentication
+        credentials:
+          type: object
+          description: Credentials for the authentication (e.g., API key, OAuth tokens)
+    CreatePublicUserAuthenticationResult:
+      title: CreatePublicUserAuthenticationResult
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Authentication Id in Tray for the newly created auth
+    LimitExceeded:
+      title: LimitExceeded
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    PublicServiceEnvironmentList:
+      type: object
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicServiceEnvironment'
+      description: ''
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    AuthenticationType:
+      title: AuthenticationType
+      type: string
+      enum:
+      - token
+      - oauth1
+      - oauth2
+      - oauth2password
+      - oauth2client_credentials
+      - builtin
+    GetFullUserAuthenticationResult:
+      title: GetFullUserAuthenticationResult
+      type: object
+      required:
+      - id
+      - name
+      - serviceEnvironmentId
+      - userData
+      - credentials
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique id of the authentication - required by the [Call connector](/developer/platform-apis/connectors#endpoint-call-connector) endpoint
+        name:
+          type: string
+          description: Name for the auth which identifies End User, service, test, dev etc.
+        serviceEnvironmentId:
+          type: string
+          description: Identifies the service and environment the auth is for (e.g. Tray Slack OAuth app or your own Custom Slack OAuth app)
+        userData:
+          description: For OAuth-based authentications, this field contains data that is provided by the user, rather than by the OAuth flow. This may include subdomains or regions, for example.
+          type: object
           additionalProperties:
             oneOf:
             - type: array
@@ -1247,8 +1305,8 @@ components:
                 type: object
             - type: string
         credentials:
+          description: The authentication credentials.
           type: object
-          description: Auth data (token, secret etc.) required to complete the auth<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
           additionalProperties:
             oneOf:
             - type: array
@@ -1265,11 +1323,60 @@ components:
           items:
             type: string
           uniqueItems: true
-          description: 'Example: `"scopes": ["chat:write", "channels:read"]` or `"scopes": ["chatter_api,", "openid"]`</br>List of the scopes required for the auth to function<br />Available scopes can be retrieved with [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments)'
+          description: The permission scopes which describe the level of access this auth has to the service
+        onPremAgentGroupId:
+          description: The on-prem agent group this authentication is associated with, if any.
+          type: string
+          format: uuid
+          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+    Unauthorized:
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    UpdatePublicUserAuthenticationResult:
+      title: UpdatePublicUserAuthenticationResult
+      type: object
+      required:
+      - id
+      - name
+      - serviceEnvironmentId
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Authentication Id in Tray for the updated auth
+        name:
+          type: string
+          description: Authentication Id in Tray for the updated auth
+        serviceEnvironmentId:
+          type: string
+          description: Authentication Id in Tray for the updated auth
+        scopes:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          description: Applicable for OAuth services only. An array of scopes attached to this auth are returned.
         onPremAgentGroupId:
           type: string
           format: uuid
           example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+    ResourceNotFound:
+      title: ResourceNotFound
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
     PublicServiceEnvironment:
       required:
       - id
@@ -1332,25 +1439,23 @@ components:
             - type: string
           description: All available scopes to control the level of access given to any authentications
       description: ''
-    CreatePublicUserAuthenticationResult:
-      title: CreatePublicUserAuthenticationResult
+    InvalidInput:
+      title: InvalidInput
       type: object
       required:
-      - id
+      - message
       properties:
-        id:
+        message:
           type: string
-          format: uuid
-          description: Authentication Id in Tray for the newly created auth
-    GetFullUserAuthenticationResult:
-      title: GetFullUserAuthenticationResult
+        code:
+          type: string
+    GetUserAuthenticationResult:
+      title: GetUserAuthenticationResult
       type: object
       required:
       - id
       - name
       - serviceEnvironmentId
-      - userData
-      - credentials
       properties:
         id:
           type: string
@@ -1362,9 +1467,30 @@ components:
         serviceEnvironmentId:
           type: string
           description: Identifies the service and environment the auth is for (e.g. Tray Slack OAuth app or your own Custom Slack OAuth app)
+        scopes:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          description: The permission scopes which describe the level of access this auth has to the service
+        onPremAgentGroupId:
+          description: The on-prem agent group this authentication is associated with, if any.
+          type: string
+          format: uuid
+          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+    UpdatePublicUserAuthenticationHttp:
+      title: UpdatePublicUserAuthenticationHttp
+      type: object
+      required:
+      - name
+      - credentials
+      properties:
+        name:
+          type: string
+          description: Name of the auth in Tray (e.g. `John Doe's Slack Auth 10th Oct`)
         userData:
-          description: For OAuth-based authentications, this field contains data that is provided by the user, rather than by the OAuth flow. This may include subdomains or regions, for example.
           type: object
+          description: Data regarding base url, company id, table id etc.<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
           additionalProperties:
             oneOf:
             - type: array
@@ -1377,8 +1503,8 @@ components:
                 type: object
             - type: string
         credentials:
-          description: The authentication credentials.
           type: object
+          description: Auth data (token, secret etc.) required to complete the auth<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
           additionalProperties:
             oneOf:
             - type: array
@@ -1395,34 +1521,13 @@ components:
           items:
             type: string
           uniqueItems: true
-          description: The permission scopes which describe the level of access this auth has to the service
+          description: 'Example: `"scopes": ["chat:write", "channels:read"]` or `"scopes": ["chatter_api,", "openid"]`</br>List of the scopes required for the auth to function<br />Available scopes can be retrieved with [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments)'
         onPremAgentGroupId:
-          description: The on-prem agent group this authentication is associated with, if any.
           type: string
           format: uuid
           example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
-    AuthenticationType:
-      title: AuthenticationType
-      type: string
-      enum:
-      - token
-      - oauth1
-      - oauth2
-      - oauth2password
-      - oauth2client_credentials
-      - builtin
     InternalError:
       title: InternalError
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    ResourceNotFound:
-      title: ResourceNotFound
       type: object
       required:
       - message
@@ -1482,111 +1587,6 @@ components:
           type: string
           format: uuid
           example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
-    PublicServiceEnvironmentList:
-      type: object
-      properties:
-        elements:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicServiceEnvironment'
-      description: ''
-    InvalidInput:
-      title: InvalidInput
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    LimitExceeded:
-      title: LimitExceeded
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    Unauthorized:
-      title: Unauthorized
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    GetUserAuthenticationResult:
-      title: GetUserAuthenticationResult
-      type: object
-      required:
-      - id
-      - name
-      - serviceEnvironmentId
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique id of the authentication - required by the [Call connector](/developer/platform-apis/connectors#endpoint-call-connector) endpoint
-        name:
-          type: string
-          description: Name for the auth which identifies End User, service, test, dev etc.
-        serviceEnvironmentId:
-          type: string
-          description: Identifies the service and environment the auth is for (e.g. Tray Slack OAuth app or your own Custom Slack OAuth app)
-        scopes:
-          type: array
-          items:
-            type: string
-          uniqueItems: true
-          description: The permission scopes which describe the level of access this auth has to the service
-        onPremAgentGroupId:
-          description: The on-prem agent group this authentication is associated with, if any.
-          type: string
-          format: uuid
-          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
-    UpdatePublicUserAuthenticationResult:
-      title: UpdatePublicUserAuthenticationResult
-      type: object
-      required:
-      - id
-      - name
-      - serviceEnvironmentId
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Authentication Id in Tray for the updated auth
-        name:
-          type: string
-          description: Authentication Id in Tray for the updated auth
-        serviceEnvironmentId:
-          type: string
-          description: Authentication Id in Tray for the updated auth
-        scopes:
-          type: array
-          items:
-            type: string
-          uniqueItems: true
-          description: Applicable for OAuth services only. An array of scopes attached to this auth are returned.
-        onPremAgentGroupId:
-          type: string
-          format: uuid
-          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
-    Forbidden:
-      title: Forbidden
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
   responses:
     Unauthorized:
       description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.

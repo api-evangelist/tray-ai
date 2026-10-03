@@ -261,13 +261,6 @@ paths:
     - url: https://api.ap1.tray.io
       description: APAC
 components:
-  responses:
-    Unauthorized:
-      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
@@ -281,13 +274,6 @@ components:
         statusCode:
           type: integer
           description: HTTP status code
-    RequestFailed:
-      type: object
-      properties:
-        message:
-          type: string
-        code:
-          type: string
     GetConnectorDeploymentResponse:
       type: object
       properties:
@@ -307,6 +293,13 @@ components:
         connectorVersion:
           type: string
           description: The version of the connector being deployed.
+    RequestFailed:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
     DeployConnectorFromSourceResponse:
       type: object
       properties:
@@ -329,6 +322,13 @@ components:
         connectorVersion:
           type: string
           description: The version of the connector being deployed.
+  responses:
+    Unauthorized:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

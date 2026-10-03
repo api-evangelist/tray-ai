@@ -1380,6 +1380,20 @@ components:
         startCursor:
           type: string
           description: Cursor for fetching the previous page
+    GraphQLRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+          description: The GraphQL query or mutation string
+        variables:
+          type: object
+          description: Variables to pass to the GraphQL query or mutation
+        operationName:
+          type: string
+          description: The name of the operation to execute if the query contains multiple operations
     GraphQLError:
       type: object
       properties:
@@ -1404,20 +1418,18 @@ components:
                 type: array
                 items:
                   type: string
-    GraphQLRequest:
+    Error:
       type: object
-      required:
-      - query
       properties:
-        query:
+        error:
           type: string
-          description: The GraphQL query or mutation string
-        variables:
-          type: object
-          description: Variables to pass to the GraphQL query or mutation
-        operationName:
+          description: Error type
+        message:
           type: string
-          description: The name of the operation to execute if the query contains multiple operations
+          description: Human-readable error message
+        statusCode:
+          type: integer
+          description: HTTP status code
     InviteUserRequest:
       type: object
       required:
@@ -1433,18 +1445,6 @@ components:
         workspaceId:
           type: string
           description: Optional workspace to assign the user to
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error type
-        message:
-          type: string
-          description: Human-readable error message
-        statusCode:
-          type: integer
-          description: HTTP status code
     PlatformUser:
       type: object
       properties:
@@ -1464,6 +1464,56 @@ components:
         status:
           type: string
           description: Account status (active, invited, etc.)
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    WorkspaceExternalApiModel:
+      title: WorkspaceExternalApiModel
+      type: object
+      required:
+      - id
+      - name
+      - type
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/WorkspaceType'
+        description:
+          type: string
+        monthlyTaskLimit:
+          type: integer
+          format: int64
+    InvalidInput:
+      title: InvalidInput
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    System:
+      title: System
+      type: object
+    WorkspaceType:
+      title: WorkspaceType
+      oneOf:
+      - $ref: '#/components/schemas/Embedded'
+      - $ref: '#/components/schemas/Organization'
+      - $ref: '#/components/schemas/Personal'
+      - $ref: '#/components/schemas/PersonalExternal'
+      - $ref: '#/components/schemas/Shared'
     RoleExternalApiModel:
       title: RoleExternalApiModel
       type: object
@@ -1476,6 +1526,33 @@ components:
           format: uuid
         name:
           type: string
+    Regular:
+      title: Regular
+      type: object
+    PersonalExternal:
+      title: PersonalExternal
+      type: object
+    Personal:
+      title: Personal
+      type: object
+    UpdateUserOrganizationRoleExternalEndpointBody:
+      title: UpdateUserOrganizationRoleExternalEndpointBody
+      type: object
+      required:
+      - roleId
+      properties:
+        roleId:
+          type: string
+          format: uuid
+    AccountType:
+      title: AccountType
+      oneOf:
+      - $ref: '#/components/schemas/API'
+      - $ref: '#/components/schemas/External'
+      - $ref: '#/components/schemas/Integration'
+      - $ref: '#/components/schemas/Partner'
+      - $ref: '#/components/schemas/Regular'
+      - $ref: '#/components/schemas/System'
     CreateUserEndpointBody:
       title: CreateUserEndpointBody
       type: object
@@ -1492,9 +1569,41 @@ components:
         organizationRoleId:
           type: string
           format: uuid
-    Organization:
-      title: Organization
+    TooManyRequestsError:
+      title: TooManyRequestsError
       type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    ExternalApiDataPage_ENT:
+      title: ExternalApiDataPage_ENT
+      type: object
+      required:
+      - pageInfo
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceExternalApiModel'
+        pageInfo:
+          $ref: '#/components/schemas/ExternalApiPageInfoModel'
+    ExternalApiPageInfoModel:
+      title: ExternalApiPageInfoModel
+      type: object
+      required:
+      - hasNextPage
+      - hasPreviousPage
+      properties:
+        startCursor:
+          type: string
+        endCursor:
+          type: string
+        hasNextPage:
+          type: boolean
+        hasPreviousPage:
+          type: boolean
     ResourceNotFound:
       title: ResourceNotFound
       type: object
@@ -1505,8 +1614,21 @@ components:
           type: string
         code:
           type: string
-    InternalError:
-      title: InternalError
+    InviteCreatedExternalApiModel:
+      title: InviteCreatedExternalApiModel
+      type: object
+      required:
+      - inviteId
+      - expires
+      properties:
+        inviteId:
+          type: string
+          format: uuid
+        expires:
+          type: string
+          format: date-time
+    Unauthorized:
+      title: Unauthorized
       type: object
       required:
       - message
@@ -1515,54 +1637,6 @@ components:
           type: string
         code:
           type: string
-    InvalidInput:
-      title: InvalidInput
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    Embedded:
-      title: Embedded
-      type: object
-    Partner:
-      title: Partner
-      type: object
-    TooManyRequestsError:
-      title: TooManyRequestsError
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-    External:
-      title: External
-      type: object
-    WorkspaceType:
-      title: WorkspaceType
-      oneOf:
-      - $ref: '#/components/schemas/Embedded'
-      - $ref: '#/components/schemas/Organization'
-      - $ref: '#/components/schemas/Personal'
-      - $ref: '#/components/schemas/PersonalExternal'
-      - $ref: '#/components/schemas/Shared'
-    Forbidden:
-      title: Forbidden
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    PersonalExternal:
-      title: PersonalExternal
-      type: object
     InviteUserExternalEndpointBody:
       title: InviteUserExternalEndpointBody
       type: object
@@ -1579,49 +1653,17 @@ components:
     Integration:
       title: Integration
       type: object
-    System:
-      title: System
+    External:
+      title: External
       type: object
-    UpdateUserOrganizationRoleExternalEndpointBody:
-      title: UpdateUserOrganizationRoleExternalEndpointBody
+    Partner:
+      title: Partner
       type: object
-      required:
-      - roleId
-      properties:
-        roleId:
-          type: string
-          format: uuid
     API:
       title: API
       type: object
-    Unauthorized:
-      title: Unauthorized
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
     Shared:
       title: Shared
-      type: object
-    InviteCreatedExternalApiModel:
-      title: InviteCreatedExternalApiModel
-      type: object
-      required:
-      - inviteId
-      - expires
-      properties:
-        inviteId:
-          type: string
-          format: uuid
-        expires:
-          type: string
-          format: date-time
-    Personal:
-      title: Personal
       type: object
     UserExternalApiModel:
       title: UserExternalApiModel
@@ -1643,64 +1685,22 @@ components:
           $ref: '#/components/schemas/AccountType'
         role:
           $ref: '#/components/schemas/RoleExternalApiModel'
-    ExternalApiPageInfoModel:
-      title: ExternalApiPageInfoModel
+    Organization:
+      title: Organization
+      type: object
+    Embedded:
+      title: Embedded
+      type: object
+    InternalError:
+      title: InternalError
       type: object
       required:
-      - hasNextPage
-      - hasPreviousPage
+      - message
       properties:
-        startCursor:
+        message:
           type: string
-        endCursor:
+        code:
           type: string
-        hasNextPage:
-          type: boolean
-        hasPreviousPage:
-          type: boolean
-    AccountType:
-      title: AccountType
-      oneOf:
-      - $ref: '#/components/schemas/API'
-      - $ref: '#/components/schemas/External'
-      - $ref: '#/components/schemas/Integration'
-      - $ref: '#/components/schemas/Partner'
-      - $ref: '#/components/schemas/Regular'
-      - $ref: '#/components/schemas/System'
-    ExternalApiDataPage_ENT:
-      title: ExternalApiDataPage_ENT
-      type: object
-      required:
-      - pageInfo
-      properties:
-        elements:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkspaceExternalApiModel'
-        pageInfo:
-          $ref: '#/components/schemas/ExternalApiPageInfoModel'
-    Regular:
-      title: Regular
-      type: object
-    WorkspaceExternalApiModel:
-      title: WorkspaceExternalApiModel
-      type: object
-      required:
-      - id
-      - name
-      - type
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          $ref: '#/components/schemas/WorkspaceType'
-        description:
-          type: string
-        monthlyTaskLimit:
-          type: integer
-          format: int64
   responses:
     Unauthorized:
       description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.

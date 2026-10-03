@@ -269,36 +269,6 @@ paths:
                 $ref: '#/components/schemas/InternalError'
 components:
   schemas:
-    NewPublicCreateOnPremAgentGroupHttpRequest:
-      title: NewPublicCreateOnPremAgentGroupHttpRequest
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-    BasePageInfo_PublicOnPremAgentGroupHttpResponse:
-      title: BasePageInfo_PublicOnPremAgentGroupHttpResponse
-      type: object
-      properties:
-        startCursor:
-          type: string
-        endCursor:
-          type: string
-        hasNextPage:
-          type: boolean
-        hasPreviousPage:
-          type: boolean
-    Timeout:
-      title: Timeout
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
     LimitExceeded:
       title: LimitExceeded
       type: object
@@ -309,35 +279,13 @@ components:
           type: string
         code:
           type: string
-    InvalidInput:
-      title: InvalidInput
+    NewPublicCreateOnPremAgentGroupHttpRequest:
+      title: NewPublicCreateOnPremAgentGroupHttpRequest
       type: object
       required:
-      - message
+      - name
       properties:
-        message:
-          type: string
-        code:
-          type: string
-    InternalError:
-      title: InternalError
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    ResourceNotFound:
-      title: ResourceNotFound
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
+        name:
           type: string
     BasePage_PublicOnPremAgentGroupHttpResponse:
       title: BasePage_PublicOnPremAgentGroupHttpResponse
@@ -351,6 +299,16 @@ components:
             $ref: '#/components/schemas/PublicOnPremAgentGroupHttpResponse'
         pageInfo:
           $ref: '#/components/schemas/BasePageInfo_PublicOnPremAgentGroupHttpResponse'
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
     ConcurrencyConflict:
       title: ConcurrencyConflict
       type: object
@@ -361,8 +319,8 @@ components:
           type: string
         code:
           type: string
-    Unauthorized:
-      title: Unauthorized
+    ContentTooLarge:
+      title: ContentTooLarge
       type: object
       required:
       - message
@@ -371,8 +329,8 @@ components:
           type: string
         code:
           type: string
-    ContentTooLarge:
-      title: ContentTooLarge
+    Timeout:
+      title: Timeout
       type: object
       required:
       - message
@@ -395,8 +353,50 @@ components:
           type: string
         workspaceId:
           type: string
-    Forbidden:
-      title: Forbidden
+    ResourceNotFound:
+      title: ResourceNotFound
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    BasePageInfo_PublicOnPremAgentGroupHttpResponse:
+      title: BasePageInfo_PublicOnPremAgentGroupHttpResponse
+      type: object
+      properties:
+        startCursor:
+          type: string
+        endCursor:
+          type: string
+        hasNextPage:
+          type: boolean
+        hasPreviousPage:
+          type: boolean
+    InvalidInput:
+      title: InvalidInput
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Unauthorized:
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    InternalError:
+      title: InternalError
       type: object
       required:
       - message
