@@ -6,44 +6,116 @@
 - Agent Builder (https://tray.ai/platform/merlin-agent-builder) — No-code AI agent development with knowledge, tools, guardrails, and a composable agent hub.
 - Agent Gateway for MCP (https://tray.ai/platform/agent-gateway) — Governed MCP (Model Context Protocol) for the enterprise: managed MCP Servers, 700+ connectors as tools, RBAC, observability.
 - Intelligent Integration (https://tray.ai/platform/intelligent-ipaas) — Process automation, data integration, API management, and a library of 700+ connectors.
-- iPaaS Governance (https://tray.ai/platform/governance-trust) — Observability, audit trails, SOC 2 / HIPAA / GDPR compliance, 99.99%+ uptime.
+- iPaaS Governance (https://tray.ai/platform/governance-trust) — Observability, audit trails, SOC 1 & SOC 2 / HIPAA / GDPR compliance, 99.99%+ uptime.
 - iPaaS Development (https://tray.ai/platform/ai-development) — Headless + low-code authoring with prompt management, model routing, and versioned, composable building blocks.
 
 ## Platform
 
-- [Platform overview](https://tray.ai/platform): Five pillars unified under one orchestration platform.
-- [Merlin Agent Builder](https://tray.ai/platform/merlin-agent-builder): No-code AI agent builder with knowledge, tools, and guardrails.
-- [Agent Gateway](https://tray.ai/platform/agent-gateway): Governed MCP for the enterprise — managed servers, audit, observability.
-- [Intelligent Integration](https://tray.ai/platform/intelligent-ipaas): Process automation, data integration, and API management across 700+ connectors.
-- [Governance & Trust](https://tray.ai/platform/governance-trust): RBAC, audit trails, SOC 2 / HIPAA / GDPR compliance.
-- [iPaaS Development](https://tray.ai/platform/ai-development): Code or canvas — Tray Build for low-code, Tray Headless for code-first.
+- [Platform overview](https://tray.ai/platform/): Five pillars unified under one orchestration platform.
+- [Merlin Agent Builder](https://tray.ai/platform/merlin-agent-builder/): No-code AI agent builder with knowledge, tools, and guardrails.
+- [Agent Gateway](https://tray.ai/platform/agent-gateway/): Governed MCP for the enterprise — managed servers, audit, observability.
+- [Intelligent Integration](https://tray.ai/platform/intelligent-ipaas/): Process automation, data integration, and API management across 700+ connectors.
+- [Governance & Trust](https://tray.ai/platform/governance-trust/): RBAC, audit trails, SOC 1 & SOC 2 / HIPAA / GDPR compliance.
+- [iPaaS Development](https://tray.ai/platform/ai-development/): Code or canvas — Tray Build for low-code, Tray Headless for code-first.
 
 ## Solutions
 
-- [Solutions library](https://tray.ai/solutions/library): Real Tray.ai workflows browsable by industry, use case, and role.
-- [By industry](https://tray.ai/solutions/by-industry): Tech, fintech, healthcare, manufacturing, retail, and more.
-- [By use case](https://tray.ai/solutions/by-use-case): AI agents, MCP governance, lead routing, ITSM, employee lifecycle.
-- [By role](https://tray.ai/solutions/by-role): CIO/CTO, VP IT, marketing ops, data engineering, and more.
+- [Solutions](https://tray.ai/solutions/): Browse by industry, use case, and role.
+- [Solutions library](https://tray.ai/solutions/library/): Real Tray.ai workflows browsable by industry, use case, and role.
+
+## How to build integrations and automations
+
+Step by step guides, each covering one integration or one automation: the model behind it, copy-paste prompts for Claude Code or Codex with the Tray Headless plugin, the systems it connects to, and what it takes to run in production.
+
+- [All guides](https://tray.ai/automate/): 68 guides across 10 functions.
+- [How to build lead import and validation](https://tray.ai/automate/lead-import-and-validation/): Validate before you write, quarantine the bad rows instead of dropping them, dedupe against what is already there, and keep the source. The prompts that build it.
+- [How to build lead routing that assigns in seconds](https://tray.ai/automate/lead-routing/): Match the lead to an account first, evaluate rules in a fixed order, catch what they miss, and time it from arrival. The Headless prompts that build it.
+- [How to build lead-to-account matching](https://tray.ai/automate/lead-to-account-matching/): Domain first, then fuzzy name, then hierarchy, with a confidence score and a review queue for the ones that are close. The Headless prompts that build it.
+- [How to build lead enrichment that does not stall the queue](https://tray.ai/automate/lead-enrichment/): Enrich on a budget and a timeout, cache by domain, fall back between providers, and never hold a lead waiting for a field. The Headless prompts that build it.
+- [How to build lead deduplication and merge](https://tray.ai/automate/lead-dedupe-and-merge/): Detect on a scored rule set, survive the merge with field-level rules, keep the activity history, and never silently reassign an owner. The prompts that build it.
+- [How to build pipeline hygiene automation](https://tray.ai/automate/pipeline-hygiene-automation/): Detect the staleness that matters, nudge the owner rather than the report, escalate on the deals that count, and measure whether it worked. The prompts that build it.
+- [How to build a CRM to marketing automation sync](https://tray.ai/automate/crm-to-marketing-automation-sync/): Decide field ownership before you build, sync deltas not everything, handle the person-versus-lead model gap, and break loops. The prompts that build it.
+- [How to build a sales engagement to CRM sync](https://tray.ai/automate/sales-engagement-sync/): Log activity without flooding the timeline, suppress sequences on the accounts you must not touch, and keep one definition of engagement. The prompts that build it.
+- [How to build a conversation intelligence to CRM sync](https://tray.ai/automate/conversation-intelligence-to-crm/): Write the few fields a rep will act on, keep every claim linked to its moment in the call, and never let a model set a close date. The prompts that build it.
+- [How to build a quote-to-order integration](https://tray.ai/automate/quote-to-order/): Approved quote to signed contract to booked order, with the approval state carried through and amendments handled. The Headless prompts that build it.
+- [How to build an order-to-cash integration](https://tray.ai/automate/order-to-cash/): Closed-won to sales order to invoice to cash applied, as a CRM to ERP integration. Idempotent writes, a reconciliation loop, and the Headless prompts that build it.
+- [How to build a CPQ to ERP sync](https://tray.ai/automate/cpq-to-erp-sync/): Map the product catalogue as data, carry ramps and proration intact, keep both catalogues aligned, and fail loudly on an unmapped SKU. The prompts that build it.
+- [How to build a billing to CRM sync](https://tray.ai/automate/billing-to-crm-sync/): Put invoice and payment state where the account team works, without letting the CRM become a second billing system. The Headless prompts that build it.
+- [How to build subscription and entitlement provisioning](https://tray.ai/automate/subscription-and-entitlement-provisioning/): Turn a signed contract into working access on the day it starts, handle mid-term changes, and never let entitlement drift from what was sold. The prompts.
+- [How to build partner deal registration](https://tray.ai/automate/partner-deal-registration/): Check submissions against pipeline in seconds, protect for a fixed window, expire visibly, and settle conflicts with a rule rather than an argument. The prompts.
+- [How to build a territory and quota sync](https://tray.ai/automate/territory-and-quota-sync/): Apply a plan on its effective date, keep in-flight deals with their owner, and make coverage visible before anybody signs off. The prompts that build it.
+- [How to build a commission data to payroll sync](https://tray.ai/automate/commission-data-to-payroll/): Qualify transactions against the plan, show the working line by line, hold disputes without holding the run, and reconcile before it pays. The prompts.
+- [How to build a closed-won to onboarding handoff](https://tray.ai/automate/closed-won-to-onboarding-handoff/): Carry what was promised, not only what was sold. Generate the plan from the deal, and start the clock at close. The Headless prompts that build it.
+- [How to build employee onboarding provisioning](https://tray.ai/automate/employee-onboarding-provisioning/): Drive it from the HRIS, derive access from the role instead of a copied colleague, sequence around the start date, and prove it happened. The prompts that build it.
+- [How to build employee offboarding deprovisioning](https://tray.ai/automate/employee-offboarding-deprovisioning/): Revoke on the leave date, cover every system instead of the ones you remember, transfer what they owned, and prove it. The Headless prompts that build it.
+- [How to build a CRM to warehouse sync](https://tray.ai/automate/crm-to-warehouse-sync/): Capture history instead of current state, handle deletes and field changes, land raw then model, and prove the row counts. The Headless prompts that build it.
+- [How to build a procure-to-pay integration](https://tray.ai/automate/procure-to-pay/): Requisition to PO to receipt to payment, with the approval matrix as data, three-way matching, and the budget checked before the commitment. The prompts.
+- [How to build AP invoice processing](https://tray.ai/automate/ap-invoice-processing/): Take invoices from wherever they arrive, extract and verify instead of trust, match against the order, and never pay the same one twice. The prompts that build it.
+- [How to build collections and dunning](https://tray.ai/automate/collections-and-dunning/): Escalate on the customer rather than the invoice, stop the moment they pay or dispute, and never dun an account somebody is negotiating with. The prompts.
+- [How to build an expense and card feed sync](https://tray.ai/automate/expense-and-card-feed-sync/): Match card transactions to receipts, code from the merchant instead of the claimant, and chase the missing ones before month end. The prompts that build it.
+- [How to build a vendor master sync](https://tray.ai/automate/vendor-master-sync/): Onboard a supplier once, verify bank details out of band, keep one record per legal entity, and make a change to payment details an event. The prompts.
+- [How to build financial close automation](https://tray.ai/automate/financial-close-automation/): Model the dependencies instead of the checklist, pull the data before anybody asks, and show the critical path instead of a percentage. The prompts.
+- [How to build bank reconciliation automation](https://tray.ai/automate/bank-reconciliation/): Match on rules that learn, keep the unmatched visible and ageing, and never write a plug. The Headless prompts that build it.
+- [How to build a revenue recognition feed](https://tray.ai/automate/revenue-recognition-feed/): Carry performance obligations instead of invoice totals, keep the allocation reconstructable, and reconcile bookings to revenue every period. The prompts.
+- [How to build support ticket routing](https://tray.ai/automate/support-ticket-routing/): Route on the skill needed and the account, not on who is free. Derive priority from contract and impact, and time the clock from the customer. The prompts.
+- [How to build a product usage to CRM sync](https://tray.ai/automate/product-usage-to-crm/): Send the three signals that change a conversation, aggregated and labelled, without turning the CRM into an analytics tool. The Headless prompts that build it.
+- [How to build customer health signals](https://tray.ai/automate/customer-health-signals/): Weight the signals that predict churn, keep the categories visible instead of one number, and back-test before anybody trusts it. The prompts that build it.
+- [How to build an NPS and survey to CRM sync](https://tray.ai/automate/nps-and-survey-to-crm/): Attach responses to the account and the person, route detractors before they escalate, and stop surveying people you just surveyed. The prompts that build it.
+- [How to build access request and approval](https://tray.ai/automate/access-request-and-approval/): Route to the system owner, grant with an expiry by default, provision automatically, and produce the access review as a by-product. The prompts that build it.
+- [How to build incident to resolution](https://tray.ai/automate/incident-to-resolution/): Declare fast, assemble the channel and the timeline automatically, keep customers informed on a cadence, and make the postmortem unavoidable. The prompts.
+- [How to build security alert triage](https://tray.ai/automate/security-alert-triage/): Enrich before a human sees it, suppress the known-benign, escalate on asset value, and measure what you closed rather than what fired. The prompts.
+- [How to build IT service desk fulfilment](https://tray.ai/automate/it-service-desk-fulfilment/): Catalogue the requests worth automating, fulfil the safe ones end to end, and route the rest with everything already gathered. The prompts that build it.
+- [How to build SaaS licence reclamation](https://tray.ai/automate/saas-licence-reclamation/): Find the seats nobody uses, ask before you take, reclaim on a schedule, and put the saving where finance sees it. The Headless prompts that build it.
+- [How to build vulnerability to ticket routing](https://tray.ai/automate/vulnerability-to-ticket/): Rank on exploitability and exposure rather than CVSS, group by fix instead of by finding, and route to whoever ships the patch. The prompts that build it.
+- [How to build a device lifecycle sync](https://tray.ai/automate/device-lifecycle-sync/): Reconcile what management sees against what finance owns and what HR says, and make an unassigned device an exception instead of a row. The prompts.
+- [How to build reverse ETL from the warehouse](https://tray.ai/automate/reverse-etl/): Push modelled data back into the tools people work in, syncing deltas, respecting field ownership, and never overwriting a human. The prompts that build it.
+- [How to build a customer 360 and master data sync](https://tray.ai/automate/master-data-and-customer-360/): Pick a survivorship order per attribute, resolve identity on more than email, and publish a golden record every system can point at. The prompts.
+- [How to build data quality monitoring](https://tray.ai/automate/data-quality-monitoring/): Test what breaks decisions, alert the owner rather than a channel, and say what depends on a failure. The Headless prompts that build it.
+- [How to build schema change management](https://tray.ai/automate/schema-change-management/): Detect a source change before it breaks a model, resolve what depends on it, and tell the owner in time to act. The Headless prompts that build it.
+- [How to build a campaign attribution pipeline](https://tray.ai/automate/campaign-attribution-pipeline/): Stitch touches to accounts, publish more than one model, and reconcile spend against pipeline so the number survives a finance review. The prompts.
+- [How to build an ad audience sync](https://tray.ai/automate/ad-audience-sync/): Build audiences from CRM state, suppress customers and open deals, hash before it leaves, and refresh often enough to matter. The prompts that build it.
+- [How to build a webinar and event registration sync](https://tray.ai/automate/webinar-and-event-registration-sync/): Get registrations in before the event, split attended from registered, route the follow-up the same day, and attribute honestly. The prompts that build it.
+- [How to build an HRIS to payroll sync](https://tray.ai/automate/hris-to-payroll-sync/): Sync effective-dated changes, respect the payroll cutoff, hold anything ambiguous instead of guessing, and reconcile every cycle. The prompts that build it.
+- [How to build an org hierarchy sync](https://tray.ai/automate/org-hierarchy-sync/): Propagate a reporting change everywhere it decides something, handle the reorganisation, and never leave an approval routed to somebody who left. The prompts.
+- [How to build an ATS to HRIS sync](https://tray.ai/automate/ats-to-hris-sync/): Move a signed offer into a worker record without rekeying, keep candidate data out of HR, and trigger onboarding from the start date. The prompts.
+- [How to build a training completion sync](https://tray.ai/automate/training-completion-sync/): Assign from role rather than a spreadsheet, carry completions into the HRIS, and produce evidence per person instead of a percentage. The Headless prompts.
+- [How to expose an internal system as an MCP tool](https://tray.ai/automate/mcp-tool-exposure/): Scope the tool to a job rather than an API, resolve identity per call, make writes idempotent, and log every invocation. The Headless prompts that build it.
+- [How to build human approval for agent actions](https://tray.ai/automate/agent-action-approval/): Decide what needs approving by blast radius, show the approver what will happen, expire cleanly, and keep the record. The Headless prompts that build it.
+- [How to build LLM cost and usage tracking](https://tray.ai/automate/llm-cost-and-usage-tracking/): Attribute spend to a team and a feature, alert on the rate rather than the total, and catch the loop before the invoice does. The prompts that build it.
+- [How to build a knowledge base to vector sync](https://tray.ai/automate/knowledge-base-to-vector-sync/): Chunk on structure, carry permissions into the index, delete on delete, and re-embed only what changed. The Headless prompts that build it.
+- [How to build shadow AI discovery](https://tray.ai/automate/shadow-ai-discovery/): Find the AI tools nobody registered, from expenses, SSO and DNS, then route to a path rather than a ban. The Headless prompts that build it.
+- [How to build AI support deflection](https://tray.ai/automate/ai-support-deflection/): Answer only what the knowledge base actually covers, escalate early with the context, and measure resolution rather than deflection. The prompts that build it.
+- [How to build an agent observability pipeline](https://tray.ai/automate/agent-observability-pipeline/): Capture whole agent runs instead of single calls, join each one to the outcome it produced, and alert on the failures that return an answer anyway. The prompts.
+- [How to build a document intelligence pipeline](https://tray.ai/automate/document-intelligence-pipeline/): Score confidence per field rather than per document, validate against a system of record, and route only the uncertain fields to a person. The prompts.
+- [How to build data subject request automation](https://tray.ai/automate/data-subject-request-automation/): Search every system instead of the ones you remember, verify identity before disclosing, track the statutory clock, and record what was found. The prompts.
+- [How to build a consent and preference sync](https://tray.ai/automate/consent-and-preference-sync/): Give consent one owner, propagate a withdrawal in seconds, keep the evidence, and never let a sync re-subscribe anybody. The Headless prompts that build it.
+- [How to build a contract lifecycle sync](https://tray.ai/automate/contract-lifecycle-sync/): Extract the obligations rather than storing a PDF, put renewal and notice dates where somebody will see them, and never let the signed version drift. The prompts.
+- [How to build vendor security review](https://tray.ai/automate/vendor-risk-review/): Tier on what the vendor can reach, ask questions that match the tier, track conditions to closure, and re-review before the evidence expires. The prompts.
+- [How to build policy attestation tracking](https://tray.ai/automate/policy-attestation-tracking/): Assign from the HRIS continuously, version what was accepted, chase without nagging everybody, and keep evidence a person can point at. The prompts.
+- [How to build an API facade](https://tray.ai/automate/api-facade/): Give consumers one contract instead of six systems, absorb upstream changes rather than leaking them, and keep the caller identity intact. The prompts.
+- [How to build a change data capture pipeline](https://tray.ai/automate/change-data-capture/): Read the log instead of polling a timestamp, overlap the snapshot with the stream, and keep deletes and order intact. The Headless prompts that build it.
+- [How to build webhook fan-out](https://tray.ai/automate/webhook-fan-out/): Acknowledge before you fan out, verify the signature first, retry per consumer, and make replay possible. The Headless prompts that build it.
+- [How to migrate an SFTP batch feed to an API](https://tray.ai/automate/sftp-batch-to-api-migration/): Recover the semantics nobody wrote down, run both in parallel and diff, and cut over only after a month end. The Headless prompts that build it.
 
 ## Customers
 
-- [Customer stories](https://tray.ai/customers): Named customer outcomes across industries.
-- [Customer awards](https://tray.ai/customers/awards): Annual awards recognising customer outcomes.
-- [Abridge](https://tray.ai/customers/abridge): How Abridge orchestrates responsible AI across go-to-market
-- [Apollo](https://tray.ai/customers/apollo): Apollo deflects nearly 40% of IT tickets with Tray AI agents
-- [Zuora](https://tray.ai/customers/zuora): How Zuora unified AI across 200+ SaaS apps with orchestration
-- [J.W. Pepper](https://tray.ai/customers/jw-pepper): How J.W. Pepper centralized MCP tools without slowing teams down
-- [Life360](https://tray.ai/customers/life360): Life360 unifies AI with an agent-of-agents model with Tray Merlin Agent Builder
-- [Auctane](https://tray.ai/customers/auctane): Auctane accelerates IT processes with low-code automation, boosts productivity 30%
-- [Bynder](https://tray.ai/customers/bynder): Bynder transforms integration roadmap, accelerates delivery by 75%
-- [Cue](https://tray.ai/customers/cue): Cue dramatically accelerates integration delivery time to build a world-class sales and service scripting platform
-- [Cvent](https://tray.ai/customers/cvent): Cvent boosts integration efficiency in just 6 months with Tray
-- [Yext](https://tray.ai/customers/yext): Yext accelerates integration delivery 3x, reduces costs by 60%
-- [HackerOne](https://tray.ai/customers/hackerone): HackerOne delivers customer integrations 4x faster
-- [Podium](https://tray.ai/customers/podium): Podium uses Tray.ai to reduce customer churn by 60%
-- [Eventbrite](https://tray.ai/customers/eventbrite): Eventbrite accelerates high-quality integration delivery at scale and lifts customer satisfaction
-- [GitHub](https://tray.ai/customers/github): GitHub syncs customer data at scale to grow engagement and build robust marketing attribution
-- [Mixpanel](https://tray.ai/customers/mixpanel): Mixpanel accelerates mission-critical order-to-cash process 25%
+- [Customer stories](https://tray.ai/customers/): Named customer outcomes across industries.
+- [Customer awards](https://tray.ai/customers/awards/): Annual awards recognising customer outcomes.
+- [Abridge](https://tray.ai/customers/abridge/): How Abridge orchestrates responsible AI across go-to-market
+- [Apollo](https://tray.ai/customers/apollo/): Apollo deflects nearly 40% of IT tickets with Tray AI agents
+- [Zuora](https://tray.ai/customers/zuora/): How Zuora unified AI across 200+ SaaS apps with orchestration
+- [J.W. Pepper](https://tray.ai/customers/jw-pepper/): How J.W. Pepper centralized MCP tools without slowing teams down
+- [Life360](https://tray.ai/customers/life360/): Life360 unifies AI with an agent-of-agents model with Tray Merlin Agent Builder
+- [Auctane](https://tray.ai/customers/auctane/): Auctane accelerates IT processes with low-code automation, boosts productivity 30%
+- [Bynder](https://tray.ai/customers/bynder/): Bynder transforms integration roadmap, accelerates delivery by 75%
+- [Cue](https://tray.ai/customers/cue/): Cue dramatically accelerates integration delivery time to build a world-class sales and service scripting platform
+- [Cvent](https://tray.ai/customers/cvent/): Cvent boosts integration efficiency in just 6 months with Tray
+- [Yext](https://tray.ai/customers/yext/): Yext accelerates integration delivery 3x, reduces costs by 60%
+- [HackerOne](https://tray.ai/customers/hackerone/): HackerOne delivers customer integrations 4x faster
+- [Podium](https://tray.ai/customers/podium/): Podium uses Tray.ai to reduce customer churn by 60%
+- [Eventbrite](https://tray.ai/customers/eventbrite/): Eventbrite accelerates high-quality integration delivery at scale and lifts customer satisfaction
+- [GitHub](https://tray.ai/customers/github/): GitHub syncs customer data at scale to grow engagement and build robust marketing attribution
+- [Mixpanel](https://tray.ai/customers/mixpanel/): Mixpanel accelerates mission-critical order-to-cash process 25%
 
 ## Customer attestations
 
@@ -64,77 +136,103 @@
 - "Tray completely improved the efficiency and accuracy of our Order-to-cash process from start to finish." — Jing Chen, Director, Enterprise and Business Applications, Udemy (https://tray.ai/customers/udemy/)
 - "Tray has allowed us to operationalize AI faster than any other company we are competing with." — Brendan Neal, VP Revenue Operations, Wavo (https://tray.ai/customers/)
 - "With Tray, we're now building agents that can troubleshoot access issues, automate provisioning, and reduce manual load on our IT teams. With a more agile and cost-effective integration strategy, Yext is now well-equipped to drive innovation, improve operations, and scale automation at an enterprise level." — Tulasi Dhonthireddy, Director of IT and Business Applications, Yext (https://tray.ai/customers/yext/)
+- "With Tray, we can build integrations 3x faster than with our legacy platform, giving us the agility we needed." — Tulasi Dhonthireddy, Director of IT and Business Applications, Yext (https://tray.ai/customers/yext/)
 - "As we roll MCP out, I don't want end users thinking about which system they're authenticating to or what tools they have access to. Tray's Dynamic Authentication lets us scale agents across the enterprise without compromising on user-level permissions." — Mark Gill, Head of Infrastructure, Zuora (https://tray.ai/customers/zuora/)
 - "We can actually deliver on integration requests in fewer than 10 days." — Mark Gill, Head of Infrastructure, Zuora (https://tray.ai/customers/zuora/)
 - "Tray Headless will change the way we build workflows. I'm super excited about that, because we're trying to get ourselves to 10x and 100x of what we were doing last quarter, and Tray Headless will enable us to do that." — Mark Gill, Head of Infrastructure, Zuora (https://tray.ai/blog/enterprise-ipaas-native-ai-ide-tray-headless/)
 
 ## Comparisons
 
-- [Compare](https://tray.ai/compare): Honest comparisons against named competitors.
-- [Tray.ai vs. Salesforce Agentforce — honest comparison](https://tray.ai/compare/agentforce): Agentforce is an AI layer built on a CRM. Tray.ai is a purpose-built automation platform for agents and AI across your whole business.
-- [Tray.ai vs. Boomi — honest comparison](https://tray.ai/compare/boomi): How Tray.ai compares to Boomi on speed, AI-readiness, pricing model, and platform coherence.
-- [Tray.ai vs. Celigo — honest comparison](https://tray.ai/compare/celigo): Celigo is the go-to for NetSuite integration. Tray.ai is the consolidation play when you also need agents, gateway, and orchestration beyond NetSuite.
-- [Tray.ai vs. Salesforce / Informatica — honest comparison](https://tray.ai/compare/informatica): Informatica only does data — you still need MuleSoft and Agentforce for everything else. Here's how Tray.ai compares.
-- [Tray.ai vs. Jitterbit — honest comparison](https://tray.ai/compare/jitterbit): How Tray.ai compares to Jitterbit on platform coherence, AI-readiness, and the cost of a bundle built through acquisition.
-- [Tray.ai vs. Make — honest comparison](https://tray.ai/compare/make): How Tray.ai compares to Make (formerly Integromat) on governance, scale, AI readiness, and enterprise suitability.
-- [Tray.ai vs. Microsoft Power Automate & Logic Apps — honest comparison](https://tray.ai/compare/microsoft): How Tray.ai compares to Microsoft's integration stack — one orchestration layer vs. a patchwork of Azure services.
-- [Tray.ai vs. MuleSoft — honest comparison](https://tray.ai/compare/mulesoft): How Tray.ai compares to MuleSoft on scope beyond Salesforce, implementation time, TCO, and platform consolidation.
-- [Tray.ai vs. n8n — honest comparison](https://tray.ai/compare/n8n): n8n is developer-flexible and open-source. Tray.ai is what enterprises move to when the security and scaling risks of open-source stop being acceptable.
-- [Tray.ai vs. Oracle Integration Cloud — honest comparison](https://tray.ai/compare/oracle-oic): OIC is great for Oracle-to-Oracle integration. Tray.ai is what Oracle-running enterprises use when they also need non-Oracle, non-integration, and AI.
-- [Tray.ai vs. SAP Integration Suite — honest comparison](https://tray.ai/compare/sap): SAP Integration Suite is built for connecting SAP systems. Tray.ai is built for everything — SAP included, not SAP-centered.
-- [Tray.ai vs. SnapLogic — honest comparison](https://tray.ai/compare/snaplogic): SnapLogic is a 20-year-old data pipeline tool retrofitting AI agents. Tray.ai is a unified platform built for integration and agents from day one.
-- [Tray.ai vs. TIBCO — honest comparison](https://tray.ai/compare/tibco): How Tray.ai compares to TIBCO (now Cloud Software Group) on AI readiness, modern cloud architecture, and time-to-value for enterprise integration and orchestration.
-- [Tray.ai vs. Workato — honest comparison](https://tray.ai/compare/workato): How Tray.ai compares to Workato on builder flexibility, AI-readiness, pricing, and enterprise fit.
-- [Tray.ai vs. Zapier — honest comparison](https://tray.ai/compare/zapier): How Tray.ai compares to Zapier on enterprise scale, complex workflows, governance, and AI-native capabilities.
+- [Compare](https://tray.ai/compare/): Honest comparisons against named competitors.
+- [Tray.ai vs. Salesforce Agentforce — honest comparison](https://tray.ai/compare/tray-vs-agentforce/): Agentforce is an AI layer built on a CRM. Tray.ai is a purpose-built automation platform for agents and AI across your whole business.
+- [Tray.ai vs. Boomi — honest comparison](https://tray.ai/compare/tray-vs-boomi/): How Tray.ai compares to Boomi on speed, AI-readiness, pricing model, and platform coherence.
+- [Tray.ai vs. Celigo — honest comparison](https://tray.ai/compare/tray-vs-celigo/): Celigo is the go-to for NetSuite integration. Tray.ai is the consolidation play when you also need agents, gateway, and orchestration beyond NetSuite.
+- [Tray.ai vs. Salesforce / Informatica — honest comparison](https://tray.ai/compare/tray-vs-informatica/): Informatica only does data — you still need MuleSoft and Agentforce for everything else. Here's how Tray.ai compares.
+- [Tray.ai vs. Jitterbit — honest comparison](https://tray.ai/compare/tray-vs-jitterbit/): How Tray.ai compares to Jitterbit on platform coherence, AI-readiness, and the cost of a bundle built through acquisition.
+- [Tray.ai vs. Make — honest comparison](https://tray.ai/compare/tray-vs-make/): How Tray.ai compares to Make, now part of Celonis, on governance, scale, AI readiness, and enterprise suitability.
+- [Tray.ai vs. Microsoft Power Automate & Logic Apps — honest comparison](https://tray.ai/compare/tray-vs-microsoft/): How Tray.ai compares to Microsoft's integration stack — one orchestration layer vs. a patchwork of Azure services.
+- [Tray.ai vs. MuleSoft — honest comparison](https://tray.ai/compare/tray-vs-mulesoft/): How Tray.ai compares to MuleSoft on scope beyond Salesforce, implementation time, TCO, and platform consolidation.
+- [Tray.ai vs. n8n: an honest comparison](https://tray.ai/compare/tray-vs-n8n/): n8n is a good way to build. What changes at production is who owns the risk. Tray.ai takes the patching, the scaling and the audit evidence, so the platform gets easier to run as it grows, not harder.
+- [Tray.ai vs. Oracle Integration Cloud — honest comparison](https://tray.ai/compare/tray-vs-oracle-oic/): OIC is great for Oracle-to-Oracle integration. Tray.ai is what Oracle-running enterprises use when they also need non-Oracle, non-integration, and AI.
+- [Tray.ai vs. SAP Integration Suite — honest comparison](https://tray.ai/compare/tray-vs-sap/): SAP Integration Suite is built for connecting SAP systems. Tray.ai is built for everything — SAP included, not SAP-centered.
+- [Tray.ai vs. SnapLogic — honest comparison](https://tray.ai/compare/tray-vs-snaplogic/): SnapLogic is a 20-year-old data pipeline tool retrofitting AI agents. Tray.ai is a unified platform built for integration and agents from day one.
+- [Tray.ai vs. TIBCO — honest comparison](https://tray.ai/compare/tray-vs-tibco/): How Tray.ai compares to TIBCO (now Cloud Software Group) on AI readiness, modern cloud architecture, and time-to-value for enterprise integration and orchestration.
+- [Tray.ai vs. Workato — honest comparison](https://tray.ai/compare/tray-vs-workato/): How Tray.ai compares to Workato on builder flexibility, AI-readiness, pricing, and enterprise fit.
+- [Tray.ai vs. Zapier — honest comparison](https://tray.ai/compare/tray-vs-zapier/): How Tray.ai compares to Zapier on enterprise scale, complex workflows, governance, and AI-native capabilities.
+- [The 7 best Agentforce alternatives in 2026, compared](https://tray.ai/blog/agentforce-alternatives/): A comparison of Agentforce alternatives for 2026, covering agent builders, governed MCP, and what it takes to run agents beyond Salesforce.
+- [The 8 best Boomi alternatives in 2026, compared](https://tray.ai/blog/boomi-alternatives/): A comparison of Boomi alternatives for 2026, with published pricing where it exists, cloud and on-premises options, and a clear sense of where each one fits.
+- [The 7 best Celigo alternatives in 2026, compared](https://tray.ai/blog/celigo-alternatives/): A comparison of Celigo alternatives for 2026, with published pricing where it exists, template-driven and general-purpose options, and a clear sense of where each one fits.
+- [The 7 best Informatica alternatives in 2026, compared](https://tray.ai/blog/informatica-alternatives/): A comparison of Informatica alternatives for 2026, with published pricing where it exists, data-first and orchestration-first options, and where each one fits.
+- [The 7 best Jitterbit alternatives in 2026, compared](https://tray.ai/blog/jitterbit-alternatives/): A comparison of Jitterbit alternatives for 2026, with published pricing where it exists, bundled and single-platform options, and a clear sense of where each one fits.
+- [The 7 best Make alternatives in 2026, compared](https://tray.ai/blog/make-alternatives/): A comparison of Make alternatives for 2026, with published pricing where it exists, managed and self-hosted options, and a clear sense of where each one fits.
+- [The 8 best Microsoft Power Automate alternatives in 2026, compared](https://tray.ai/blog/microsoft-alternatives/): A comparison of Power Automate alternatives for 2026, with published pricing where it exists, managed and self-hosted options, and a clear sense of where each one fits.
+- [The 8 best MuleSoft alternatives in 2026, compared](https://tray.ai/blog/mulesoft-alternatives/): A comparison of MuleSoft alternatives for 2026, with published pricing where it exists, cloud and hybrid options, and a clear sense of where each one fits.
+- [The 9 best n8n alternatives in 2026, compared](https://tray.ai/blog/n8n-alternatives/): A comparison of n8n alternatives for 2026, with published pricing where it exists, self-hosted and managed options, and a clear sense of where each one fits.
+- [The 7 best Oracle Integration Cloud alternatives in 2026, compared](https://tray.ai/blog/oracle-oic-alternatives/): A comparison of Oracle Integration Cloud alternatives for 2026, with published pricing where it exists, ERP-centric and general-purpose options, and where each one fits.
+- [The 7 best SAP Integration Suite alternatives in 2026, compared](https://tray.ai/blog/sap-alternatives/): A comparison of SAP Integration Suite alternatives for 2026, with published pricing where it exists, ERP-centric and general-purpose options, and where each one fits.
+- [The 7 best SnapLogic alternatives in 2026, compared](https://tray.ai/blog/snaplogic-alternatives/): A comparison of SnapLogic alternatives for 2026, with published pricing where it exists, pipeline-first and orchestration-first options, and where each one fits.
+- [The 7 best TIBCO alternatives in 2026, compared](https://tray.ai/blog/tibco-alternatives/): A comparison of TIBCO alternatives for 2026, with published pricing where it exists, modernization and like-for-like options, and where each one fits.
+- [The 8 best Workato alternatives in 2026, compared](https://tray.ai/blog/workato-alternatives/): A comparison of Workato alternatives for 2026, with published pricing where it exists, managed and self-hosted options, and a clear sense of where each one fits.
+- [The 7 best Zapier alternatives in 2026, compared](https://tray.ai/blog/zapier-alternatives/): A comparison of Zapier alternatives for 2026, with published pricing where it exists, self-hosted and managed options, and a clear sense of where each one fits.
+
+## Moving from n8n
+
+- [n8n alternative: the risk, the overhead, and the bill](https://tray.ai/n8n/): The build already works. What it costs you is the security review, the scaling, the patching hours, and the executions you pay for on your own infrastructure.
+- [n8n security: can you stay ahead of the patches?](https://tray.ai/n8n/risk/): n8n patches fast. Keeping up with every advisory is your team’s standing job. What their own terms and docs say, the record with its counting rule, and what changes on a managed platform.
+- [n8n self-hosted pricing and operational overhead](https://tray.ai/n8n/overhead/): Free Community self-hosted is genuinely unmetered. The controls a review asks for sit a tier up. n8n’s published prices with a retrieval date, plus the infrastructure that is yours.
+- [Running n8n at scale: who does the sizing?](https://tray.ai/n8n/scale/): What self-hosting n8n hands your team as volume grows, all documented by n8n, and what changes when the platform scales itself instead.
+- [n8n governance and compliance: SOC 2, SSO, RBAC, MCP](https://tray.ai/n8n/governance/): Governance as a node a builder adds, or as a property of the platform. The structural difference, in n8n’s own documentation, plus what comes standard on Tray.ai.
+- [Move your n8n workflows to Tray.ai](https://tray.ai/n8n/migration/): Take your n8n workflows and run them on the Tray AI Orchestration Platform. What you gain by moving, what comes across as native Tray workflows, and the parts that still need a person.
 
 ## Resources
 
-- [Blog](https://tray.ai/blog): Product updates, engineering, growth, and thought leadership.
-- [Guides](https://tray.ai/resources/guides): Playbooks, frameworks, and templates.
-- [Events](https://tray.ai/events): Upcoming events and on-demand recordings.
-- [Glossary](https://tray.ai/glossary): Definitions for AI orchestration, MCP, iPaaS, and related terms.
-- [AI platforms return $1.98 for every dollar invested](https://tray.ai/resources/guides/ai-platforms-deliver-measurable-roi): Nucleus Research reviewed ROI case studies from enterprise AI platform deployments and found organizations returned $1.98 for every dollar spent, with a 7-month payback period and production deployment averaging 4.9 months. Productivity gains reached 50%, and data quality improved by up to 37% — without specialized AI expertise.
-- [The Workato Renewal-O-Meter](https://tray.ai/resources/guides/are-you-overpaying-for-workato): You did not have a requirements list when you bought Workato. You have one now. Tick what you actually run and see where the needle lands.
-- [The n8n operating cost calculator](https://tray.ai/resources/guides/n8n-cost-calculator): Work out what your self-hosted n8n instance costs to run. Your hours, your infrastructure spend, your loaded rate.
-- [Five signs you've outgrown n8n](https://tray.ai/resources/guides/five-signs-outgrown-n8n): A practical guide to moving n8n workflows into production: the five signs a pilot has outgrown self-hosting, what each one costs if left unaddressed, and a checklist to score where your setup stands today.
-- [The n8n production readiness checklist](https://tray.ai/resources/guides/n8n-production-readiness-checklist): 25 questions to ask before your n8n pilot becomes a system the business depends on. Score yourself across security, compliance, governance, reliability, cost, and support.
-- [AI powered integration improves user productivity by 27 to 58 percent](https://tray.ai/resources/guides/ai-powered-integration-improves-productivity): Nucleus Research analyzed AI-powered iPaaS deployments across multiple organizations and found integration developers gained 27–58% productivity improvements, with up to 90% faster time to deployment. Business users gained self-service capabilities that previously required IT involvement.
-- [iPaaS is going headless. Here's your guide to doing it right.](https://tray.ai/resources/guides/ipaas-going-headless): A practical guide to headless iPaaS: what it is, why it's now the critical layer for AI development, and the architectural decisions that separate first-class from retrofitted.
-- [Gartner® Report: How to Choose the Best-Fit Integration Platform as a Service Vendor](https://tray.ai/resources/guides/gartner-how-to-choose-a-ipaas-vendor): Get the Gartner report on how to choose the best-fit iPaaS vendor. Learn how to evaluate AI readiness, governance, and success measures for your integration platform selection.
-- [Not everything needs AI. A framework for knowing what does.](https://tray.ai/resources/guides/not-everything-needs-ai-framework): Not every workflow needs an AI agent. A framework for knowing when to use rule-based, AI-powered, or agentic automation — before you build.
-- [Tray named a Leader in the 2026 Nucleus iPaaS Value Matrix for seventh consecutive year](https://tray.ai/resources/guides/nucleus-ipaas-matrix): For the seventh consecutive year, Nucleus Research recognizes Tray in the Leader quadrant — this year for its AI orchestration platform, MCP governance capabilities, and strong agent infrastructure for enterprise deployment.
+- [Blog](https://tray.ai/blog/): Product updates, engineering, growth, and thought leadership.
+- [Guides](https://tray.ai/guides/): Playbooks, frameworks, and templates.
+- [Events](https://tray.ai/events/): Upcoming events and on-demand recordings.
+- [Glossary](https://tray.ai/glossary/): Definitions for AI orchestration, MCP, iPaaS, and related terms.
+- [Which of your automations breaks first?](https://tray.ai/guides/revops-automation-risk-assessment/): Four questions about each RevOps process your team has automated. Get a ranked list of which one is most likely to stop working, and why.
+- [How to scope your integration platform before you renew](https://tray.ai/guides/scope-integration-platform-before-renewal/): A method for inventorying the workloads you actually run before an integration platform renewal, so the next term is sized against what you know rather than what you estimated.
+- [The governance checklist for vibe-coded apps, agents, and integrations](https://tray.ai/guides/vibe-coded-app-governance-checklist/): Sixteen checks across integration capacity, visibility, identity and access, and path to production. See where your gaps are, and the order worth closing them.
+- [Gartner® Report: Govern Vibe Coding for Citizen Developers With Self-Service Platforms](https://tray.ai/guides/gartner-govern-vibe-coding/): Get Gartner's guidance on governing vibe coding without blocking it — development controls, pre-deployment validation, and agent safeguards.
+- [Gartner® Report: Hype Cycle™ for AI in Application Integration and Architecture, 2026](https://tray.ai/guides/gartner-hype-cycle-ai-integration-2026/): Get the 2026 Gartner Hype Cycle for AI in Application Integration and Architecture to see where Tray is named and how AI integration technologies are maturing.
+- [AI platforms return $1.98 for every dollar invested](https://tray.ai/guides/ai-platforms-deliver-measurable-roi/): Nucleus Research reviewed ROI case studies from enterprise AI platform deployments and found organizations returned $1.98 for every dollar spent, with a 7-month payback period and production deployment averaging 4.9 months. Productivity gains reached 50%, and data quality improved by up to 37% — without specialized AI expertise.
+- [The Workato Renewal-O-Meter](https://tray.ai/guides/are-you-overpaying-for-workato/): You did not have a requirements list when you bought Workato. You have one now. Tick what you actually run and see where the needle lands.
+- [The n8n operating cost calculator](https://tray.ai/guides/n8n-cost-calculator/): Work out what your self-hosted n8n instance costs to run. Your hours, your infrastructure spend, your loaded rate.
+- [n8n security tracker](https://tray.ai/guides/n8n-security-tracker/): A running list of disclosed n8n vulnerabilities, with severity, affected versions and the release that fixes each one. Check whether the version you run is affected — in your browser, nothing sent anywhere.
+- [Five signs you've outgrown n8n](https://tray.ai/guides/five-signs-outgrown-n8n/): A practical guide to moving n8n workflows into production: the five signs a pilot has outgrown self-hosting, what each one costs if left unaddressed, and a checklist to score where your setup stands today.
 
 ## Glossary
 
-- [Agent Gateway for MCP](https://tray.ai/glossary/agent-gateway): Tray.ai's governance layer for MCP — deploy managed MCP Servers, expose connectors as governed agent tools, and audit every agent action.
-- [Agentic AI](https://tray.ai/glossary/agentic-ai): AI systems that don't just generate responses but take actions — planning, using tools, calling APIs, and completing multi-step tasks autonomously toward a goal.
-- [Agentic Automation](https://tray.ai/glossary/agentic-automation): Automation that uses AI agents to handle tasks requiring judgment — not just fixed steps, but decisions, tool use, and adaptation based on what the agent finds.
-- [AI agent](https://tray.ai/glossary/ai-agent): An AI system that can reason about a task, use tools to act on it, and learn from feedback — not just generate text.
-- [AI Agent Orchestration](https://tray.ai/glossary/ai-agent-orchestration): How multiple AI agents are coordinated to work as a system: which agent acts, when, on what data, and with what oversight.
-- [AI-native](https://tray.ai/glossary/ai-native): Built with AI as a core architectural concern from day one — not bolted on as a feature after the fact.
-- [API management](https://tray.ai/glossary/api-management): The tools and processes for publishing, securing, monitoring, and versioning APIs — so teams can expose data and services without building custom infrastructure for every integration.
-- [Change data capture](https://tray.ai/glossary/change-data-capture): A data integration technique that tracks and streams changes in a database in real time — inserts, updates, and deletes — rather than re-pulling the full dataset on a schedule.
-- [Composable](https://tray.ai/glossary/composable): An architecture where independent, reusable pieces combine freely — so new capability comes from recombination, not rebuilding.
-- [Connector](https://tray.ai/glossary/connector): A pre-built integration between Tray.ai and a specific application — Salesforce, Slack, Snowflake, 700+ others.
-- [Data integration](https://tray.ai/glossary/data-integration): The practice of moving, normalizing, and synchronizing data between systems — so one application's data is usable in another.
-- [Enterprise automation](https://tray.ai/glossary/enterprise-automation): Using software to execute business processes automatically — at the scale, reliability, and governance that enterprise operations require.
-- [ETL](https://tray.ai/glossary/etl): Extract, Transform, Load — the process of pulling data from source systems, reshaping it, and loading it into a destination like a data warehouse.
-- [Governance](https://tray.ai/glossary/governance): The controls that make automation, integration, and AI agents safe to run in production — audit, access, approvals, compliance.
-- [Human-in-the-loop](https://tray.ai/glossary/human-in-the-loop): A design pattern where a human approval, review, or decision is embedded as a step in an otherwise automated process — keeping people accountable for the decisions that matter.
-- [Hyperautomation](https://tray.ai/glossary/hyperautomation): A Gartner-coined term for the disciplined, enterprise-wide application of automation — combining AI, integration, and process tools to automate everything that can be automated.
-- [Intelligent document processing](https://tray.ai/glossary/intelligent-document-processing): AI-powered extraction of structured data from unstructured documents — invoices, contracts, forms, receipts — so the data can flow directly into downstream systems without manual entry.
-- [iPaaS](https://tray.ai/glossary/ipaas): Integration Platform as a Service — a cloud-hosted platform for building, running, and managing integrations between applications.
-- [Low-code](https://tray.ai/glossary/low-code): A development approach where software is built primarily through visual interfaces and configuration rather than hand-written code — accessible to non-developers, extensible by developers.
-- [MCP](https://tray.ai/glossary/mcp): Model Context Protocol — the emerging standard for how AI agents discover and call tools, data, and services.
-- [Merlin Agent Builder](https://tray.ai/glossary/merlin-agent-builder): Tray.ai's no-code / low-code platform for building AI agents that reason, act, and learn — with guardrails and audit baked in.
-- [Orchestration](https://tray.ai/glossary/orchestration): Coordinating data, integrations, automations, and AI agents as one system — not just moving data between apps.
-- [Process automation](https://tray.ai/glossary/process-automation): Using workflows to execute business processes — onboarding, approvals, order-to-cash, incident response — without human-in-the-loop for routine steps.
-- [Task](https://tray.ai/glossary/task): Tray.ai's unit of workflow execution — a discrete run that handles one trigger through the workflow's logic to completion.
-- [Workflow](https://tray.ai/glossary/workflow): A sequence of steps that runs when a trigger fires — the unit of automation that moves data, calls systems, and orchestrates outcomes.
-- [Workflow automation](https://tray.ai/glossary/workflow-automation): Software that executes a defined sequence of steps automatically — moving data, triggering actions, and routing decisions without manual intervention.
+- [Agent Gateway for MCP](https://tray.ai/glossary/agent-gateway/): Tray.ai's governance layer for MCP — deploy managed MCP Servers, expose connectors as governed agent tools, and audit every agent action.
+- [Agentic AI](https://tray.ai/glossary/agentic-ai/): AI systems that don't just generate responses but take actions — planning, using tools, calling APIs, and completing multi-step tasks autonomously toward a goal.
+- [Agentic Automation](https://tray.ai/glossary/agentic-automation/): Automation that uses AI agents to handle tasks requiring judgment — not just fixed steps, but decisions, tool use, and adaptation based on what the agent finds.
+- [AI agent](https://tray.ai/glossary/ai-agent/): An AI system that can reason about a task, use tools to act on it, and learn from feedback — not just generate text.
+- [AI Agent Orchestration](https://tray.ai/glossary/ai-agent-orchestration/): How multiple AI agents are coordinated to work as a system: which agent acts, when, on what data, and with what oversight.
+- [AI-native](https://tray.ai/glossary/ai-native/): Built with AI as a core architectural concern from day one — not bolted on as a feature after the fact.
+- [API management](https://tray.ai/glossary/api-management/): The tools and processes for publishing, securing, monitoring, and versioning APIs — so teams can expose data and services without building custom infrastructure for every integration.
+- [Change data capture](https://tray.ai/glossary/change-data-capture/): A data integration technique that tracks and streams changes in a database in real time — inserts, updates, and deletes — rather than re-pulling the full dataset on a schedule.
+- [Composable](https://tray.ai/glossary/composable/): An architecture where independent, reusable pieces combine freely — so new capability comes from recombination, not rebuilding.
+- [Connector](https://tray.ai/glossary/connector/): A pre-built integration between Tray.ai and a specific application — Salesforce, Slack, Snowflake, 700+ others.
+- [Data integration](https://tray.ai/glossary/data-integration/): The practice of moving, normalizing, and synchronizing data between systems — so one application's data is usable in another.
+- [Enterprise automation](https://tray.ai/glossary/enterprise-automation/): Using software to execute business processes automatically — at the scale, reliability, and governance that enterprise operations require.
+- [ETL](https://tray.ai/glossary/etl/): Extract, Transform, Load — the process of pulling data from source systems, reshaping it, and loading it into a destination like a data warehouse.
+- [Governance](https://tray.ai/glossary/governance/): The controls that make automation, integration, and AI agents safe to run in production — audit, access, approvals, compliance.
+- [Human-in-the-loop](https://tray.ai/glossary/human-in-the-loop/): A design pattern where a human approval, review, or decision is embedded as a step in an otherwise automated process — keeping people accountable for the decisions that matter.
+- [Hyperautomation](https://tray.ai/glossary/hyperautomation/): A Gartner-coined term for the disciplined, enterprise-wide application of automation — combining AI, integration, and process tools to automate everything that can be automated.
+- [Intelligent document processing](https://tray.ai/glossary/intelligent-document-processing/): AI-powered extraction of structured data from unstructured documents — invoices, contracts, forms, receipts — so the data can flow directly into downstream systems without manual entry.
+- [iPaaS](https://tray.ai/glossary/ipaas/): Integration Platform as a Service — a cloud-hosted platform for building, running, and managing integrations between applications.
+- [Low-code](https://tray.ai/glossary/low-code/): A development approach where software is built primarily through visual interfaces and configuration rather than hand-written code — accessible to non-developers, extensible by developers.
+- [MCP](https://tray.ai/glossary/mcp/): Model Context Protocol — the emerging standard for how AI agents discover and call tools, data, and services.
+- [Merlin Agent Builder](https://tray.ai/glossary/merlin-agent-builder/): Tray.ai's no-code / low-code platform for building AI agents that reason, act, and learn — with guardrails and audit baked in.
+- [Orchestration](https://tray.ai/glossary/orchestration/): Coordinating data, integrations, automations, and AI agents as one system — not just moving data between apps.
+- [Process automation](https://tray.ai/glossary/process-automation/): Using workflows to execute business processes — onboarding, approvals, order-to-cash, incident response — without human-in-the-loop for routine steps.
+- [Task](https://tray.ai/glossary/task/): Tray.ai's unit of workflow execution — a discrete run that handles one trigger through the workflow's logic to completion.
+- [Workflow](https://tray.ai/glossary/workflow/): A sequence of steps that runs when a trigger fires — the unit of automation that moves data, calls systems, and orchestrates outcomes.
+- [Workflow automation](https://tray.ai/glossary/workflow-automation/): Software that executes a defined sequence of steps automatically — moving data, triggering actions, and routing decisions without manual intervention.
 
 ## Webinars
 
+- [Five Signs You've Outgrown n8n, and What to Do About It](https://tray.ai/events/planning-your-next-step-from-n8n/): n8n is good at getting something built. Carrying real load, clearing a security review, and surviving the next upgrade is a different job. Watch Paul Turner and Luke Smith walk through the five signs, what each one costs, and how little work the move to an enterprise platform actually takes.
 - [Your Team Is Building With AI. Now You Need to Govern It](https://tray.ai/events/ai-deployment-summit-govern-ai-builds/): As Claude Code, Codex, and Cursor collapse the cost of building, anyone can wire up integrations and ship AI agents. Watch Paul Turner and Luke Smith explain how to put guardrails around that explosion without slowing your team down.
 - [Low-Code Was Never Enough: How Headless Changes Who Builds Integrations](https://tray.ai/events/low-code-vs-headless-integrations/): Low-code promised anyone could build, but it was too hard for business teams and too rigid for developers. Watch the replay to see how Claude Code and Codex with a headless iPaaS changed who can build — and what it means for the integration team.
 - [Shifting your integration architecture to headless](https://tray.ai/events/tray-headless/): Watch the recording: the shift from low-code to headless enterprise integration. What it means, how to balance it with low-code, and a live build inside Claude Code using Tray as MCP services.
@@ -146,16 +244,15 @@
 - [Build and launch agents faster with Tray Agent Hub](https://tray.ai/events/agent-hub-first-look/): See how Tray Agent Hub helps teams cut build time, reuse tools and data, and scale adoption inside Tray Merlin Agent Builder. Watch the demo on demand.
 - [What to do with your second agent](https://tray.ai/events/scaling-ai-agents-rich-waldron-hyoun-park/): Learn from Tray.ai CEO Rich Waldron and Amalgam Insights CEO Hyoun Park on how to master scaling AI agents, from orchestration and ROI to scalable deployment.
 - [How Yext cut integration costs by 60% in 90 days](https://tray.ai/events/yext-integrations-cost-reduction/): Yext delivered 100+ integrations in 3 months. See how they did it—and why their old platform was slowing everything down.
-- [New product launch: Tray Merlin Agent Builder addresses agent adoption](https://tray.ai/events/agent-adoption-merlin-launch/): See what’s new in Tray’s Merlin Agent Builder. This launch adds long-term memory, one-click data access, model flexibility, and Slack or Teams deployment.
 
 ## Company
 
-- [About](https://tray.ai/company/about): Mission, founders, investors, and press.
-- [Careers](https://tray.ai/company/careers): Open roles.
-- [Pricing](https://tray.ai/pricing): Plan tiers and how pricing works.
-- [Trust](https://tray.ai/trust): Security, compliance, and uptime.
-- [Connectors](https://tray.ai/connectors): 700+ pre-built connectors directory.
-- [Contact](https://tray.ai/contact): Book a demo.
+- [About](https://tray.ai/company/about/): Mission, founders, investors, and press.
+- [Careers](https://tray.ai/company/careers/): Open roles.
+- [Pricing](https://tray.ai/pricing/): Plan tiers and how pricing works.
+- [Trust](https://tray.ai/trust/): Security, compliance, and uptime.
+- [Connectors](https://tray.ai/connectors/): 700+ pre-built connectors directory.
+- [Contact](https://tray.ai/contact/): Book a demo.
 
 ## Machine-readable pages
 
@@ -171,7 +268,7 @@ Guide and connector pages are also available as clean markdown — append `.md` 
 ## Recognition
 
 ## Pricing
-Enterprise / quote-based. Three tiers — Pro, Team, Enterprise — plus add-ons (Tray Agent Gateway for MCP, Agent Builder, Intelligent Document Processing, Data Engineering, SSO, HIPAA, Regional Hosting, Log Streaming). See https://tray.ai/pricing.
+Enterprise / quote-based. Three tiers — Pro, Team, Enterprise — plus add-ons (Tray Agent Gateway for MCP, Agent Builder, Intelligent Document Processing, Data Engineering, SSO, HIPAA, Regional Hosting, Log Streaming). See https://tray.ai/pricing/ for details.
 
 ## Contact
 

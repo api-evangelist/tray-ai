@@ -473,8 +473,14 @@ components:
           type: string
         registrationToken:
           type: string
-    LimitExceeded:
-      title: LimitExceeded
+    PublicUpdateOnPremAgentInstanceHttpRequest:
+      title: PublicUpdateOnPremAgentInstanceHttpRequest
+      type: object
+      properties:
+        enabled:
+          type: boolean
+    ResourceNotFound:
+      title: ResourceNotFound
       type: object
       required:
       - message
@@ -483,14 +489,40 @@ components:
           type: string
         code:
           type: string
-    PublicUpdateOnPremAgentInstanceHttpRequest:
-      title: PublicUpdateOnPremAgentInstanceHttpRequest
+    ContentTooLarge:
+      title: ContentTooLarge
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    BasePageInfo_PublicOnPremAgentInstanceHttpResponse:
+      title: BasePageInfo_PublicOnPremAgentInstanceHttpResponse
       type: object
       properties:
-        enabled:
+        startCursor:
+          type: string
+        endCursor:
+          type: string
+        hasNextPage:
           type: boolean
-    Forbidden:
-      title: Forbidden
+        hasPreviousPage:
+          type: boolean
+    InvalidInput:
+      title: InvalidInput
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    InternalError:
+      title: InternalError
       type: object
       required:
       - message
@@ -522,8 +554,18 @@ components:
           type: boolean
         enabled:
           type: boolean
-    ConcurrencyConflict:
-      title: ConcurrencyConflict
+    LimitExceeded:
+      title: LimitExceeded
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Timeout:
+      title: Timeout
       type: object
       required:
       - message
@@ -544,58 +586,6 @@ components:
             $ref: '#/components/schemas/PublicOnPremAgentInstanceHttpResponse'
         pageInfo:
           $ref: '#/components/schemas/BasePageInfo_PublicOnPremAgentInstanceHttpResponse'
-    ContentTooLarge:
-      title: ContentTooLarge
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    Timeout:
-      title: Timeout
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    BasePageInfo_PublicOnPremAgentInstanceHttpResponse:
-      title: BasePageInfo_PublicOnPremAgentInstanceHttpResponse
-      type: object
-      properties:
-        startCursor:
-          type: string
-        endCursor:
-          type: string
-        hasNextPage:
-          type: boolean
-        hasPreviousPage:
-          type: boolean
-    ResourceNotFound:
-      title: ResourceNotFound
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    InvalidInput:
-      title: InvalidInput
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
     Unauthorized:
       title: Unauthorized
       type: object
@@ -606,8 +596,18 @@ components:
           type: string
         code:
           type: string
-    InternalError:
-      title: InternalError
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    ConcurrencyConflict:
+      title: ConcurrencyConflict
       type: object
       required:
       - message

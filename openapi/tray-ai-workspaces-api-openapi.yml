@@ -767,19 +767,30 @@ paths:
     - url: https://api.ap1.tray.io
       description: APAC
 components:
+  responses:
+    Unauthorized:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
+    Workspace:
       type: object
       properties:
-        error:
+        id:
           type: string
-          description: Error type
-        message:
+          description: Unique workspace identifier
+        name:
           type: string
-          description: Human-readable error message
-        statusCode:
-          type: integer
-          description: HTTP status code
+          description: Display name of the workspace
+        description:
+          type: string
+          description: Description of the workspace
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the workspace was created
     PlatformUser:
       type: object
       properties:
@@ -799,32 +810,30 @@ components:
         status:
           type: string
           description: Account status (active, invited, etc.)
-    Workspace:
+    Error:
       type: object
       properties:
-        id:
+        error:
           type: string
-          description: Unique workspace identifier
-        name:
-          type: string
-          description: Display name of the workspace
-        description:
-          type: string
-          description: Description of the workspace
-        createdAt:
-          type: string
-          format: date-time
-          description: Timestamp when the workspace was created
-    Forbidden:
-      title: Forbidden
-      type: object
-      required:
-      - message
-      properties:
+          description: Error type
         message:
           type: string
-        code:
-          type: string
+          description: Human-readable error message
+        statusCode:
+          type: integer
+          description: HTTP status code
+    AccountType:
+      title: AccountType
+      oneOf:
+      - $ref: '#/components/schemas/API'
+      - $ref: '#/components/schemas/External'
+      - $ref: '#/components/schemas/Integration'
+      - $ref: '#/components/schemas/Partner'
+      - $ref: '#/components/schemas/Regular'
+      - $ref: '#/components/schemas/System'
+    Shared:
+      title: Shared
+      type: object
     WorkspaceExternalApiModel:
       title: WorkspaceExternalApiModel
       type: object
@@ -844,8 +853,8 @@ components:
         monthlyTaskLimit:
           type: integer
           format: int64
-    InvalidInput:
-      title: InvalidInput
+    InternalError:
+      title: InternalError
       type: object
       required:
       - message
@@ -854,67 +863,31 @@ components:
           type: string
         code:
           type: string
-    WorkspaceType:
-      title: WorkspaceType
-      oneOf:
-      - $ref: '#/components/schemas/Embedded'
-      - $ref: '#/components/schemas/Organization'
-      - $ref: '#/components/schemas/Personal'
-      - $ref: '#/components/schemas/PersonalExternal'
-      - $ref: '#/components/schemas/Shared'
-    System:
-      title: System
-      type: object
-    RoleExternalApiModel:
-      title: RoleExternalApiModel
+    UpdateUserWorkspaceRoleExternalEndpointBody:
+      title: UpdateUserWorkspaceRoleExternalEndpointBody
       type: object
       required:
-      - id
-      - name
+      - roleId
       properties:
-        id:
+        roleId:
           type: string
           format: uuid
-        name:
-          type: string
-    Regular:
-      title: Regular
-      type: object
-    PersonalExternal:
-      title: PersonalExternal
-      type: object
     Personal:
       title: Personal
       type: object
-    AccountType:
-      title: AccountType
-      oneOf:
-      - $ref: '#/components/schemas/API'
-      - $ref: '#/components/schemas/External'
-      - $ref: '#/components/schemas/Integration'
-      - $ref: '#/components/schemas/Partner'
-      - $ref: '#/components/schemas/Regular'
-      - $ref: '#/components/schemas/System'
-    TooManyRequestsError:
-      title: TooManyRequestsError
+    Unauthorized:
+      title: Unauthorized
       type: object
       required:
       - message
       properties:
         message:
           type: string
-    ExternalApiDataPage_ENT:
-      title: ExternalApiDataPage_ENT
+        code:
+          type: string
+    Embedded:
+      title: Embedded
       type: object
-      required:
-      - pageInfo
-      properties:
-        elements:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkspaceExternalApiModel'
-        pageInfo:
-          $ref: '#/components/schemas/ExternalApiPageInfoModel'
     ExternalApiPageInfoModel:
       title: ExternalApiPageInfoModel
       type: object
@@ -949,28 +922,14 @@ components:
           $ref: '#/components/schemas/AccountType'
         role:
           $ref: '#/components/schemas/RoleExternalApiModel'
-    ResourceNotFound:
-      title: ResourceNotFound
+    Organization:
+      title: Organization
       type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    Unauthorized:
-      title: Unauthorized
+    PersonalExternal:
+      title: PersonalExternal
       type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    Integration:
-      title: Integration
+    System:
+      title: System
       type: object
     AddUserToWorkspaceExternalApiBody:
       title: AddUserToWorkspaceExternalApiBody
@@ -985,35 +944,34 @@ components:
         roleId:
           type: string
           format: uuid
+    Integration:
+      title: Integration
+      type: object
     Partner:
       title: Partner
       type: object
-    API:
-      title: API
-      type: object
-    External:
-      title: External
-      type: object
-    Shared:
-      title: Shared
-      type: object
-    UpdateUserWorkspaceRoleExternalEndpointBody:
-      title: UpdateUserWorkspaceRoleExternalEndpointBody
+    WorkspaceType:
+      title: WorkspaceType
+      oneOf:
+      - $ref: '#/components/schemas/Embedded'
+      - $ref: '#/components/schemas/Organization'
+      - $ref: '#/components/schemas/Personal'
+      - $ref: '#/components/schemas/PersonalExternal'
+      - $ref: '#/components/schemas/Shared'
+    ExternalApiDataPage_ENT:
+      title: ExternalApiDataPage_ENT
       type: object
       required:
-      - roleId
+      - pageInfo
       properties:
-        roleId:
-          type: string
-          format: uuid
-    Organization:
-      title: Organization
-      type: object
-    Embedded:
-      title: Embedded
-      type: object
-    InternalError:
-      title: InternalError
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceExternalApiModel'
+        pageInfo:
+          $ref: '#/components/schemas/ExternalApiPageInfoModel'
+    ResourceNotFound:
+      title: ResourceNotFound
       type: object
       required:
       - message
@@ -1022,13 +980,55 @@ components:
           type: string
         code:
           type: string
-  responses:
-    Unauthorized:
-      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    API:
+      title: API
+      type: object
+    RoleExternalApiModel:
+      title: RoleExternalApiModel
+      type: object
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+    TooManyRequestsError:
+      title: TooManyRequestsError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    InvalidInput:
+      title: InvalidInput
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Regular:
+      title: Regular
+      type: object
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    External:
+      title: External
+      type: object
   securitySchemes:
     bearerAuth:
       type: http

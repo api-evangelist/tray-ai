@@ -293,13 +293,6 @@ components:
         connectorVersion:
           type: string
           description: The version of the connector being deployed.
-    RequestFailed:
-      type: object
-      properties:
-        message:
-          type: string
-        code:
-          type: string
     DeployConnectorFromSourceResponse:
       type: object
       properties:
@@ -322,6 +315,13 @@ components:
         connectorVersion:
           type: string
           description: The version of the connector being deployed.
+    RequestFailed:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: string
   responses:
     Unauthorized:
       description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.

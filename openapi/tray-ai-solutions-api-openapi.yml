@@ -316,22 +316,28 @@ paths:
     - url: https://api.ap1.tray.io
       description: APAC
 components:
+  responses:
+    Unauthorized:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GraphQLError'
   schemas:
-    PageInfo:
+    GraphQLRequest:
       type: object
+      required:
+      - query
       properties:
-        hasNextPage:
-          type: boolean
-          description: Whether there are more results after the current page
-        endCursor:
+        query:
           type: string
-          description: Cursor for fetching the next page
-        hasPreviousPage:
-          type: boolean
-          description: Whether there are results before the current page
-        startCursor:
+          description: The GraphQL query or mutation string
+        variables:
+          type: object
+          description: Variables to pass to the GraphQL query or mutation
+        operationName:
           type: string
-          description: Cursor for fetching the previous page
+          description: The name of the operation to execute if the query contains multiple operations
     Solution:
       type: object
       properties:
@@ -349,20 +355,21 @@ components:
           items:
             type: string
           description: Tags associated with the solution
-    GraphQLRequest:
+    PageInfo:
       type: object
-      required:
-      - query
       properties:
-        query:
+        hasNextPage:
+          type: boolean
+          description: Whether there are more results after the current page
+        endCursor:
           type: string
-          description: The GraphQL query or mutation string
-        variables:
-          type: object
-          description: Variables to pass to the GraphQL query or mutation
-        operationName:
+          description: Cursor for fetching the next page
+        hasPreviousPage:
+          type: boolean
+          description: Whether there are results before the current page
+        startCursor:
           type: string
-          description: The name of the operation to execute if the query contains multiple operations
+          description: Cursor for fetching the previous page
     GraphQLError:
       type: object
       properties:
@@ -387,41 +394,85 @@ components:
                 type: array
                 items:
                   type: string
-    Forbidden:
-      title: Forbidden
-      type: object
-      required:
-      - message
+    solution.release.PublishSolutionImpactView.AuthSlotChangesView.CreatedAuthSlotView:
       properties:
-        message:
+        id:
           type: string
-        code:
+          format: uuid
+          description: ID of the slot
+        authenticationId:
           type: string
-    solution.release.PublishSolutionImpactView.ConfigSlotChangesView.ConfigSlotDDLConfigurationView:
-      properties:
-        allowSetCustomValue:
+          format: uuid
+          description: ID of the authentication based on which the slot has been created
+        title:
+          type: string
+          description: Title of the slot
+        description:
+          type: string
+          description: Description of the slot
+        serviceId:
+          type: string
+          format: uuid
+          description: ID of the 3rd party service for which the slot has been created
+        serviceEnvironmentId:
+          type: string
+          format: uuid
+          description: ID of the service environment for which the slot has been created
+        scopes:
+          type: array
+          description: Authentication scopes that the slot requires
+          items:
+            type: string
+        externalId:
+          type: string
+          description: Custom external identifier for the slot set in Tray UI
+        static:
           type: boolean
-          description: Whether the slot allows to set a custom value for a dropdown list field
-      required:
-      - allowSetCustomValue
-    solution.release.PublishSolutionImpactView.AuthSlotChangesView.AuthSlotRecreationReasonView:
-      properties:
-        code:
-          description: Code that can be used by clients to recognize specific recreation reasons
+          description: Whether the slot is static and its value is shared between all solution instances
+        hidden:
+          type: boolean
+          description: Whether the slot is hidden from an end user
+        skipCTA:
+          type: boolean
+          description: Whether the UI should skip call to action button for the slot
+        requireUnique:
+          type: boolean
+          description: Whether the authentication used to fulfill the slot should be unique
+        hasBreakingChange:
+          type: boolean
+          description: Informs if new slot version is introducing breaking changes
+        changes:
+          type: array
+          description: Changes between previously published slot and the current one
+          items:
+            $ref: '#/components/schemas/solution.release.slot.AuthSlotChangeView'
+        recreated:
+          type: boolean
+          description: Informs if the slot has been recreated
+        slotRecreationReasons:
+          type: array
+          description: Reasons why the slot has been recreated (present only if recreated is true)
+          items:
+            $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.AuthSlotChangesView.AuthSlotRecreationReasonView'
+        recreatedFromSlotId:
           type: string
-          enum:
-          - AuthenticationIdChanged
-          - ScopesIncreased
-          - ScopesDecreased
-          - ServiceEnvironmentChanged
-        message:
-          type: string
-          description: Message explaining the recreation reason
+          format: uuid
+          description: ID of the removed slot that this slot is replacing (present only if recreated is true)
       required:
-      - code
-      - message
-    InvalidInput:
-      title: InvalidInput
+      - id
+      - authenticationId
+      - title
+      - description
+      - scopes
+      - static
+      - hidden
+      - skipCTA
+      - requireUnique
+      - hasBreakingChange
+      - changes
+      - recreated
+    InternalError:
+      title: InternalError
       type: object
       required:
       - message
@@ -430,27 +481,16 @@ components:
           type: string
         code:
           type: string
-    solution.release.PublishSolutionImpactView.AuthSlotChangesView:
-      properties:
-        created:
-          type: array
-          description: Slots that have been added compare to the previously published solution
-          items:
-            $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.AuthSlotChangesView.CreatedAuthSlotView'
-        updated:
-          type: array
-          description: Slots that have been updated compare to the previously published solution
-          items:
-            $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.AuthSlotChangesView.UpdatedAuthSlotView'
-        removed:
-          type: array
-          description: Slots that have been removed compare to the previously published solution
-          items:
-            $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.AuthSlotChangesView.AuthSlotView'
+    Unauthorized:
+      title: Unauthorized
+      type: object
       required:
-      - created
-      - updated
-      - removed
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
     solution.release.PublishSolutionImpactView.ConfigSlotChangesView.ConfigSlotRecreationReasonView:
       properties:
         code:
@@ -467,6 +507,65 @@ components:
       required:
       - code
       - message
+    solution.release.slot.ConfigSlotChangeView:
+      properties:
+        message:
+          type: string
+          description: Human readable description of the change
+        code:
+          description: Code that can be used by clients to recognize specific changes
+          type: string
+          enum:
+          - CreatedMandatorySlot
+          - CreatedOptionalSlot
+          - SlotMadeMandatory
+          - SlotMadeOptional
+          - DefaultValueUpdated
+          - CustomJavascriptAdded
+          - CustomJavascriptRemoved
+          - CustomJavascriptUpdated
+          - DataMappingAdded
+          - DataMappingRemoved
+          - DataMappingUpdated
+          - KeyUpdated
+          - ValueTypeUpdated
+          - TitleUpdated
+          - DescriptionUpdated
+          - ExternalIdUpdated
+          - ReferencedAuthSlotIdUpdated
+          - ReferenceToAuthSlotIdAdded
+          - ReferenceToAuthSlotIdRemoved
+          - SlotMadeToAllowSetCustomValueInDDL
+          - SlotMadeToNotAllowSetCustomValueInDDL
+          - SlotMadeDDL
+          - SlotMadeNotDDL
+          - SlotMadeStatic
+          - SlotMadeNotStatic
+          - SlotMadeRequired
+          - SlotMadeNotRequired
+          - SlotMadeToUseDefaultValue
+          - SlotMadeToNotUseDefaultValue
+          - SlotMadeHidden
+          - SlotMadeNotHidden
+          - DisabledResetType
+          - EnabledResetType
+        breakingChange:
+          type: boolean
+          description: Whether the change is a breaking change
+      required:
+      - message
+      - code
+      - breakingChange
+    ResourceNotFound:
+      title: ResourceNotFound
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
     solution.release.PublishSolutionImpactView.ConfigSlotChangesView.CreatedConfigSlotView:
       properties:
         id:
@@ -564,60 +663,22 @@ components:
       - hasBreakingChange
       - changes
       - recreated
-    solution.release.PublishSolutionImpactView.AuthSlotChangesView.AuthSlotView:
+    solution.release.PublishSolutionImpactView.AuthSlotChangesView.AuthSlotRecreationReasonView:
       properties:
-        id:
+        code:
+          description: Code that can be used by clients to recognize specific recreation reasons
           type: string
-          format: uuid
-          description: ID of the slot
-        title:
+          enum:
+          - AuthenticationIdChanged
+          - ScopesIncreased
+          - ScopesDecreased
+          - ServiceEnvironmentChanged
+        message:
           type: string
-          description: Title of the slot
-        description:
-          type: string
-          description: Description of the slot
-        authenticationId:
-          type: string
-          format: uuid
-          description: ID of the authentication based on which the slot has been created
-        serviceId:
-          type: string
-          format: uuid
-          description: ID of the 3rd party service for which the slot has been created
-        serviceEnvironmentId:
-          type: string
-          format: uuid
-          description: ID of the service environment for which the slot has been created
-        scopes:
-          type: array
-          description: Authentication scopes that the slot requires
-          items:
-            type: string
-        externalId:
-          type: string
-          description: Custom external identifier for the slot set in Tray UI
-        static:
-          type: boolean
-          description: Whether the slot is static and its value is shared between all solution instances
-        hidden:
-          type: boolean
-          description: Whether the slot is hidden from an end user
-        skipCTA:
-          type: boolean
-          description: Whether the UI should skip call to action button for the slot
-        requireUnique:
-          type: boolean
-          description: Whether the authentication used to fulfill the slot should be unique
+          description: Message explaining the recreation reason
       required:
-      - id
-      - title
-      - description
-      - authenticationId
-      - scopes
-      - static
-      - hidden
-      - skipCTA
-      - requireUnique
+      - code
+      - message
     solution.release.slot.AuthSlotChangeView:
       properties:
         message:
@@ -654,350 +715,6 @@ components:
       - message
       - code
       - breakingChange
-    solution.release.PublishSolutionImpactView:
-      properties:
-        releaseId:
-          type: string
-          format: uuid
-          description: ID of the solution release (not present in case of preview endpoint)
-        breakingChanges:
-          type: boolean
-          description: Informs if new version of the solution is introducing breaking changes
-        requiresNewUserInput:
-          type: boolean
-          description: Informs if new version of the solution required new end user input
-        requiresNewSystemInput:
-          type: boolean
-          description: Informs if new version of the solution required new system input
-        authSlots:
-          description: Auth slots changes
-          $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.AuthSlotChangesView'
-        configSlots:
-          description: Config slots changes
-          $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.ConfigSlotChangesView'
-      required:
-      - breakingChanges
-      - requiresNewUserInput
-      - requiresNewSystemInput
-      - authSlots
-      - configSlots
-    TooManyRequestsError:
-      title: TooManyRequestsError
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-    solution.release.PublishSolutionImpactView.AuthSlotChangesView.UpdatedAuthSlotView:
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: ID of the slot
-        title:
-          type: string
-          description: Title of the slot
-        description:
-          type: string
-          description: Description of the slot
-        authenticationId:
-          type: string
-          format: uuid
-          description: ID of the authentication based on which the slot has been created
-        serviceId:
-          type: string
-          format: uuid
-          description: ID of the 3rd party service for which the slot has been created
-        serviceEnvironmentId:
-          type: string
-          format: uuid
-          description: ID of the service environment for which the slot has been created
-        scopes:
-          type: array
-          description: Authentication scopes that the slot requires
-          items:
-            type: string
-        externalId:
-          type: string
-          description: Custom external identifier for the slot set in Tray UI
-        static:
-          type: boolean
-          description: Whether the slot is static and its value is shared between all solution instances
-        hidden:
-          type: boolean
-          description: Whether the slot is hidden from an end user
-        skipCTA:
-          type: boolean
-          description: Whether the UI should skip call to action button for the slot
-        requireUnique:
-          type: boolean
-          description: Whether the authentication used to fulfill the slot should be unique
-        hasBreakingChange:
-          type: boolean
-          description: Informs if new slot version is introducing breaking changes
-        changes:
-          type: array
-          description: Changes between previously published slot and the current one
-          items:
-            $ref: '#/components/schemas/solution.release.slot.AuthSlotChangeView'
-        previously:
-          description: Slot values previously
-          $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.AuthSlotChangesView.AuthSlotView'
-      required:
-      - id
-      - title
-      - description
-      - authenticationId
-      - scopes
-      - static
-      - hidden
-      - skipCTA
-      - requireUnique
-      - hasBreakingChange
-      - changes
-      - previously
-    solution.release.PublishSolutionImpactView.ConfigSlotChangesView.ConfigSlotView:
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: ID of the slot
-        key:
-          type: string
-          description: Project config key for which slot corresponds
-        title:
-          type: string
-          description: Title of the slot
-        description:
-          type: string
-          description: Description of the slot
-        externalId:
-          type: string
-          description: Custom external identifier for the slot set in Tray UI
-        valueType:
-          type: string
-          description: type of value that can be stored in the slot
-        ddl:
-          type: boolean
-          description: Whether the slot is a dropdown list with dynamically loaded values
-        ddlConfiguration:
-          $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.ConfigSlotChangesView.ConfigSlotDDLConfigurationView'
-        required:
-          type: boolean
-          description: Whether the slot value is required to be collected from an end user
-        useDefaultValue:
-          type: boolean
-          description: Whether the default value should be used if a value has not been collected from an end user
-        defaultValue:
-          description: A default value which can be a string, number, object, array, boolean, null
-          oneOf:
-          - type: string
-          - type: number
-          - type: object
-          - type: array
-          - type: boolean
-        referencedAuthSlotId:
-          type: string
-          format: uuid
-          description: ID of the auth slot that this config slot uses for DDL operations
-        static:
-          type: boolean
-          description: Whether the slot is static and its value is shared between all solution instances
-        hidden:
-          type: boolean
-          description: Whether the slot is hidden from an end user
-        hasCustomJs:
-          type: boolean
-          description: Whether the slot UI has custom JavaScript logic
-        hasDataMapping:
-          type: boolean
-          description: Whether the slot uses data mapping UI
-        disabledResetType:
-          type: boolean
-          description: Whether the slot UI allows to set a value to null (applies for string type values)
-      required:
-      - id
-      - key
-      - title
-      - description
-      - valueType
-      - ddl
-      - required
-      - useDefaultValue
-      - defaultValue
-      - static
-      - hidden
-      - hasCustomJs
-      - hasDataMapping
-      - disabledResetType
-    solution.release.PublishSolutionImpactView.AuthSlotChangesView.CreatedAuthSlotView:
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: ID of the slot
-        authenticationId:
-          type: string
-          format: uuid
-          description: ID of the authentication based on which the slot has been created
-        title:
-          type: string
-          description: Title of the slot
-        description:
-          type: string
-          description: Description of the slot
-        serviceId:
-          type: string
-          format: uuid
-          description: ID of the 3rd party service for which the slot has been created
-        serviceEnvironmentId:
-          type: string
-          format: uuid
-          description: ID of the service environment for which the slot has been created
-        scopes:
-          type: array
-          description: Authentication scopes that the slot requires
-          items:
-            type: string
-        externalId:
-          type: string
-          description: Custom external identifier for the slot set in Tray UI
-        static:
-          type: boolean
-          description: Whether the slot is static and its value is shared between all solution instances
-        hidden:
-          type: boolean
-          description: Whether the slot is hidden from an end user
-        skipCTA:
-          type: boolean
-          description: Whether the UI should skip call to action button for the slot
-        requireUnique:
-          type: boolean
-          description: Whether the authentication used to fulfill the slot should be unique
-        hasBreakingChange:
-          type: boolean
-          description: Informs if new slot version is introducing breaking changes
-        changes:
-          type: array
-          description: Changes between previously published slot and the current one
-          items:
-            $ref: '#/components/schemas/solution.release.slot.AuthSlotChangeView'
-        recreated:
-          type: boolean
-          description: Informs if the slot has been recreated
-        slotRecreationReasons:
-          type: array
-          description: Reasons why the slot has been recreated (present only if recreated is true)
-          items:
-            $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.AuthSlotChangesView.AuthSlotRecreationReasonView'
-        recreatedFromSlotId:
-          type: string
-          format: uuid
-          description: ID of the removed slot that this slot is replacing (present only if recreated is true)
-      required:
-      - id
-      - authenticationId
-      - title
-      - description
-      - scopes
-      - static
-      - hidden
-      - skipCTA
-      - requireUnique
-      - hasBreakingChange
-      - changes
-      - recreated
-    solution.release.slot.ConfigSlotChangeView:
-      properties:
-        message:
-          type: string
-          description: Human readable description of the change
-        code:
-          description: Code that can be used by clients to recognize specific changes
-          type: string
-          enum:
-          - CreatedMandatorySlot
-          - CreatedOptionalSlot
-          - SlotMadeMandatory
-          - SlotMadeOptional
-          - DefaultValueUpdated
-          - CustomJavascriptAdded
-          - CustomJavascriptRemoved
-          - CustomJavascriptUpdated
-          - DataMappingAdded
-          - DataMappingRemoved
-          - DataMappingUpdated
-          - KeyUpdated
-          - ValueTypeUpdated
-          - TitleUpdated
-          - DescriptionUpdated
-          - ExternalIdUpdated
-          - ReferencedAuthSlotIdUpdated
-          - ReferenceToAuthSlotIdAdded
-          - ReferenceToAuthSlotIdRemoved
-          - SlotMadeToAllowSetCustomValueInDDL
-          - SlotMadeToNotAllowSetCustomValueInDDL
-          - SlotMadeDDL
-          - SlotMadeNotDDL
-          - SlotMadeStatic
-          - SlotMadeNotStatic
-          - SlotMadeRequired
-          - SlotMadeNotRequired
-          - SlotMadeToUseDefaultValue
-          - SlotMadeToNotUseDefaultValue
-          - SlotMadeHidden
-          - SlotMadeNotHidden
-          - DisabledResetType
-          - EnabledResetType
-        breakingChange:
-          type: boolean
-          description: Whether the change is a breaking change
-      required:
-      - message
-      - code
-      - breakingChange
-    ResourceNotFound:
-      title: ResourceNotFound
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    Unauthorized:
-      title: Unauthorized
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    solution.release.PublishSolutionImpactView.ConfigSlotChangesView:
-      properties:
-        created:
-          type: array
-          description: Slots that have been added compare to the previously published solution
-          items:
-            $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.ConfigSlotChangesView.CreatedConfigSlotView'
-        updated:
-          type: array
-          description: Slots that have been updated compare to the previously published solution
-          items:
-            $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.ConfigSlotChangesView.UpdatedConfigSlotView'
-        removed:
-          type: array
-          description: Slots that have been removed compare to the previously published solution
-          items:
-            $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.ConfigSlotChangesView.ConfigSlotView'
-      required:
-      - created
-      - updated
-      - removed
     solution.release.PublishSolutionImpactView.ConfigSlotChangesView.UpdatedConfigSlotView:
       properties:
         id:
@@ -1086,8 +803,200 @@ components:
       - hasBreakingChange
       - changes
       - previously
-    InternalError:
-      title: InternalError
+    solution.release.PublishSolutionImpactView.ConfigSlotChangesView.ConfigSlotView:
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the slot
+        key:
+          type: string
+          description: Project config key for which slot corresponds
+        title:
+          type: string
+          description: Title of the slot
+        description:
+          type: string
+          description: Description of the slot
+        externalId:
+          type: string
+          description: Custom external identifier for the slot set in Tray UI
+        valueType:
+          type: string
+          description: type of value that can be stored in the slot
+        ddl:
+          type: boolean
+          description: Whether the slot is a dropdown list with dynamically loaded values
+        ddlConfiguration:
+          $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.ConfigSlotChangesView.ConfigSlotDDLConfigurationView'
+        required:
+          type: boolean
+          description: Whether the slot value is required to be collected from an end user
+        useDefaultValue:
+          type: boolean
+          description: Whether the default value should be used if a value has not been collected from an end user
+        defaultValue:
+          description: A default value which can be a string, number, object, array, boolean, null
+          oneOf:
+          - type: string
+          - type: number
+          - type: object
+          - type: array
+          - type: boolean
+        referencedAuthSlotId:
+          type: string
+          format: uuid
+          description: ID of the auth slot that this config slot uses for DDL operations
+        static:
+          type: boolean
+          description: Whether the slot is static and its value is shared between all solution instances
+        hidden:
+          type: boolean
+          description: Whether the slot is hidden from an end user
+        hasCustomJs:
+          type: boolean
+          description: Whether the slot UI has custom JavaScript logic
+        hasDataMapping:
+          type: boolean
+          description: Whether the slot uses data mapping UI
+        disabledResetType:
+          type: boolean
+          description: Whether the slot UI allows to set a value to null (applies for string type values)
+      required:
+      - id
+      - key
+      - title
+      - description
+      - valueType
+      - ddl
+      - required
+      - useDefaultValue
+      - defaultValue
+      - static
+      - hidden
+      - hasCustomJs
+      - hasDataMapping
+      - disabledResetType
+    solution.release.PublishSolutionImpactView.AuthSlotChangesView:
+      properties:
+        created:
+          type: array
+          description: Slots that have been added compare to the previously published solution
+          items:
+            $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.AuthSlotChangesView.CreatedAuthSlotView'
+        updated:
+          type: array
+          description: Slots that have been updated compare to the previously published solution
+          items:
+            $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.AuthSlotChangesView.UpdatedAuthSlotView'
+        removed:
+          type: array
+          description: Slots that have been removed compare to the previously published solution
+          items:
+            $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.AuthSlotChangesView.AuthSlotView'
+      required:
+      - created
+      - updated
+      - removed
+    solution.release.PublishSolutionImpactView.AuthSlotChangesView.UpdatedAuthSlotView:
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the slot
+        title:
+          type: string
+          description: Title of the slot
+        description:
+          type: string
+          description: Description of the slot
+        authenticationId:
+          type: string
+          format: uuid
+          description: ID of the authentication based on which the slot has been created
+        serviceId:
+          type: string
+          format: uuid
+          description: ID of the 3rd party service for which the slot has been created
+        serviceEnvironmentId:
+          type: string
+          format: uuid
+          description: ID of the service environment for which the slot has been created
+        scopes:
+          type: array
+          description: Authentication scopes that the slot requires
+          items:
+            type: string
+        externalId:
+          type: string
+          description: Custom external identifier for the slot set in Tray UI
+        static:
+          type: boolean
+          description: Whether the slot is static and its value is shared between all solution instances
+        hidden:
+          type: boolean
+          description: Whether the slot is hidden from an end user
+        skipCTA:
+          type: boolean
+          description: Whether the UI should skip call to action button for the slot
+        requireUnique:
+          type: boolean
+          description: Whether the authentication used to fulfill the slot should be unique
+        hasBreakingChange:
+          type: boolean
+          description: Informs if new slot version is introducing breaking changes
+        changes:
+          type: array
+          description: Changes between previously published slot and the current one
+          items:
+            $ref: '#/components/schemas/solution.release.slot.AuthSlotChangeView'
+        previously:
+          description: Slot values previously
+          $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.AuthSlotChangesView.AuthSlotView'
+      required:
+      - id
+      - title
+      - description
+      - authenticationId
+      - scopes
+      - static
+      - hidden
+      - skipCTA
+      - requireUnique
+      - hasBreakingChange
+      - changes
+      - previously
+    TooManyRequestsError:
+      title: TooManyRequestsError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    solution.release.PublishSolutionImpactView.ConfigSlotChangesView:
+      properties:
+        created:
+          type: array
+          description: Slots that have been added compare to the previously published solution
+          items:
+            $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.ConfigSlotChangesView.CreatedConfigSlotView'
+        updated:
+          type: array
+          description: Slots that have been updated compare to the previously published solution
+          items:
+            $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.ConfigSlotChangesView.UpdatedConfigSlotView'
+        removed:
+          type: array
+          description: Slots that have been removed compare to the previously published solution
+          items:
+            $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.ConfigSlotChangesView.ConfigSlotView'
+      required:
+      - created
+      - updated
+      - removed
+    InvalidInput:
+      title: InvalidInput
       type: object
       required:
       - message
@@ -1096,13 +1005,104 @@ components:
           type: string
         code:
           type: string
-  responses:
-    Unauthorized:
-      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/GraphQLError'
+    solution.release.PublishSolutionImpactView.ConfigSlotChangesView.ConfigSlotDDLConfigurationView:
+      properties:
+        allowSetCustomValue:
+          type: boolean
+          description: Whether the slot allows to set a custom value for a dropdown list field
+      required:
+      - allowSetCustomValue
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    solution.release.PublishSolutionImpactView.AuthSlotChangesView.AuthSlotView:
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the slot
+        title:
+          type: string
+          description: Title of the slot
+        description:
+          type: string
+          description: Description of the slot
+        authenticationId:
+          type: string
+          format: uuid
+          description: ID of the authentication based on which the slot has been created
+        serviceId:
+          type: string
+          format: uuid
+          description: ID of the 3rd party service for which the slot has been created
+        serviceEnvironmentId:
+          type: string
+          format: uuid
+          description: ID of the service environment for which the slot has been created
+        scopes:
+          type: array
+          description: Authentication scopes that the slot requires
+          items:
+            type: string
+        externalId:
+          type: string
+          description: Custom external identifier for the slot set in Tray UI
+        static:
+          type: boolean
+          description: Whether the slot is static and its value is shared between all solution instances
+        hidden:
+          type: boolean
+          description: Whether the slot is hidden from an end user
+        skipCTA:
+          type: boolean
+          description: Whether the UI should skip call to action button for the slot
+        requireUnique:
+          type: boolean
+          description: Whether the authentication used to fulfill the slot should be unique
+      required:
+      - id
+      - title
+      - description
+      - authenticationId
+      - scopes
+      - static
+      - hidden
+      - skipCTA
+      - requireUnique
+    solution.release.PublishSolutionImpactView:
+      properties:
+        releaseId:
+          type: string
+          format: uuid
+          description: ID of the solution release (not present in case of preview endpoint)
+        breakingChanges:
+          type: boolean
+          description: Informs if new version of the solution is introducing breaking changes
+        requiresNewUserInput:
+          type: boolean
+          description: Informs if new version of the solution required new end user input
+        requiresNewSystemInput:
+          type: boolean
+          description: Informs if new version of the solution required new system input
+        authSlots:
+          description: Auth slots changes
+          $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.AuthSlotChangesView'
+        configSlots:
+          description: Config slots changes
+          $ref: '#/components/schemas/solution.release.PublishSolutionImpactView.ConfigSlotChangesView'
+      required:
+      - breakingChanges
+      - requiresNewUserInput
+      - requiresNewSystemInput
+      - authSlots
+      - configSlots
   securitySchemes:
     bearerAuth:
       type: http

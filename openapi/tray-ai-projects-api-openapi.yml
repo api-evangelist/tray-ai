@@ -808,102 +808,27 @@ components:
         statusCode:
           type: integer
           description: HTTP status code
-    importexport.RemovedWorkflowSummaryView:
+    importexport.slot.AuthSlotChangesView:
       properties:
-        id:
-          type: string
-          format: uuid
-          description: ID of the removed workflow
-        name:
-          type: string
-          description: Name of the removed workflow
-      required:
-      - id
-      - name
-    importexport.ProjectImportInput:
-      properties:
-        authenticationResolution:
+        created:
           type: array
-          description: Mapping of exported authentications to the authentications available for the target project
+          description: Slots that have been added as result of import
           items:
-            $ref: '#/components/schemas/importexport.AuthImportInput'
-        configOverride:
-          type: object
-          description: A JSON object that should override existing project configuration. The object must contain the same set of keys and types of values as the exported project configuration. Only config values are allowed to be overriden.
-        exportedProjectJson:
-          type: object
-          description: A json document representing the exported project
-        connectorMapping:
+            $ref: '#/components/schemas/importexport.slot.CreatedAuthSlotView'
+        updated:
           type: array
-          description: Mapping of connectors that should be used during the project import. Allows to map connectors from the exported project to the connectors in the target project.
+          description: Slots that have been updated as result of import
           items:
-            $ref: '#/components/schemas/importexport.ConnectorMappingInput'
-        serviceMapping:
+            $ref: '#/components/schemas/importexport.slot.UpdatedAuthSlotView'
+        removed:
           type: array
-          description: Mapping of services that should be used during the project import. Allows to map services from the exported project to the services in the target project.
+          description: Slots that have been removed as result of import
           items:
-            $ref: '#/components/schemas/importexport.ServiceMappingInput'
+            $ref: '#/components/schemas/importexport.slot.AuthSlotView'
       required:
-      - authenticationResolution
-      - exportedProjectJson
-      - connectorMapping
-      - serviceMapping
-    Forbidden:
-      title: Forbidden
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    importexport.slot.AuthSlotRecreationReasonView:
-      properties:
-        code:
-          type: string
-          enum:
-          - AuthenticationIdChanged
-          - ScopesIncreased
-          - ScopesDecreased
-          - ServiceEnvironmentChanged
-        message:
-          type: string
-          description: Message explaining the recreation reason
-      required:
-      - code
-      - message
-    importexport.SolutionImportImpactViewForPreview:
-      description: Preview of an impact of the solution import. Applies only for embedded solutions import.
-      properties:
-        changeType:
-          type: string
-          enum:
-          - Created
-          - Updated
-          - Deleted
-        breakingChanges:
-          type: boolean
-          description: Informs if import would introduce breaking changes to the solution
-        requiresNewUserInput:
-          type: boolean
-          description: Informs if new version of the solution required new end user input
-        requiresNewSystemInput:
-          type: boolean
-          description: Informs if new version of the solution required new system input
-        authSlots:
-          description: Auth slots changes
-          $ref: '#/components/schemas/importexport.slot.AuthSlotChangesViewForPreview'
-        configSlots:
-          description: Config slots changes
-          $ref: '#/components/schemas/importexport.slot.ConfigSlotChangesViewForPreview'
-      required:
-      - changeType
-      - breakingChanges
-      - requiresNewUserInput
-      - requiresNewSystemInput
-      - authSlots
-      - configSlots
+      - created
+      - updated
+      - removed
     importexport.SolutionImportImpactView:
       description: Impact of the solution import. Applies only for embedded solutions import.
       properties:
@@ -938,25 +863,6 @@ components:
       - requiresNewSystemInput
       - authSlots
       - configSlots
-    importexport.PrepareProjectImportInput:
-      properties:
-        exportedProjectJson:
-          type: object
-          description: A json document representing the exported project
-        connectorMapping:
-          type: array
-          description: Mapping of connectors that should be used during the project import. Allows to map connectors from the exported project to the connectors in the target project.
-          items:
-            $ref: '#/components/schemas/importexport.ConnectorMappingInput'
-        serviceMapping:
-          type: array
-          description: Mapping of services that should be used during the project import. Allows to map services from the exported project to the services in the target project.
-          items:
-            $ref: '#/components/schemas/importexport.ServiceMappingInput'
-      required:
-      - exportedProjectJson
-      - connectorMapping
-      - serviceMapping
     importexport.slot.CreatedAuthSlotViewForPreview:
       properties:
         authenticationId:
@@ -1029,17 +935,182 @@ components:
       - hasBreakingChange
       - changes
       - recreated
-    importexport.SourceServiceInput:
+    InternalError:
+      title: InternalError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Unauthorized:
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    importexport.slot.AuthSlotChangesViewForPreview:
+      properties:
+        created:
+          type: array
+          description: Slots that would be added as result of import
+          items:
+            $ref: '#/components/schemas/importexport.slot.CreatedAuthSlotViewForPreview'
+        updated:
+          type: array
+          description: Slots that would be updated as result of import
+          items:
+            $ref: '#/components/schemas/importexport.slot.UpdatedAuthSlotView'
+        removed:
+          type: array
+          description: Slots that would be removed as result of import
+          items:
+            $ref: '#/components/schemas/importexport.slot.AuthSlotView'
+      required:
+      - created
+      - updated
+      - removed
+    importexport.slot.AuthSlotRecreationReasonView:
+      properties:
+        code:
+          type: string
+          enum:
+          - AuthenticationIdChanged
+          - ScopesIncreased
+          - ScopesDecreased
+          - ServiceEnvironmentChanged
+        message:
+          type: string
+          description: Message explaining the recreation reason
+      required:
+      - code
+      - message
+    importexport.ConfigSpecificationView:
+      properties:
+        source:
+          type: object
+          description: A JSON object which can contain key-value pairs of JSON values (exported project configuration)
+        target:
+          type: object
+          description: A JSON object which can contain key-value pairs of JSON values (current target project configuration)
+      required:
+      - source
+      - target
+    importexport.slot.UpdatedAuthSlotView:
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the slot
+        title:
+          type: string
+          description: Title of the slot
+        description:
+          type: string
+          description: Description of the slot
+        authenticationId:
+          type: string
+          format: uuid
+          description: ID of the authentication based on which the slot has been created
+        serviceId:
+          type: string
+          format: uuid
+          description: ID of the 3rd party service for which the slot has been created
+        serviceEnvironmentId:
+          type: string
+          format: uuid
+          description: ID of the service environment for which the slot has been created
+        scopes:
+          type: array
+          description: Authentication scopes that the slot requires
+          items:
+            type: string
+        externalId:
+          type: string
+          description: Custom external identifier for the slot set in Tray UI
+        static:
+          type: boolean
+          description: Whether the slot is static and its value is shared between all solution instances
+        hidden:
+          type: boolean
+          description: Whether the slot is hidden from an end user
+        skipCTA:
+          type: boolean
+          description: Whether the UI should skip call to action button for the slot
+        requireUnique:
+          type: boolean
+          description: Whether the authentication used to fulfill the slot should be unique
+        hasBreakingChange:
+          type: boolean
+          description: Informs if new slot version is introducing breaking changes
+        changes:
+          type: array
+          description: The slot changes introduced by import
+          items:
+            $ref: '#/components/schemas/importexport.slot.AuthSlotChangeView'
+        previously:
+          description: Slot values previously
+          $ref: '#/components/schemas/importexport.slot.AuthSlotView'
+      required:
+      - id
+      - title
+      - description
+      - authenticationId
+      - scopes
+      - static
+      - hidden
+      - skipCTA
+      - requireUnique
+      - hasBreakingChange
+      - changes
+      - previously
+    importexport.TargetConnectorInput:
       properties:
         name:
           type: string
-          description: Name of the entity in Tray system representing 3rd party service
+          description: Name of the connector
         version:
           type: string
-          description: 'Version of the service. For example: "1", "2", "3"'
+          description: 'Version of the connector. For example: "1.0", "1.1", "1.2"'
       required:
       - name
       - version
+    importexport.CreatedWorkflowSummaryView:
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the created workflow
+        name:
+          type: string
+        importedFromId:
+          type: string
+          format: uuid
+          description: ID of the workflow from which the created workflow has been imported
+      required:
+      - id
+      - name
+      - importedFromId
+    importexport.ProjectImportResponse:
+      properties:
+        importMetadata:
+          description: Metadata of the import
+          $ref: '#/components/schemas/importexport.ImportMetadataView'
+        projectImpact:
+          description: Impact of the import on the project
+          $ref: '#/components/schemas/importexport.ProjectImportImpactView'
+        solutionImpact:
+          description: Impact of the import on the solution (present only if importing a project with embedded solution)
+          $ref: '#/components/schemas/importexport.SolutionImportImpactView'
+      required:
+      - importMetadata
+      - projectImpact
     importexport.slot.CreatedConfigSlotView:
       properties:
         id:
@@ -1137,19 +1208,219 @@ components:
       - hasBreakingChange
       - changes
       - recreated
-    importexport.ConnectorMappingInput:
+    importexport.UpdatedWorkflowSummaryView:
       properties:
-        from:
-          description: Source connector that should be mapped to the target connector
-          $ref: '#/components/schemas/importexport.SourceConnectorInput'
-        to:
-          description: Target connector that should be used during the project import
-          $ref: '#/components/schemas/importexport.TargetConnectorInput'
+        id:
+          type: string
+          format: uuid
+          description: ID of the updated workflow
+        name:
+          type: string
+          description: Name of the updated workflow
+        importedFromId:
+          type: string
+          format: uuid
+          description: ID of the workflow from which the updated workflow has been imported
       required:
-      - from
-      - to
-    InvalidInput:
-      title: InvalidInput
+      - id
+      - name
+      - importedFromId
+    importexport.slot.ConfigSlotChangesViewForPreview:
+      properties:
+        created:
+          type: array
+          description: Slots that would be added as result of import
+          items:
+            $ref: '#/components/schemas/importexport.slot.CreatedConfigSlotViewForPreview'
+        updated:
+          type: array
+          description: Slots that would be updated as result of import
+          items:
+            $ref: '#/components/schemas/importexport.slot.UpdatedConfigSlotView'
+        removed:
+          type: array
+          description: Slots that would be removed as result of import
+          items:
+            $ref: '#/components/schemas/importexport.slot.ConfigSlotView'
+      required:
+      - created
+      - updated
+      - removed
+    importexport.ProjectConfigItemView:
+      properties:
+        key:
+          type: string
+          description: Project config key for which slot corresponds
+        value:
+          description: A JSON value which can be a string, number, object, array, boolean, null
+          oneOf:
+          - type: string
+          - type: number
+          - type: object
+          - type: array
+          - type: boolean
+      required:
+      - key
+      - value
+    importexport.PrepareProjectImportInput:
+      properties:
+        exportedProjectJson:
+          type: object
+          description: A json document representing the exported project
+        connectorMapping:
+          type: array
+          description: Mapping of connectors that should be used during the project import. Allows to map connectors from the exported project to the connectors in the target project.
+          items:
+            $ref: '#/components/schemas/importexport.ConnectorMappingInput'
+        serviceMapping:
+          type: array
+          description: Mapping of services that should be used during the project import. Allows to map services from the exported project to the services in the target project.
+          items:
+            $ref: '#/components/schemas/importexport.ServiceMappingInput'
+      required:
+      - exportedProjectJson
+      - connectorMapping
+      - serviceMapping
+    importexport.slot.ConfigSlotDDLConfigurationView:
+      properties:
+        allowSetCustomValue:
+          type: boolean
+          description: Whether the slot allows to set a custom value for a dropdown list field
+      required:
+      - allowSetCustomValue
+    importexport.SolutionImportImpactViewForPreview:
+      description: Preview of an impact of the solution import. Applies only for embedded solutions import.
+      properties:
+        changeType:
+          type: string
+          enum:
+          - Created
+          - Updated
+          - Deleted
+        breakingChanges:
+          type: boolean
+          description: Informs if import would introduce breaking changes to the solution
+        requiresNewUserInput:
+          type: boolean
+          description: Informs if new version of the solution required new end user input
+        requiresNewSystemInput:
+          type: boolean
+          description: Informs if new version of the solution required new system input
+        authSlots:
+          description: Auth slots changes
+          $ref: '#/components/schemas/importexport.slot.AuthSlotChangesViewForPreview'
+        configSlots:
+          description: Config slots changes
+          $ref: '#/components/schemas/importexport.slot.ConfigSlotChangesViewForPreview'
+      required:
+      - changeType
+      - breakingChanges
+      - requiresNewUserInput
+      - requiresNewSystemInput
+      - authSlots
+      - configSlots
+    importexport.slot.ConfigSlotRecreationReasonView:
+      properties:
+        code:
+          type: string
+          enum:
+          - ConfigVariableKeyChanged
+          - ConfigVariableTypeChanged
+          - AuthSlotReferencedByDLLFieldChanged
+          - IncompatibleDDLChanged
+        message:
+          type: string
+          description: Message explaining the recreation reason
+      required:
+      - code
+      - message
+    CreateProjectVersionInput:
+      properties:
+        title:
+          type: string
+          description: Title of the project version that is going to be created
+        description:
+          type: string
+          description: Description of the project version that is going to be created
+      required:
+      - title
+    importexport.ServiceNameAndVersionView:
+      properties:
+        name:
+          type: string
+          description: Name of the entity in Tray system representing 3rd party service
+        version:
+          type: string
+          description: Version of the service
+      required:
+      - name
+      - version
+    importexport.slot.AuthSlotChangeView:
+      properties:
+        message:
+          type: string
+          description: Human readable description of the change
+        code:
+          description: Code that can be used by clients to recognize specific changes
+          type: string
+          enum:
+          - CreatedMandatorySlot
+          - CreatedOptionalSlot
+          - SlotMadeMandatory
+          - SlotMadeOptional
+          - ScopesIncreased
+          - ScopesDecreased
+          - TitleUpdated
+          - DescriptionUpdated
+          - ExternalIdUpdated
+          - ServiceIdUpdated
+          - ServiceEnvironmentIdUpdated
+          - AuthenticationIdUpdated
+          - SlotMadeStatic
+          - SlotMadeNotStatic
+          - SlotMadeHidden
+          - SlotMadeNotHidden
+          - SlotMadeToSkipCTA
+          - SlotMadeToNotSkipCTA
+          - SlotMadeToRequireUnique
+          - SlotMadeToNotRequireUnique
+        breakingChange:
+          type: boolean
+          description: Whether the change is a breaking change
+      required:
+      - message
+      - code
+      - breakingChange
+    importexport.ProjectImportInput:
+      properties:
+        authenticationResolution:
+          type: array
+          description: Mapping of exported authentications to the authentications available for the target project
+          items:
+            $ref: '#/components/schemas/importexport.AuthImportInput'
+        configOverride:
+          type: object
+          description: A JSON object that should override existing project configuration. The object must contain the same set of keys and types of values as the exported project configuration. Only config values are allowed to be overriden.
+        exportedProjectJson:
+          type: object
+          description: A json document representing the exported project
+        connectorMapping:
+          type: array
+          description: Mapping of connectors that should be used during the project import. Allows to map connectors from the exported project to the connectors in the target project.
+          items:
+            $ref: '#/components/schemas/importexport.ConnectorMappingInput'
+        serviceMapping:
+          type: array
+          description: Mapping of services that should be used during the project import. Allows to map services from the exported project to the services in the target project.
+          items:
+            $ref: '#/components/schemas/importexport.ServiceMappingInput'
+      required:
+      - authenticationResolution
+      - exportedProjectJson
+      - connectorMapping
+      - serviceMapping
+    ResourceNotFound:
+      title: ResourceNotFound
       type: object
       required:
       - message
@@ -1158,25 +1429,6 @@ components:
           type: string
         code:
           type: string
-    importexport.TargetConnectorInput:
-      properties:
-        name:
-          type: string
-          description: Name of the connector
-        version:
-          type: string
-          description: 'Version of the connector. For example: "1.0", "1.1", "1.2"'
-      required:
-      - name
-      - version
-    importexport.ServiceEnvironmentView:
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: ID of the service environment
-      required:
-      - id
     importexport.slot.ConfigSlotChangeView:
       properties:
         message:
@@ -1226,279 +1478,27 @@ components:
       - message
       - code
       - breakingChange
-    importexport.AuthenticationRequirementView:
-      properties:
-        authExportId:
-          type: string
-          description: Export identifier of a source authentication
-        title:
-          type: string
-          description: Title of the authentication used in exported project
-        service:
-          description: Object representing the 3rd party service related to the authentication
-          $ref: '#/components/schemas/importexport.ServiceNameAndVersionView'
-        scopes:
-          type: array
-          description: Required authentication scopes
-          items:
-            type: string
-        resolvedAuthentication:
-          description: List of resolved authentications that can be used during the project import
-          $ref: '#/components/schemas/importexport.ResolvedAuthenticationRequirementView'
-      required:
-      - authExportId
-      - title
-      - service
-      - scopes
-    importexport.ServiceNameAndVersionView:
-      properties:
-        name:
-          type: string
-          description: Name of the entity in Tray system representing 3rd party service
-        version:
-          type: string
-          description: Version of the service
-      required:
-      - name
-      - version
-    importexport.TargetServiceInput:
-      properties:
-        name:
-          type: string
-          description: Name of the entity in Tray system representing 3rd party service
-        version:
-          type: string
-          description: 'Version of the service. For example: "1", "2", "3"'
-      required:
-      - name
-      - version
-    importexport.ProjectImportImpactView:
-      description: Impact of the project import.
-      properties:
-        config:
-          description: Project configuration changes
-          $ref: '#/components/schemas/importexport.ProjectConfigChangesView'
-        workflows:
-          description: Project workflows changes
-          $ref: '#/components/schemas/importexport.WorkflowChangesView'
-      required:
-      - config
-      - workflows
-    importexport.PrepareProjectImportResponse:
-      properties:
-        unresolvedAuthentications:
-          type: boolean
-          description: Whether there are unresolved authentications
-        newConfigKeys:
-          type: boolean
-          description: Whether there are new config keys
-        config:
-          description: Exported project configuration and current target project configurations
-          $ref: '#/components/schemas/importexport.ConfigSpecificationView'
-        authenticationsRequirements:
-          type: array
-          description: List of requirements for authentications required by the project import
-          items:
-            $ref: '#/components/schemas/importexport.AuthenticationRequirementView'
-      required:
-      - unresolvedAuthentications
-      - newConfigKeys
-      - config
-      - authenticationsRequirements
-    importexport.ProjectImportResponse:
-      properties:
-        importMetadata:
-          description: Metadata of the import
-          $ref: '#/components/schemas/importexport.ImportMetadataView'
-        projectImpact:
-          description: Impact of the import on the project
-          $ref: '#/components/schemas/importexport.ProjectImportImpactView'
-        solutionImpact:
-          description: Impact of the import on the solution (present only if importing a project with embedded solution)
-          $ref: '#/components/schemas/importexport.SolutionImportImpactView'
-      required:
-      - importMetadata
-      - projectImpact
-    importexport.slot.AuthSlotChangesView:
+    importexport.ProjectConfigChangesView:
       properties:
         created:
           type: array
-          description: Slots that have been added as result of import
+          description: Added project configuration items
           items:
-            $ref: '#/components/schemas/importexport.slot.CreatedAuthSlotView'
+            $ref: '#/components/schemas/importexport.ProjectConfigItemView'
         updated:
           type: array
-          description: Slots that have been updated as result of import
+          description: Updated project configuration items
           items:
-            $ref: '#/components/schemas/importexport.slot.UpdatedAuthSlotView'
+            $ref: '#/components/schemas/importexport.ModifiedProjectConfigItemView'
         removed:
           type: array
-          description: Slots that have been removed as result of import
+          description: Removed project configuration items
           items:
-            $ref: '#/components/schemas/importexport.slot.AuthSlotView'
+            $ref: '#/components/schemas/importexport.ProjectConfigItemView'
       required:
       - created
       - updated
       - removed
-    importexport.WorkflowChangesViewForPreview:
-      properties:
-        created:
-          type: array
-          description: Workflows that would added as result of import
-          items:
-            $ref: '#/components/schemas/importexport.CreatedWorkflowSummaryViewForPreview'
-        updated:
-          type: array
-          description: Workflows that would updated as result of import
-          items:
-            $ref: '#/components/schemas/importexport.UpdatedWorkflowSummaryView'
-        removed:
-          type: array
-          description: Workflows that would removed as result of import
-          items:
-            $ref: '#/components/schemas/importexport.RemovedWorkflowSummaryView'
-      required:
-      - created
-      - updated
-      - removed
-    importexport.ResolvedAuthenticationRequirementView:
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: ID of the resolved authentication
-        title:
-          type: string
-          description: Title of the resolved authentication
-        service:
-          description: Object representing the 3rd party service related to resolved authentication
-          $ref: '#/components/schemas/importexport.ServiceNameAndVersionView'
-        serviceEnvironment:
-          description: Object representing the service environment related to resolved authentication
-          $ref: '#/components/schemas/importexport.ServiceEnvironmentView'
-        scopes:
-          type: array
-          description: Scopes of the resolved authentication
-          items:
-            type: string
-      required:
-      - id
-      - title
-      - service
-      - serviceEnvironment
-      - scopes
-    importexport.WorkflowChangesView:
-      properties:
-        created:
-          type: array
-          description: Workflows that have been added as result of import
-          items:
-            $ref: '#/components/schemas/importexport.CreatedWorkflowSummaryView'
-        updated:
-          type: array
-          description: Workflows that have been updated as result of import
-          items:
-            $ref: '#/components/schemas/importexport.UpdatedWorkflowSummaryView'
-        removed:
-          type: array
-          description: Workflows that have been removed as result of import
-          items:
-            $ref: '#/components/schemas/importexport.RemovedWorkflowSummaryView'
-      required:
-      - created
-      - updated
-      - removed
-    importexport.slot.AuthSlotView:
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: ID of the slot
-        title:
-          type: string
-          description: Title of the slot
-        description:
-          type: string
-          description: Description of the slot
-        authenticationId:
-          type: string
-          format: uuid
-          description: ID of the authentication based on which the slot has been created
-        serviceId:
-          type: string
-          format: uuid
-          description: ID of the 3rd party service for which the slot has been created
-        serviceEnvironmentId:
-          type: string
-          format: uuid
-          description: ID of the service environment for which the slot has been created
-        scopes:
-          type: array
-          description: Authentication scopes that the slot requires
-          items:
-            type: string
-        externalId:
-          type: string
-          description: Custom external identifier for the slot set in Tray UI
-        static:
-          type: boolean
-          description: Whether the slot is static and its value is shared between all solution instances
-        hidden:
-          type: boolean
-          description: Whether the slot is hidden from an end user
-        skipCTA:
-          type: boolean
-          description: Whether the UI should skip call to action button for the slot
-        requireUnique:
-          type: boolean
-          description: Whether the authentication used to fulfill the slot should be unique
-      required:
-      - id
-      - title
-      - description
-      - authenticationId
-      - scopes
-      - static
-      - hidden
-      - skipCTA
-      - requireUnique
-    importexport.ImportMetadataView:
-      properties:
-        importedFrom:
-          $ref: '#/components/schemas/importexport.ImportedFromMetadataView'
-        projectId:
-          type: string
-          format: uuid
-        projectName:
-          type: string
-      required:
-      - importedFrom
-      - projectId
-      - projectName
-    importexport.ImportedFromMetadataView:
-      properties:
-        projectId:
-          type: string
-          format: uuid
-        projectVersion:
-          type: string
-        projectName:
-          type: string
-      required:
-      - projectId
-      - projectName
-    importexport.ProjectImportImpactViewForPreview:
-      description: Preview of an impact of the project import.
-      properties:
-        config:
-          description: Project configuration changes
-          $ref: '#/components/schemas/importexport.ProjectConfigChangesView'
-        workflows:
-          description: Project workflows changes
-          $ref: '#/components/schemas/importexport.WorkflowChangesViewForPreview'
-      required:
-      - config
-      - workflows
     importexport.slot.CreatedConfigSlotViewForPreview:
       properties:
         key:
@@ -1591,14 +1591,205 @@ components:
       - hasBreakingChange
       - changes
       - recreated
-    TooManyRequestsError:
-      title: TooManyRequestsError
-      type: object
-      required:
-      - message
+    importexport.WorkflowChangesViewForPreview:
       properties:
-        message:
+        created:
+          type: array
+          description: Workflows that would added as result of import
+          items:
+            $ref: '#/components/schemas/importexport.CreatedWorkflowSummaryViewForPreview'
+        updated:
+          type: array
+          description: Workflows that would updated as result of import
+          items:
+            $ref: '#/components/schemas/importexport.UpdatedWorkflowSummaryView'
+        removed:
+          type: array
+          description: Workflows that would removed as result of import
+          items:
+            $ref: '#/components/schemas/importexport.RemovedWorkflowSummaryView'
+      required:
+      - created
+      - updated
+      - removed
+    importexport.CreatedWorkflowSummaryViewForPreview:
+      properties:
+        name:
           type: string
+          description: Name of the created workflow
+        importedFromId:
+          type: string
+          format: uuid
+          description: ID of the workflow from which the created workflow has been imported
+      required:
+      - name
+      - importedFromId
+    PageInfoResponse:
+      properties:
+        startCursor:
+          type: string
+          description: pagination parameter that can be passed in `cursor` query parameter
+        endCursor:
+          type: string
+          description: pagination parameter that can be passed in `cursor` query parameter
+        hasNextPage:
+          type: boolean
+          description: indicates the existence of another page of response that can be obtained by passing endCursor value in `cursor` query parameter
+        hasPreviousPage:
+          type: boolean
+          description: indicates the existence of another page of response that can be obtained by passing startCursor value in `cursor` query parameter
+      required:
+      - hasNextPage
+      - hasPreviousPage
+    importexport.AuthenticationRequirementView:
+      properties:
+        authExportId:
+          type: string
+          description: Export identifier of a source authentication
+        title:
+          type: string
+          description: Title of the authentication used in exported project
+        service:
+          description: Object representing the 3rd party service related to the authentication
+          $ref: '#/components/schemas/importexport.ServiceNameAndVersionView'
+        scopes:
+          type: array
+          description: Required authentication scopes
+          items:
+            type: string
+        resolvedAuthentication:
+          description: List of resolved authentications that can be used during the project import
+          $ref: '#/components/schemas/importexport.ResolvedAuthenticationRequirementView'
+      required:
+      - authExportId
+      - title
+      - service
+      - scopes
+    importexport.ProjectImportPreviewResponse:
+      properties:
+        importMetadata:
+          description: Metadata of the import
+          $ref: '#/components/schemas/importexport.ImportMetadataView'
+        projectImpact:
+          description: Preview of an impact of the import on the project
+          $ref: '#/components/schemas/importexport.ProjectImportImpactViewForPreview'
+        solutionImpact:
+          description: Preview of an impact of the import on the solution (present only if importing a project with embedded solution)
+          $ref: '#/components/schemas/importexport.SolutionImportImpactViewForPreview'
+      required:
+      - importMetadata
+      - projectImpact
+    importexport.ProjectImportImpactViewForPreview:
+      description: Preview of an impact of the project import.
+      properties:
+        config:
+          description: Project configuration changes
+          $ref: '#/components/schemas/importexport.ProjectConfigChangesView'
+        workflows:
+          description: Project workflows changes
+          $ref: '#/components/schemas/importexport.WorkflowChangesViewForPreview'
+      required:
+      - config
+      - workflows
+    importexport.ModifiedProjectConfigItemView:
+      properties:
+        key:
+          type: string
+          description: Project config key for which slot corresponds
+        oldValue:
+          description: A JSON value which can be a string, number, object, array, boolean, null
+          oneOf:
+          - type: string
+          - type: number
+          - type: object
+          - type: array
+          - type: boolean
+        newValue:
+          description: A JSON value which can be a string, number, object, array, boolean, null
+          oneOf:
+          - type: string
+          - type: number
+          - type: object
+          - type: array
+          - type: boolean
+      required:
+      - key
+      - oldValue
+      - newValue
+    importexport.slot.ConfigSlotView:
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the slot
+        key:
+          type: string
+          description: Project config key for which slot corresponds
+        title:
+          type: string
+          description: Title of the slot
+        description:
+          type: string
+          description: Description of the slot
+        externalId:
+          type: string
+          description: Custom external identifier for the slot set in Tray UI
+        valueType:
+          type: string
+          description: type of value that can be stored in the slot
+        ddl:
+          type: boolean
+          description: Whether the slot is a dropdown list with dynamically loaded values
+        ddlConfiguration:
+          $ref: '#/components/schemas/importexport.slot.ConfigSlotDDLConfigurationView'
+        required:
+          type: boolean
+          description: Whether the slot value is required to be collected from an end user
+        useDefaultValue:
+          type: boolean
+          description: Whether the default value should be used if a value has not been collected from an end user
+        defaultValue:
+          description: A default value which can be a string, number, object, array, boolean, null
+          oneOf:
+          - type: string
+          - type: number
+          - type: object
+          - type: array
+          - type: boolean
+        referencedAuthSlotId:
+          type: string
+          format: uuid
+          description: ID of the auth slot that this config slot uses for DDL operations
+        static:
+          type: boolean
+          description: Whether the slot is static and its value is shared between all solution instances
+        hidden:
+          type: boolean
+          description: Whether the slot is hidden from an end user
+        hasCustomJs:
+          type: boolean
+          description: Whether the slot UI has custom JavaScript logic
+        hasDataMapping:
+          type: boolean
+          description: Whether the slot uses data mapping UI
+        disabledResetType:
+          type: boolean
+          description: Whether the slot UI allows to set a value to null (applies for string type values)
+      required:
+      - id
+      - key
+      - title
+      - description
+      - valueType
+      - ddl
+      - required
+      - useDefaultValue
+      - defaultValue
+      - static
+      - hidden
+      - hasCustomJs
+      - hasDataMapping
+      - disabledResetType
     importexport.slot.CreatedAuthSlotView:
       properties:
         id:
@@ -1676,138 +1867,38 @@ components:
       - hasBreakingChange
       - changes
       - recreated
-    importexport.UpdatedWorkflowSummaryView:
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: ID of the updated workflow
-        name:
-          type: string
-          description: Name of the updated workflow
-        importedFromId:
-          type: string
-          format: uuid
-          description: ID of the workflow from which the updated workflow has been imported
-      required:
-      - id
-      - name
-      - importedFromId
-    importexport.ProjectConfigItemView:
-      properties:
-        key:
-          type: string
-          description: Project config key for which slot corresponds
-        value:
-          description: A JSON value which can be a string, number, object, array, boolean, null
-          oneOf:
-          - type: string
-          - type: number
-          - type: object
-          - type: array
-          - type: boolean
-      required:
-      - key
-      - value
-    importexport.slot.ConfigSlotChangesView:
+    importexport.WorkflowChangesView:
       properties:
         created:
           type: array
-          description: Slots that have been added as result of import
+          description: Workflows that have been added as result of import
           items:
-            $ref: '#/components/schemas/importexport.slot.CreatedConfigSlotView'
+            $ref: '#/components/schemas/importexport.CreatedWorkflowSummaryView'
         updated:
           type: array
-          description: Slots that have been updated as result of import
+          description: Workflows that have been updated as result of import
           items:
-            $ref: '#/components/schemas/importexport.slot.UpdatedConfigSlotView'
+            $ref: '#/components/schemas/importexport.UpdatedWorkflowSummaryView'
         removed:
           type: array
-          description: Slots that have been removed as result of import
+          description: Workflows that have been removed as result of import
           items:
-            $ref: '#/components/schemas/importexport.slot.ConfigSlotView'
+            $ref: '#/components/schemas/importexport.RemovedWorkflowSummaryView'
       required:
       - created
       - updated
       - removed
-    importexport.ServiceMappingInput:
+    importexport.ConnectorMappingInput:
       properties:
         from:
-          description: Source service that should be mapped to the target service
-          $ref: '#/components/schemas/importexport.SourceServiceInput'
+          description: Source connector that should be mapped to the target connector
+          $ref: '#/components/schemas/importexport.SourceConnectorInput'
         to:
-          description: Target service that should be used during the project import
-          $ref: '#/components/schemas/importexport.TargetServiceInput'
+          description: Target connector that should be used during the project import
+          $ref: '#/components/schemas/importexport.TargetConnectorInput'
       required:
       - from
       - to
-    importexport.SourceConnectorInput:
-      properties:
-        name:
-          type: string
-          description: Name of the connector
-        version:
-          type: string
-          description: 'Version of the connector. For example: "1.0", "1.1", "1.2"'
-      required:
-      - name
-      - version
-    importexport.ModifiedProjectConfigItemView:
-      properties:
-        key:
-          type: string
-          description: Project config key for which slot corresponds
-        oldValue:
-          description: A JSON value which can be a string, number, object, array, boolean, null
-          oneOf:
-          - type: string
-          - type: number
-          - type: object
-          - type: array
-          - type: boolean
-        newValue:
-          description: A JSON value which can be a string, number, object, array, boolean, null
-          oneOf:
-          - type: string
-          - type: number
-          - type: object
-          - type: array
-          - type: boolean
-      required:
-      - key
-      - oldValue
-      - newValue
-    importexport.slot.AuthSlotChangesViewForPreview:
-      properties:
-        created:
-          type: array
-          description: Slots that would be added as result of import
-          items:
-            $ref: '#/components/schemas/importexport.slot.CreatedAuthSlotViewForPreview'
-        updated:
-          type: array
-          description: Slots that would be updated as result of import
-          items:
-            $ref: '#/components/schemas/importexport.slot.UpdatedAuthSlotView'
-        removed:
-          type: array
-          description: Slots that would be removed as result of import
-          items:
-            $ref: '#/components/schemas/importexport.slot.AuthSlotView'
-      required:
-      - created
-      - updated
-      - removed
-    ResourceNotFound:
-      title: ResourceNotFound
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
     ProjectVersionResponse:
       properties:
         projectId:
@@ -1837,197 +1928,85 @@ components:
       - description
       - created
       - creator
-    PageInfoResponse:
-      properties:
-        startCursor:
-          type: string
-          description: pagination parameter that can be passed in `cursor` query parameter
-        endCursor:
-          type: string
-          description: pagination parameter that can be passed in `cursor` query parameter
-        hasNextPage:
-          type: boolean
-          description: indicates the existence of another page of response that can be obtained by passing endCursor value in `cursor` query parameter
-        hasPreviousPage:
-          type: boolean
-          description: indicates the existence of another page of response that can be obtained by passing startCursor value in `cursor` query parameter
-      required:
-      - hasNextPage
-      - hasPreviousPage
-    importexport.CreatedWorkflowSummaryViewForPreview:
-      properties:
-        name:
-          type: string
-          description: Name of the created workflow
-        importedFromId:
-          type: string
-          format: uuid
-          description: ID of the workflow from which the created workflow has been imported
-      required:
-      - name
-      - importedFromId
-    Unauthorized:
-      title: Unauthorized
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    importexport.slot.AuthSlotChangeView:
-      properties:
-        message:
-          type: string
-          description: Human readable description of the change
-        code:
-          description: Code that can be used by clients to recognize specific changes
-          type: string
-          enum:
-          - CreatedMandatorySlot
-          - CreatedOptionalSlot
-          - SlotMadeMandatory
-          - SlotMadeOptional
-          - ScopesIncreased
-          - ScopesDecreased
-          - TitleUpdated
-          - DescriptionUpdated
-          - ExternalIdUpdated
-          - ServiceIdUpdated
-          - ServiceEnvironmentIdUpdated
-          - AuthenticationIdUpdated
-          - SlotMadeStatic
-          - SlotMadeNotStatic
-          - SlotMadeHidden
-          - SlotMadeNotHidden
-          - SlotMadeToSkipCTA
-          - SlotMadeToNotSkipCTA
-          - SlotMadeToRequireUnique
-          - SlotMadeToNotRequireUnique
-        breakingChange:
-          type: boolean
-          description: Whether the change is a breaking change
-      required:
-      - message
-      - code
-      - breakingChange
-    importexport.ProjectImportPreviewResponse:
-      properties:
-        importMetadata:
-          description: Metadata of the import
-          $ref: '#/components/schemas/importexport.ImportMetadataView'
-        projectImpact:
-          description: Preview of an impact of the import on the project
-          $ref: '#/components/schemas/importexport.ProjectImportImpactViewForPreview'
-        solutionImpact:
-          description: Preview of an impact of the import on the solution (present only if importing a project with embedded solution)
-          $ref: '#/components/schemas/importexport.SolutionImportImpactViewForPreview'
-      required:
-      - importMetadata
-      - projectImpact
-    importexport.slot.ConfigSlotView:
+    importexport.RemovedWorkflowSummaryView:
       properties:
         id:
           type: string
           format: uuid
-          description: ID of the slot
-        key:
+          description: ID of the removed workflow
+        name:
           type: string
-          description: Project config key for which slot corresponds
-        title:
-          type: string
-          description: Title of the slot
-        description:
-          type: string
-          description: Description of the slot
-        externalId:
-          type: string
-          description: Custom external identifier for the slot set in Tray UI
-        valueType:
-          type: string
-          description: type of value that can be stored in the slot
-        ddl:
-          type: boolean
-          description: Whether the slot is a dropdown list with dynamically loaded values
-        ddlConfiguration:
-          $ref: '#/components/schemas/importexport.slot.ConfigSlotDDLConfigurationView'
-        required:
-          type: boolean
-          description: Whether the slot value is required to be collected from an end user
-        useDefaultValue:
-          type: boolean
-          description: Whether the default value should be used if a value has not been collected from an end user
-        defaultValue:
-          description: A default value which can be a string, number, object, array, boolean, null
-          oneOf:
-          - type: string
-          - type: number
-          - type: object
-          - type: array
-          - type: boolean
-        referencedAuthSlotId:
-          type: string
-          format: uuid
-          description: ID of the auth slot that this config slot uses for DDL operations
-        static:
-          type: boolean
-          description: Whether the slot is static and its value is shared between all solution instances
-        hidden:
-          type: boolean
-          description: Whether the slot is hidden from an end user
-        hasCustomJs:
-          type: boolean
-          description: Whether the slot UI has custom JavaScript logic
-        hasDataMapping:
-          type: boolean
-          description: Whether the slot uses data mapping UI
-        disabledResetType:
-          type: boolean
-          description: Whether the slot UI allows to set a value to null (applies for string type values)
+          description: Name of the removed workflow
       required:
       - id
-      - key
-      - title
-      - description
-      - valueType
-      - ddl
-      - required
-      - useDefaultValue
-      - defaultValue
-      - static
-      - hidden
-      - hasCustomJs
-      - hasDataMapping
-      - disabledResetType
-    importexport.slot.ConfigSlotDDLConfigurationView:
+      - name
+    importexport.ImportedFromMetadataView:
       properties:
-        allowSetCustomValue:
-          type: boolean
-          description: Whether the slot allows to set a custom value for a dropdown list field
+        projectId:
+          type: string
+          format: uuid
+        projectVersion:
+          type: string
+        projectName:
+          type: string
       required:
-      - allowSetCustomValue
-    importexport.ProjectConfigChangesView:
+      - projectId
+      - projectName
+    importexport.SourceConnectorInput:
+      properties:
+        name:
+          type: string
+          description: Name of the connector
+        version:
+          type: string
+          description: 'Version of the connector. For example: "1.0", "1.1", "1.2"'
+      required:
+      - name
+      - version
+    importexport.ProjectImportImpactView:
+      description: Impact of the project import.
+      properties:
+        config:
+          description: Project configuration changes
+          $ref: '#/components/schemas/importexport.ProjectConfigChangesView'
+        workflows:
+          description: Project workflows changes
+          $ref: '#/components/schemas/importexport.WorkflowChangesView'
+      required:
+      - config
+      - workflows
+    importexport.slot.ConfigSlotChangesView:
       properties:
         created:
           type: array
-          description: Added project configuration items
+          description: Slots that have been added as result of import
           items:
-            $ref: '#/components/schemas/importexport.ProjectConfigItemView'
+            $ref: '#/components/schemas/importexport.slot.CreatedConfigSlotView'
         updated:
           type: array
-          description: Updated project configuration items
+          description: Slots that have been updated as result of import
           items:
-            $ref: '#/components/schemas/importexport.ModifiedProjectConfigItemView'
+            $ref: '#/components/schemas/importexport.slot.UpdatedConfigSlotView'
         removed:
           type: array
-          description: Removed project configuration items
+          description: Slots that have been removed as result of import
           items:
-            $ref: '#/components/schemas/importexport.ProjectConfigItemView'
+            $ref: '#/components/schemas/importexport.slot.ConfigSlotView'
       required:
       - created
       - updated
       - removed
+    importexport.TargetServiceInput:
+      properties:
+        name:
+          type: string
+          description: Name of the entity in Tray system representing 3rd party service
+        version:
+          type: string
+          description: 'Version of the service. For example: "1", "2", "3"'
+      required:
+      - name
+      - version
     PageResponse-ProjectVersionResponse:
       properties:
         elements:
@@ -2041,169 +2020,6 @@ components:
       required:
       - elements
       - pageInfo
-    importexport.slot.ConfigSlotRecreationReasonView:
-      properties:
-        code:
-          type: string
-          enum:
-          - ConfigVariableKeyChanged
-          - ConfigVariableTypeChanged
-          - AuthSlotReferencedByDLLFieldChanged
-          - IncompatibleDDLChanged
-        message:
-          type: string
-          description: Message explaining the recreation reason
-      required:
-      - code
-      - message
-    importexport.AuthImportInput:
-      properties:
-        authExportId:
-          type: string
-          description: Export identifier of a source authentication
-        authenticationId:
-          type: string
-          format: uuid
-          description: ID of the authentication selected to be used for authExportId during the project import
-      required:
-      - authExportId
-      - authenticationId
-    importexport.ConfigSpecificationView:
-      properties:
-        source:
-          type: object
-          description: A JSON object which can contain key-value pairs of JSON values (exported project configuration)
-        target:
-          type: object
-          description: A JSON object which can contain key-value pairs of JSON values (current target project configuration)
-      required:
-      - source
-      - target
-    importexport.slot.ConfigSlotChangesViewForPreview:
-      properties:
-        created:
-          type: array
-          description: Slots that would be added as result of import
-          items:
-            $ref: '#/components/schemas/importexport.slot.CreatedConfigSlotViewForPreview'
-        updated:
-          type: array
-          description: Slots that would be updated as result of import
-          items:
-            $ref: '#/components/schemas/importexport.slot.UpdatedConfigSlotView'
-        removed:
-          type: array
-          description: Slots that would be removed as result of import
-          items:
-            $ref: '#/components/schemas/importexport.slot.ConfigSlotView'
-      required:
-      - created
-      - updated
-      - removed
-    importexport.slot.UpdatedAuthSlotView:
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: ID of the slot
-        title:
-          type: string
-          description: Title of the slot
-        description:
-          type: string
-          description: Description of the slot
-        authenticationId:
-          type: string
-          format: uuid
-          description: ID of the authentication based on which the slot has been created
-        serviceId:
-          type: string
-          format: uuid
-          description: ID of the 3rd party service for which the slot has been created
-        serviceEnvironmentId:
-          type: string
-          format: uuid
-          description: ID of the service environment for which the slot has been created
-        scopes:
-          type: array
-          description: Authentication scopes that the slot requires
-          items:
-            type: string
-        externalId:
-          type: string
-          description: Custom external identifier for the slot set in Tray UI
-        static:
-          type: boolean
-          description: Whether the slot is static and its value is shared between all solution instances
-        hidden:
-          type: boolean
-          description: Whether the slot is hidden from an end user
-        skipCTA:
-          type: boolean
-          description: Whether the UI should skip call to action button for the slot
-        requireUnique:
-          type: boolean
-          description: Whether the authentication used to fulfill the slot should be unique
-        hasBreakingChange:
-          type: boolean
-          description: Informs if new slot version is introducing breaking changes
-        changes:
-          type: array
-          description: The slot changes introduced by import
-          items:
-            $ref: '#/components/schemas/importexport.slot.AuthSlotChangeView'
-        previously:
-          description: Slot values previously
-          $ref: '#/components/schemas/importexport.slot.AuthSlotView'
-      required:
-      - id
-      - title
-      - description
-      - authenticationId
-      - scopes
-      - static
-      - hidden
-      - skipCTA
-      - requireUnique
-      - hasBreakingChange
-      - changes
-      - previously
-    CreateProjectVersionInput:
-      properties:
-        title:
-          type: string
-          description: Title of the project version that is going to be created
-        description:
-          type: string
-          description: Description of the project version that is going to be created
-      required:
-      - title
-    importexport.CreatedWorkflowSummaryView:
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: ID of the created workflow
-        name:
-          type: string
-        importedFromId:
-          type: string
-          format: uuid
-          description: ID of the workflow from which the created workflow has been imported
-      required:
-      - id
-      - name
-      - importedFromId
-    InternalError:
-      title: InternalError
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
     importexport.slot.UpdatedConfigSlotView:
       properties:
         id:
@@ -2292,6 +2108,190 @@ components:
       - hasBreakingChange
       - changes
       - previously
+    TooManyRequestsError:
+      title: TooManyRequestsError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    InvalidInput:
+      title: InvalidInput
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    importexport.SourceServiceInput:
+      properties:
+        name:
+          type: string
+          description: Name of the entity in Tray system representing 3rd party service
+        version:
+          type: string
+          description: 'Version of the service. For example: "1", "2", "3"'
+      required:
+      - name
+      - version
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    importexport.ResolvedAuthenticationRequirementView:
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the resolved authentication
+        title:
+          type: string
+          description: Title of the resolved authentication
+        service:
+          description: Object representing the 3rd party service related to resolved authentication
+          $ref: '#/components/schemas/importexport.ServiceNameAndVersionView'
+        serviceEnvironment:
+          description: Object representing the service environment related to resolved authentication
+          $ref: '#/components/schemas/importexport.ServiceEnvironmentView'
+        scopes:
+          type: array
+          description: Scopes of the resolved authentication
+          items:
+            type: string
+      required:
+      - id
+      - title
+      - service
+      - serviceEnvironment
+      - scopes
+    importexport.slot.AuthSlotView:
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the slot
+        title:
+          type: string
+          description: Title of the slot
+        description:
+          type: string
+          description: Description of the slot
+        authenticationId:
+          type: string
+          format: uuid
+          description: ID of the authentication based on which the slot has been created
+        serviceId:
+          type: string
+          format: uuid
+          description: ID of the 3rd party service for which the slot has been created
+        serviceEnvironmentId:
+          type: string
+          format: uuid
+          description: ID of the service environment for which the slot has been created
+        scopes:
+          type: array
+          description: Authentication scopes that the slot requires
+          items:
+            type: string
+        externalId:
+          type: string
+          description: Custom external identifier for the slot set in Tray UI
+        static:
+          type: boolean
+          description: Whether the slot is static and its value is shared between all solution instances
+        hidden:
+          type: boolean
+          description: Whether the slot is hidden from an end user
+        skipCTA:
+          type: boolean
+          description: Whether the UI should skip call to action button for the slot
+        requireUnique:
+          type: boolean
+          description: Whether the authentication used to fulfill the slot should be unique
+      required:
+      - id
+      - title
+      - description
+      - authenticationId
+      - scopes
+      - static
+      - hidden
+      - skipCTA
+      - requireUnique
+    importexport.PrepareProjectImportResponse:
+      properties:
+        unresolvedAuthentications:
+          type: boolean
+          description: Whether there are unresolved authentications
+        newConfigKeys:
+          type: boolean
+          description: Whether there are new config keys
+        config:
+          description: Exported project configuration and current target project configurations
+          $ref: '#/components/schemas/importexport.ConfigSpecificationView'
+        authenticationsRequirements:
+          type: array
+          description: List of requirements for authentications required by the project import
+          items:
+            $ref: '#/components/schemas/importexport.AuthenticationRequirementView'
+      required:
+      - unresolvedAuthentications
+      - newConfigKeys
+      - config
+      - authenticationsRequirements
+    importexport.AuthImportInput:
+      properties:
+        authExportId:
+          type: string
+          description: Export identifier of a source authentication
+        authenticationId:
+          type: string
+          format: uuid
+          description: ID of the authentication selected to be used for authExportId during the project import
+      required:
+      - authExportId
+      - authenticationId
+    importexport.ServiceEnvironmentView:
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the service environment
+      required:
+      - id
+    importexport.ImportMetadataView:
+      properties:
+        importedFrom:
+          $ref: '#/components/schemas/importexport.ImportedFromMetadataView'
+        projectId:
+          type: string
+          format: uuid
+        projectName:
+          type: string
+      required:
+      - importedFrom
+      - projectId
+      - projectName
+    importexport.ServiceMappingInput:
+      properties:
+        from:
+          description: Source service that should be mapped to the target service
+          $ref: '#/components/schemas/importexport.SourceServiceInput'
+        to:
+          description: Target service that should be used during the project import
+          $ref: '#/components/schemas/importexport.TargetServiceInput'
+      required:
+      - from
+      - to
   responses:
     Unauthorized:
       description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.

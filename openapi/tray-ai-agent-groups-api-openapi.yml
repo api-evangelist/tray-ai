@@ -269,90 +269,6 @@ paths:
                 $ref: '#/components/schemas/InternalError'
 components:
   schemas:
-    LimitExceeded:
-      title: LimitExceeded
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    NewPublicCreateOnPremAgentGroupHttpRequest:
-      title: NewPublicCreateOnPremAgentGroupHttpRequest
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-    BasePage_PublicOnPremAgentGroupHttpResponse:
-      title: BasePage_PublicOnPremAgentGroupHttpResponse
-      type: object
-      required:
-      - pageInfo
-      properties:
-        elements:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicOnPremAgentGroupHttpResponse'
-        pageInfo:
-          $ref: '#/components/schemas/BasePageInfo_PublicOnPremAgentGroupHttpResponse'
-    Forbidden:
-      title: Forbidden
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    ConcurrencyConflict:
-      title: ConcurrencyConflict
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    ContentTooLarge:
-      title: ContentTooLarge
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    Timeout:
-      title: Timeout
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    PublicOnPremAgentGroupHttpResponse:
-      title: PublicOnPremAgentGroupHttpResponse
-      type: object
-      required:
-      - id
-      - name
-      - workspaceId
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        workspaceId:
-          type: string
     ResourceNotFound:
       title: ResourceNotFound
       type: object
@@ -375,8 +291,8 @@ components:
           type: boolean
         hasPreviousPage:
           type: boolean
-    InvalidInput:
-      title: InvalidInput
+    ContentTooLarge:
+      title: ContentTooLarge
       type: object
       required:
       - message
@@ -385,8 +301,8 @@ components:
           type: string
         code:
           type: string
-    Unauthorized:
-      title: Unauthorized
+    InvalidInput:
+      title: InvalidInput
       type: object
       required:
       - message
@@ -405,6 +321,90 @@ components:
           type: string
         code:
           type: string
+    LimitExceeded:
+      title: LimitExceeded
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Timeout:
+      title: Timeout
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Unauthorized:
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    NewPublicCreateOnPremAgentGroupHttpRequest:
+      title: NewPublicCreateOnPremAgentGroupHttpRequest
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    PublicOnPremAgentGroupHttpResponse:
+      title: PublicOnPremAgentGroupHttpResponse
+      type: object
+      required:
+      - id
+      - name
+      - workspaceId
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        workspaceId:
+          type: string
+    ConcurrencyConflict:
+      title: ConcurrencyConflict
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    BasePage_PublicOnPremAgentGroupHttpResponse:
+      title: BasePage_PublicOnPremAgentGroupHttpResponse
+      type: object
+      required:
+      - pageInfo
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicOnPremAgentGroupHttpResponse'
+        pageInfo:
+          $ref: '#/components/schemas/BasePageInfo_PublicOnPremAgentGroupHttpResponse'
   securitySchemes:
     bearerAuth:
       type: http

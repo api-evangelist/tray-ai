@@ -1,0 +1,39 @@
+generated: '2026-10-04'
+method: probed
+source: https://tray.ai/legal/privacy-policy/
+signals:
+  data_retention:
+    note: Retains personal data for varying periods based on purpose and legal requirements.
+    evidence:
+      - source: https://tray.ai/legal/privacy-policy/
+        http_status: 200
+        fetched: "true"
+        quote: "Data retention – We retain different types of Personal Information for different periods, depending on the purposes for processing the information, our legitimate business purposes as well as pursuant to legal requirements."
+  subprocessors:
+    note: Shares data with service providers.
+    evidence:
+      - source: https://tray.ai/legal/privacy-policy/
+        http_status: 200
+        fetched: "true"
+        quote: "Sharing Personal Information with service providers."
+  data_residency:
+    note: Stores data in US, EU, UK, Australia and other locations.
+    evidence:
+      - source: https://tray.ai/legal/privacy-policy/
+        http_status: 200
+        fetched: "true"
+        quote: "Cross-border transfer – We use cloud-based services to store and process data in the United States, European Union, United Kingdom and Australia and will store them at additional sites, at our discretion, in accordance with applicable laws."
+  ai_transparency:
+    note: Explicitly states no use of Google OAuth data for AI training.
+    evidence:
+      - source: https://tray.ai/legal/privacy-policy/
+        http_status: 200
+        fetched: "true"
+        quote: "No AI/ML Training with Google OAuth Data – We do not use data authenticated with our Google Workspaces OAuth application, service or API to train any generalized AI or ML models."
+  training_data_summary:
+    note: Provides summary that certain data is excluded from AI model training.
+    evidence:
+      - source: https://tray.ai/legal/privacy-policy/
+        http_status: 200
+        fetched: "true"
+        quote: "No AI/ML Training with Google OAuth Data – We do not use data authenticated with our Google Workspaces OAuth application, service or API to train any generalized AI or ML models."

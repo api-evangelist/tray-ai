@@ -1091,7 +1091,34 @@ paths:
     - url: https://api.ap1.tray.io
       description: APAC
 components:
+  responses:
+    Unauthorized:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GraphQLError'
+    Unauthorized_2:
+      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    GraphQLRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+          description: The GraphQL query or mutation string
+        variables:
+          type: object
+          description: Variables to pass to the GraphQL query or mutation
+        operationName:
+          type: string
+          description: The name of the operation to execute if the query contains multiple operations
     Authentication:
       type: object
       properties:
@@ -1133,20 +1160,6 @@ components:
         startCursor:
           type: string
           description: Cursor for fetching the previous page
-    GraphQLRequest:
-      type: object
-      required:
-      - query
-      properties:
-        query:
-          type: string
-          description: The GraphQL query or mutation string
-        variables:
-          type: object
-          description: Variables to pass to the GraphQL query or mutation
-        operationName:
-          type: string
-          description: The name of the operation to execute if the query contains multiple operations
     GraphQLError:
       type: object
       properties:
@@ -1222,6 +1235,16 @@ components:
         credentials:
           type: object
           description: Credentials for the authentication (e.g., API key, OAuth tokens)
+    ResourceNotFound:
+      title: ResourceNotFound
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
     CreatePublicUserAuthenticationResult:
       title: CreatePublicUserAuthenticationResult
       type: object
@@ -1232,34 +1255,114 @@ components:
           type: string
           format: uuid
           description: Authentication Id in Tray for the newly created auth
-    LimitExceeded:
-      title: LimitExceeded
+    UpdatePublicUserAuthenticationResult:
+      title: UpdatePublicUserAuthenticationResult
       type: object
       required:
-      - message
+      - id
+      - name
+      - serviceEnvironmentId
       properties:
-        message:
+        id:
           type: string
-        code:
+          format: uuid
+          description: Authentication Id in Tray for the updated auth
+        name:
           type: string
-    PublicServiceEnvironmentList:
-      type: object
-      properties:
-        elements:
+          description: Authentication Id in Tray for the updated auth
+        serviceEnvironmentId:
+          type: string
+          description: Authentication Id in Tray for the updated auth
+        scopes:
           type: array
           items:
-            $ref: '#/components/schemas/PublicServiceEnvironment'
-      description: ''
-    Forbidden:
-      title: Forbidden
+            type: string
+          uniqueItems: true
+          description: Applicable for OAuth services only. An array of scopes attached to this auth are returned.
+        onPremAgentGroupId:
+          type: string
+          format: uuid
+          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+    GetUserAuthenticationResult:
+      title: GetUserAuthenticationResult
       type: object
       required:
-      - message
+      - id
+      - name
+      - serviceEnvironmentId
       properties:
-        message:
+        id:
           type: string
-        code:
+          format: uuid
+          description: Unique id of the authentication - required by the [Call connector](/developer/platform-apis/connectors#endpoint-call-connector) endpoint
+        name:
           type: string
+          description: Name for the auth which identifies End User, service, test, dev etc.
+        serviceEnvironmentId:
+          type: string
+          description: Identifies the service and environment the auth is for (e.g. Tray Slack OAuth app or your own Custom Slack OAuth app)
+        scopes:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          description: The permission scopes which describe the level of access this auth has to the service
+        onPremAgentGroupId:
+          description: The on-prem agent group this authentication is associated with, if any.
+          type: string
+          format: uuid
+          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+    CreatePublicUserAuthentication:
+      title: CreatePublicUserAuthentication
+      type: object
+      required:
+      - name
+      - serviceEnvironmentId
+      properties:
+        name:
+          type: string
+          description: Name for the auth which identifies End User, service, test, dev etc.
+        serviceEnvironmentId:
+          type: string
+          description: Obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
+        userData:
+          type: object
+          description: Data regarding base url, company id, table id etc.<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+        credentials:
+          type: object
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+          description: Auth data (token, secret etc.) required to complete the auth<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
+        scopes:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          description: 'Example: `"scopes": ["chat:write", "channels:read"]` or `"scopes": ["chatter_api,", "openid"]`</br>List of the scopes required for the auth to function<br />Available scopes can be retrieved with [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments)'
+        onPremAgentGroupId:
+          type: string
+          format: uuid
+          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
     AuthenticationType:
       title: AuthenticationType
       type: string
@@ -1329,6 +1432,36 @@ components:
           type: string
           format: uuid
           example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
+    InvalidInput:
+      title: InvalidInput
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    InternalError:
+      title: InternalError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    LimitExceeded:
+      title: LimitExceeded
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
     Unauthorized:
       title: Unauthorized
       type: object
@@ -1339,36 +1472,16 @@ components:
           type: string
         code:
           type: string
-    UpdatePublicUserAuthenticationResult:
-      title: UpdatePublicUserAuthenticationResult
+    PublicServiceEnvironmentList:
       type: object
-      required:
-      - id
-      - name
-      - serviceEnvironmentId
       properties:
-        id:
-          type: string
-          format: uuid
-          description: Authentication Id in Tray for the updated auth
-        name:
-          type: string
-          description: Authentication Id in Tray for the updated auth
-        serviceEnvironmentId:
-          type: string
-          description: Authentication Id in Tray for the updated auth
-        scopes:
+        elements:
           type: array
           items:
-            type: string
-          uniqueItems: true
-          description: Applicable for OAuth services only. An array of scopes attached to this auth are returned.
-        onPremAgentGroupId:
-          type: string
-          format: uuid
-          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
-    ResourceNotFound:
-      title: ResourceNotFound
+            $ref: '#/components/schemas/PublicServiceEnvironment'
+      description: ''
+    Forbidden:
+      title: Forbidden
       type: object
       required:
       - message
@@ -1377,6 +1490,54 @@ components:
           type: string
         code:
           type: string
+    UpdatePublicUserAuthenticationHttp:
+      title: UpdatePublicUserAuthenticationHttp
+      type: object
+      required:
+      - name
+      - credentials
+      properties:
+        name:
+          type: string
+          description: Name of the auth in Tray (e.g. `John Doe's Slack Auth 10th Oct`)
+        userData:
+          type: object
+          description: Data regarding base url, company id, table id etc.<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+        credentials:
+          type: object
+          description: Auth data (token, secret etc.) required to complete the auth<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+        scopes:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          description: 'Example: `"scopes": ["chat:write", "channels:read"]` or `"scopes": ["chatter_api,", "openid"]`</br>List of the scopes required for the auth to function<br />Available scopes can be retrieved with [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments)'
+        onPremAgentGroupId:
+          type: string
+          format: uuid
+          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
     PublicServiceEnvironment:
       required:
       - id
@@ -1439,167 +1600,6 @@ components:
             - type: string
           description: All available scopes to control the level of access given to any authentications
       description: ''
-    InvalidInput:
-      title: InvalidInput
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    GetUserAuthenticationResult:
-      title: GetUserAuthenticationResult
-      type: object
-      required:
-      - id
-      - name
-      - serviceEnvironmentId
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique id of the authentication - required by the [Call connector](/developer/platform-apis/connectors#endpoint-call-connector) endpoint
-        name:
-          type: string
-          description: Name for the auth which identifies End User, service, test, dev etc.
-        serviceEnvironmentId:
-          type: string
-          description: Identifies the service and environment the auth is for (e.g. Tray Slack OAuth app or your own Custom Slack OAuth app)
-        scopes:
-          type: array
-          items:
-            type: string
-          uniqueItems: true
-          description: The permission scopes which describe the level of access this auth has to the service
-        onPremAgentGroupId:
-          description: The on-prem agent group this authentication is associated with, if any.
-          type: string
-          format: uuid
-          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
-    UpdatePublicUserAuthenticationHttp:
-      title: UpdatePublicUserAuthenticationHttp
-      type: object
-      required:
-      - name
-      - credentials
-      properties:
-        name:
-          type: string
-          description: Name of the auth in Tray (e.g. `John Doe's Slack Auth 10th Oct`)
-        userData:
-          type: object
-          description: Data regarding base url, company id, table id etc.<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
-          additionalProperties:
-            oneOf:
-            - type: array
-              items:
-                type: object
-            - type: boolean
-            - type: integer
-            - type: object
-              additionalProperties:
-                type: object
-            - type: string
-        credentials:
-          type: object
-          description: Auth data (token, secret etc.) required to complete the auth<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
-          additionalProperties:
-            oneOf:
-            - type: array
-              items:
-                type: object
-            - type: boolean
-            - type: integer
-            - type: object
-              additionalProperties:
-                type: object
-            - type: string
-        scopes:
-          type: array
-          items:
-            type: string
-          uniqueItems: true
-          description: 'Example: `"scopes": ["chat:write", "channels:read"]` or `"scopes": ["chatter_api,", "openid"]`</br>List of the scopes required for the auth to function<br />Available scopes can be retrieved with [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments)'
-        onPremAgentGroupId:
-          type: string
-          format: uuid
-          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
-    InternalError:
-      title: InternalError
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    CreatePublicUserAuthentication:
-      title: CreatePublicUserAuthentication
-      type: object
-      required:
-      - name
-      - serviceEnvironmentId
-      properties:
-        name:
-          type: string
-          description: Name for the auth which identifies End User, service, test, dev etc.
-        serviceEnvironmentId:
-          type: string
-          description: Obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
-        userData:
-          type: object
-          description: Data regarding base url, company id, table id etc.<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
-          additionalProperties:
-            oneOf:
-            - type: array
-              items:
-                type: object
-            - type: boolean
-            - type: integer
-            - type: object
-              additionalProperties:
-                type: object
-            - type: string
-        credentials:
-          type: object
-          additionalProperties:
-            oneOf:
-            - type: array
-              items:
-                type: object
-            - type: boolean
-            - type: integer
-            - type: object
-              additionalProperties:
-                type: object
-            - type: string
-          description: Auth data (token, secret etc.) required to complete the auth<br />Input schema obtained using the [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments) endpoint
-        scopes:
-          type: array
-          items:
-            type: string
-          uniqueItems: true
-          description: 'Example: `"scopes": ["chat:write", "channels:read"]` or `"scopes": ["chatter_api,", "openid"]`</br>List of the scopes required for the auth to function<br />Available scopes can be retrieved with [Get service environments](/developer/platform-apis/authentications#endpoint-get-service-environments)'
-        onPremAgentGroupId:
-          type: string
-          format: uuid
-          example: 123e4567-aaaa-aaaa-aaaa-aaaaaa614174
-  responses:
-    Unauthorized:
-      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/GraphQLError'
-    Unauthorized_2:
-      description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

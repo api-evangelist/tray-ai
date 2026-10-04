@@ -1,0 +1,213 @@
+generated: '2026-10-04'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 16
+  own: 5
+  other_domain: 8
+  platform: 3
+  roles:
+  - api
+  - docs
+  - identity
+  - other
+  - source
+  - status
+  - website
+hosts:
+- host: ap1.tray.io
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: tray.io
+  role: other
+  relation: other-domain
+- host: api.ap1.tray.io
+  found_by:
+  - probed
+  - contract-discovery
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: tray.io
+  role: api
+  relation: other-domain
+- host: api.eu1.tray.io
+  found_by:
+  - probed
+  - contract-discovery
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: tray.io
+  role: api
+  relation: other-domain
+- host: api.tray.io
+  found_by:
+  - apis[]
+  - probed
+  - contract-discovery
+  - well-known
+  types: []
+  serves:
+  - api
+  registrable_domain: tray.io
+  role: api
+  relation: other-domain
+- host: app.tray.io
+  found_by:
+  - pointer
+  - probed
+  - well-known
+  types:
+  - Login
+  serves: []
+  registrable_domain: tray.io
+  role: identity
+  relation: other-domain
+- host: docs.tray.io
+  found_by:
+  - probed
+  - site-links
+  - namespace-probe
+  types: []
+  serves: []
+  title: Tray Documentation
+  status: 200
+  registrable_domain: tray.io
+  role: docs
+  relation: other-domain
+- host: eu1.tray.io
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: tray.io
+  role: other
+  relation: other-domain
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - GitHubOrganization
+  - SDKs
+  - Examples
+  - Tools
+  serves: []
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: helix.tray.ai
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: tray.ai
+  role: other
+  relation: own
+- host: id.tray.ai
+  found_by:
+  - probed
+  - site-links
+  types: []
+  serves: []
+  registrable_domain: tray.ai
+  role: other
+  relation: own
+- host: status.tray.ai
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - well-known
+  types:
+  - StatusPage
+  - AtomFeed
+  - RSSFeed
+  serves: []
+  registrable_domain: tray.ai
+  role: status
+  relation: own
+- host: tray.ai
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - docs-index
+  - well-known
+  - vendor-detect
+  types:
+  - Newsroom
+  - Plans
+  - Integrations
+  - Blog
+  - CaseStudies
+  - PrivacyPolicy
+  - TermsOfService
+  - Website
+  - Portal
+  - Product
+  - LlmsText
+  - OpenAPI
+  - Documentation
+  - APIReference
+  - GettingStarted
+  - Support
+  - Community
+  - Pricing
+  - Deprecation
+  - ReleaseNotes
+  serves:
+  - docs
+  - cdn
+  - hosting
+  vendor: cloudfront
+  registrable_domain: tray.ai
+  role: website
+  relation: own
+- host: tray.io
+  found_by:
+  - apis[]
+  - probed
+  - well-known
+  - vendor-detect
+  types: []
+  serves:
+  - api
+  - api-gateway
+  vendor: aws-api-gateway
+  registrable_domain: tray.io
+  role: other
+  relation: other-domain
+- host: trust.tray.ai
+  found_by:
+  - probed
+  - site-links
+  types: []
+  serves: []
+  registrable_domain: tray.ai
+  role: other
+  relation: own
+- host: www.linkedin.com
+  found_by:
+  - pointer
+  types:
+  - LinkedIn
+  serves: []
+  registrable_domain: linkedin.com
+  role: other
+  relation: platform
+- host: www.postman.com
+  found_by:
+  - pointer
+  types:
+  - PostmanWorkspace
+  - PostmanCollection
+  serves: []
+  registrable_domain: postman.com
+  role: other
+  relation: platform

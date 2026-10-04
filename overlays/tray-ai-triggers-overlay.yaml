@@ -2,11 +2,11 @@ overlay: 1.0.0
 info:
   title: API Evangelist enhancements for Tray.ai Platform Triggers API
   version: 1.0.0
-extends: tray-ai-triggers-api-openapi.yml
+extends: openapi/tray-ai-triggers-api-openapi.yml
 x-generated: '2026-09-02'
 x-method: generated
-x-source: apis.yml, conventions/tray-ai-conventions.yml, rate-limits/tray-ai-rate-limits.yml, errors/tray-ai-problem-types.yml,
-  mcp/tray-ai-mcp.yml, lifecycle/tray-ai-lifecycle.yml
+x-source: apis.yml, conventions/tray-ai-conventions.yml, rate-limits/tray-ai-rate-limits.yml, errors/tray-ai-problem-types.yml, mcp/tray-ai-mcp.yml,
+  lifecycle/tray-ai-lifecycle.yml
 actions:
 - target: $.info
   description: Attach provider contact and licensing/terms Tray publishes on its own site.
@@ -33,12 +33,10 @@ actions:
       docs: https://tray.ai/documentation/developer/getting-started/troubleshooting/rate-limiting-tray
     x-idempotency:
       supported: false
-      note: No Idempotency-Key header and no idempotent retry semantics are documented. A retried write
-        re-executes.
+      note: No Idempotency-Key header and no idempotent retry semantics are documented. A retried write re-executes.
     x-pagination:
       first_party: none
-      note: Tray list endpoints declare no page/limit/cursor parameters; pagination is a pass-through
-        concern of the Call Connector endpoint.
+      note: Tray list endpoints declare no page/limit/cursor parameters; pagination is a pass-through concern of the Call Connector endpoint.
     x-error-envelope:
       content_type: application/json
       shape: '{ "message": string, "code": string|null }'
@@ -53,7 +51,6 @@ actions:
     x-agent-surface:
       mcp_endpoint: https://api.tray.io/mcp
       tool_crosswalk: mcp/tray-ai-tool-crosswalk.yml
-      note: Tray also runs a hosted MCP server. Most operations in this document have NO MCP tool; see
-        the crosswalk.
+      note: Tray also runs a hosted MCP server. Most operations in this document have NO MCP tool; see the crosswalk.
     x-agentic-access: agentic-access/tray-ai-agentic-access.yml
     x-lifecycle: lifecycle/tray-ai-lifecycle.yml

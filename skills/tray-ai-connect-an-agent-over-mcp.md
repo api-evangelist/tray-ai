@@ -31,7 +31,7 @@ operations:
   - get_workflow_execution
   - get_workflow_step_detail
 generated: '2026-09-02'
-method: generated
+method: none
 source: mcp/tray-ai-mcp.yml, mcp/tray-ai-tool-crosswalk.yml, scopes/tray-ai-scopes.yml, skills/_published/
 ---
 

@@ -755,18 +755,22 @@ paths:
       description: APAC
 components:
   schemas:
-    Error:
+    ConnectorVersion:
       type: object
       properties:
-        error:
+        name:
           type: string
-          description: Error type
-        message:
+          description: The connector name identifier
+        version:
           type: string
-          description: Human-readable error message
-        statusCode:
-          type: integer
-          description: HTTP status code
+          description: The connector version
+        title:
+          type: string
+          description: Display name of the connector
+        operations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Operation'
     Operation:
       type: object
       properties:
@@ -785,22 +789,32 @@ components:
         outputSchema:
           type: object
           description: JSON Schema defining the operation output
-    ConnectorVersion:
+    CallConnectorRequest:
+      type: object
+      required:
+      - operation
+      properties:
+        operation:
+          type: string
+          description: The name of the connector operation to execute
+        authId:
+          type: string
+          description: The ID of a previously created authentication to use for the connector call
+        input:
+          type: object
+          description: Input data for the operation. Must conform to the operation's input schema.
+    Error:
       type: object
       properties:
-        name:
+        error:
           type: string
-          description: The connector name identifier
-        version:
+          description: Error type
+        message:
           type: string
-          description: The connector version
-        title:
-          type: string
-          description: Display name of the connector
-        operations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Operation'
+          description: Human-readable error message
+        statusCode:
+          type: integer
+          description: HTTP status code
     Connector:
       type: object
       properties:
@@ -826,20 +840,76 @@ components:
                 type: string
               isLatest:
                 type: boolean
-    CallConnectorRequest:
+    ResourceNotFound:
+      title: ResourceNotFound
       type: object
       required:
-      - operation
+      - message
       properties:
-        operation:
+        message:
           type: string
-          description: The name of the connector operation to execute
-        authId:
+        code:
           type: string
-          description: The ID of a previously created authentication to use for the connector call
-        input:
+    PublicConnectorOperationList:
+      type: object
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicConnectorOperation'
+          description: ''
+      description: ''
+    PublicConnectorCallResult:
+      required:
+      - outcome
+      - output
+      type: object
+      properties:
+        outcome:
+          $ref: '#/components/schemas/PublicConnectorCallResultOutcome'
+        output:
           type: object
-          description: Input data for the operation. Must conform to the operation's input schema.
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+          description: ''
+      description: ''
+    PublicConnectorList:
+      type: object
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicConnector'
+          description: Contains all connector details
+    InvalidInput:
+      title: InvalidInput
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    InternalError:
+      title: InternalError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
     LimitExceeded:
       title: LimitExceeded
       type: object
@@ -850,6 +920,77 @@ components:
           type: string
         code:
           type: string
+    PublicConnectorCallPayload:
+      required:
+      - operation
+      - input
+      type: object
+      properties:
+        operation:
+          type: string
+          description: The name of the operation obtained using [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations)
+        authId:
+          type: string
+          format: uuid
+          description: The End User-specific auth id obtained when using [Create user authentication](/developer/platform-apis/authentications#endpoint-create-user-authentication)
+        input:
+          type: object
+          additionalProperties:
+            oneOf:
+            - type: array
+              items:
+                type: object
+            - type: boolean
+            - type: integer
+            - type: object
+              additionalProperties:
+                type: object
+            - type: string
+          description: The exact schema of inputs must be retrieved from [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations)
+        returnOutputSchema:
+          type: boolean
+          description: Only applicable if [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations) has returned true for `hasDynamicOutput` - indicating that the output changes depending on the input
+      description: ''
+    Unauthorized:
+      title: Unauthorized
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    PublicConnectorCallResultOutcome:
+      type: string
+      enum:
+      - success
+      - error
+      description: ''
+    PublicConnector:
+      required:
+      - name
+      - version
+      - title
+      - description
+      - service
+      type: object
+      properties:
+        description:
+          type: string
+          description: ''
+        name:
+          type: string
+          description: The programmatic name of the connector
+        service:
+          $ref: '#/components/schemas/ConnectorServiceReference'
+        title:
+          type: string
+          description: ''
+        version:
+          type: string
+          description: The connector version required by [Get Connector Operations](/developer/platform-apis/connectors#endpoint-get-connector-operations) and [Call Connector](/developer/platform-apis/connectors#endpoint-call-connector)
+      description: Array of connector objects
     Forbidden:
       title: Forbidden
       type: object
@@ -878,29 +1019,6 @@ components:
           format: int32
           description: Version of the service in Tray. Can be used in combination with service name above to get `serviceEnvironmentId` using <a href="/developer/platform-apis/authentications#endpoint-get-service-environments">GET service environments</a>
       description: Contains underlying Tray service details.
-    PublicConnectorCallResult:
-      required:
-      - outcome
-      - output
-      type: object
-      properties:
-        outcome:
-          $ref: '#/components/schemas/PublicConnectorCallResultOutcome'
-        output:
-          type: object
-          additionalProperties:
-            oneOf:
-            - type: array
-              items:
-                type: object
-            - type: boolean
-            - type: integer
-            - type: object
-              additionalProperties:
-                type: object
-            - type: string
-          description: ''
-      description: ''
     PublicConnectorOperation:
       required:
       - name
@@ -957,124 +1075,6 @@ components:
             - type: string
           description: 'All available input fields for the operation<br />Key properties include:<br />**required**: a list of the mandatory fields<br />**lookup**: indicates a field which is dependent on the result of another operation e.g. a channel selected from a list. Please see our <a href=''/developer/getting-started/calling-connectors/ddl-operations'' target=''_blank''>DDL documentation</a> for more details<br />**enumLabels**: some fields have a set array of enum values which you can allow the user to choose from'
       description: ''
-    PublicConnectorOperationList:
-      type: object
-      properties:
-        elements:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicConnectorOperation'
-          description: ''
-      description: ''
-    PublicConnectorCallPayload:
-      required:
-      - operation
-      - input
-      type: object
-      properties:
-        operation:
-          type: string
-          description: The name of the operation obtained using [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations)
-        authId:
-          type: string
-          format: uuid
-          description: The End User-specific auth id obtained when using [Create user authentication](/developer/platform-apis/authentications#endpoint-create-user-authentication)
-        input:
-          type: object
-          additionalProperties:
-            oneOf:
-            - type: array
-              items:
-                type: object
-            - type: boolean
-            - type: integer
-            - type: object
-              additionalProperties:
-                type: object
-            - type: string
-          description: The exact schema of inputs must be retrieved from [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations)
-        returnOutputSchema:
-          type: boolean
-          description: Only applicable if [Get connector operations](/developer/platform-apis/connectors#endpoint-get-connector-operations) has returned true for `hasDynamicOutput` - indicating that the output changes depending on the input
-      description: ''
-    PublicConnectorList:
-      type: object
-      properties:
-        elements:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicConnector'
-          description: Contains all connector details
-    ResourceNotFound:
-      title: ResourceNotFound
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    PublicConnector:
-      required:
-      - name
-      - version
-      - title
-      - description
-      - service
-      type: object
-      properties:
-        description:
-          type: string
-          description: ''
-        name:
-          type: string
-          description: The programmatic name of the connector
-        service:
-          $ref: '#/components/schemas/ConnectorServiceReference'
-        title:
-          type: string
-          description: ''
-        version:
-          type: string
-          description: The connector version required by [Get Connector Operations](/developer/platform-apis/connectors#endpoint-get-connector-operations) and [Call Connector](/developer/platform-apis/connectors#endpoint-call-connector)
-      description: Array of connector objects
-    PublicConnectorCallResultOutcome:
-      type: string
-      enum:
-      - success
-      - error
-      description: ''
-    InvalidInput:
-      title: InvalidInput
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    Unauthorized:
-      title: Unauthorized
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
-    InternalError:
-      title: InternalError
-      type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
   responses:
     Unauthorized:
       description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.

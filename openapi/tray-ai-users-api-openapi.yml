@@ -1365,6 +1365,20 @@ components:
         isTestUser:
           type: boolean
           description: Whether the user is marked as a test user (excluded from billing)
+    GraphQLRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+          description: The GraphQL query or mutation string
+        variables:
+          type: object
+          description: Variables to pass to the GraphQL query or mutation
+        operationName:
+          type: string
+          description: The name of the operation to execute if the query contains multiple operations
     PageInfo:
       type: object
       properties:
@@ -1380,20 +1394,6 @@ components:
         startCursor:
           type: string
           description: Cursor for fetching the previous page
-    GraphQLRequest:
-      type: object
-      required:
-      - query
-      properties:
-        query:
-          type: string
-          description: The GraphQL query or mutation string
-        variables:
-          type: object
-          description: Variables to pass to the GraphQL query or mutation
-        operationName:
-          type: string
-          description: The name of the operation to execute if the query contains multiple operations
     GraphQLError:
       type: object
       properties:
@@ -1464,16 +1464,18 @@ components:
         status:
           type: string
           description: Account status (active, invited, etc.)
-    Forbidden:
-      title: Forbidden
+    AccountType:
+      title: AccountType
+      oneOf:
+      - $ref: '#/components/schemas/API'
+      - $ref: '#/components/schemas/External'
+      - $ref: '#/components/schemas/Integration'
+      - $ref: '#/components/schemas/Partner'
+      - $ref: '#/components/schemas/Regular'
+      - $ref: '#/components/schemas/System'
+    Shared:
+      title: Shared
       type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
     WorkspaceExternalApiModel:
       title: WorkspaceExternalApiModel
       type: object
@@ -1493,8 +1495,8 @@ components:
         monthlyTaskLimit:
           type: integer
           format: int64
-    InvalidInput:
-      title: InvalidInput
+    InternalError:
+      title: InternalError
       type: object
       required:
       - message
@@ -1503,56 +1505,19 @@ components:
           type: string
         code:
           type: string
-    System:
-      title: System
-      type: object
-    WorkspaceType:
-      title: WorkspaceType
-      oneOf:
-      - $ref: '#/components/schemas/Embedded'
-      - $ref: '#/components/schemas/Organization'
-      - $ref: '#/components/schemas/Personal'
-      - $ref: '#/components/schemas/PersonalExternal'
-      - $ref: '#/components/schemas/Shared'
-    RoleExternalApiModel:
-      title: RoleExternalApiModel
+    Unauthorized:
+      title: Unauthorized
       type: object
       required:
-      - id
-      - name
+      - message
       properties:
-        id:
+        message:
           type: string
-          format: uuid
-        name:
+        code:
           type: string
-    Regular:
-      title: Regular
-      type: object
-    PersonalExternal:
-      title: PersonalExternal
-      type: object
     Personal:
       title: Personal
       type: object
-    UpdateUserOrganizationRoleExternalEndpointBody:
-      title: UpdateUserOrganizationRoleExternalEndpointBody
-      type: object
-      required:
-      - roleId
-      properties:
-        roleId:
-          type: string
-          format: uuid
-    AccountType:
-      title: AccountType
-      oneOf:
-      - $ref: '#/components/schemas/API'
-      - $ref: '#/components/schemas/External'
-      - $ref: '#/components/schemas/Integration'
-      - $ref: '#/components/schemas/Partner'
-      - $ref: '#/components/schemas/Regular'
-      - $ref: '#/components/schemas/System'
     CreateUserEndpointBody:
       title: CreateUserEndpointBody
       type: object
@@ -1569,26 +1534,22 @@ components:
         organizationRoleId:
           type: string
           format: uuid
-    TooManyRequestsError:
-      title: TooManyRequestsError
+    InviteUserExternalEndpointBody:
+      title: InviteUserExternalEndpointBody
       type: object
       required:
-      - message
+      - email
+      - organizationRoleId
       properties:
-        message:
+        email:
           type: string
-    ExternalApiDataPage_ENT:
-      title: ExternalApiDataPage_ENT
+          pattern: ^[a-zA-Z0-9\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$
+        organizationRoleId:
+          type: string
+          format: uuid
+    Embedded:
+      title: Embedded
       type: object
-      required:
-      - pageInfo
-      properties:
-        elements:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkspaceExternalApiModel'
-        pageInfo:
-          $ref: '#/components/schemas/ExternalApiPageInfoModel'
     ExternalApiPageInfoModel:
       title: ExternalApiPageInfoModel
       type: object
@@ -1604,16 +1565,9 @@ components:
           type: boolean
         hasPreviousPage:
           type: boolean
-    ResourceNotFound:
-      title: ResourceNotFound
+    Organization:
+      title: Organization
       type: object
-      required:
-      - message
-      properties:
-        message:
-          type: string
-        code:
-          type: string
     InviteCreatedExternalApiModel:
       title: InviteCreatedExternalApiModel
       type: object
@@ -1627,44 +1581,21 @@ components:
         expires:
           type: string
           format: date-time
-    Unauthorized:
-      title: Unauthorized
+    System:
+      title: System
+      type: object
+    PersonalExternal:
+      title: PersonalExternal
+      type: object
+    UpdateUserOrganizationRoleExternalEndpointBody:
+      title: UpdateUserOrganizationRoleExternalEndpointBody
       type: object
       required:
-      - message
+      - roleId
       properties:
-        message:
-          type: string
-        code:
-          type: string
-    InviteUserExternalEndpointBody:
-      title: InviteUserExternalEndpointBody
-      type: object
-      required:
-      - email
-      - organizationRoleId
-      properties:
-        email:
-          type: string
-          pattern: ^[a-zA-Z0-9\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$
-        organizationRoleId:
+        roleId:
           type: string
           format: uuid
-    Integration:
-      title: Integration
-      type: object
-    External:
-      title: External
-      type: object
-    Partner:
-      title: Partner
-      type: object
-    API:
-      title: API
-      type: object
-    Shared:
-      title: Shared
-      type: object
     UserExternalApiModel:
       title: UserExternalApiModel
       type: object
@@ -1685,14 +1616,34 @@ components:
           $ref: '#/components/schemas/AccountType'
         role:
           $ref: '#/components/schemas/RoleExternalApiModel'
-    Organization:
-      title: Organization
+    Integration:
+      title: Integration
       type: object
-    Embedded:
-      title: Embedded
+    Partner:
+      title: Partner
       type: object
-    InternalError:
-      title: InternalError
+    WorkspaceType:
+      title: WorkspaceType
+      oneOf:
+      - $ref: '#/components/schemas/Embedded'
+      - $ref: '#/components/schemas/Organization'
+      - $ref: '#/components/schemas/Personal'
+      - $ref: '#/components/schemas/PersonalExternal'
+      - $ref: '#/components/schemas/Shared'
+    ExternalApiDataPage_ENT:
+      title: ExternalApiDataPage_ENT
+      type: object
+      required:
+      - pageInfo
+      properties:
+        elements:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkspaceExternalApiModel'
+        pageInfo:
+          $ref: '#/components/schemas/ExternalApiPageInfoModel'
+    ResourceNotFound:
+      title: ResourceNotFound
       type: object
       required:
       - message
@@ -1701,6 +1652,55 @@ components:
           type: string
         code:
           type: string
+    API:
+      title: API
+      type: object
+    RoleExternalApiModel:
+      title: RoleExternalApiModel
+      type: object
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+    TooManyRequestsError:
+      title: TooManyRequestsError
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+    InvalidInput:
+      title: InvalidInput
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    Regular:
+      title: Regular
+      type: object
+    Forbidden:
+      title: Forbidden
+      type: object
+      required:
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: string
+    External:
+      title: External
+      type: object
   responses:
     Unauthorized:
       description: Authentication failed. The bearer token is missing, invalid, or does not have sufficient permissions for the requested operation.
