@@ -1,0 +1,12 @@
+{
+ "url": "https://tray.ai/documentation/files/openapi/trayapi.yaml",
+ "requested_url": "https://tray.ai/documentation/files/openapi/trayapi.yaml",
+ "status": 200,
+ "content_type": "text/yaml; charset=utf-8",
+ "bytes": 274519,
+ "sha256": "bcaa8cb4faef9647edc006cb43fd9b6f8d3c01447a3b84d67976cc6a9da2640c",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
