@@ -1,5 +1,13 @@
-generated: '2026-10-14'
+generated: '2026-10-20'
 method: searched
+source:
+- workday/integrations/workday-integration-edges.yml
+- https://zapier.com/apps/tray-ai/integrations
+- https://zapier.com/apps/tray/integrations
+- https://n8n.io/integrations/tray-ai/
+- https://n8n.io/integrations/tray/
+- https://composio.dev/toolkits/tray-ai
+- https://monid.ai/tools/tray-ai
 checked:
 - https://api.nuget.org/v3
 - https://crates.io/api/v1
@@ -9,8 +17,14 @@ checked:
 - https://repo1.maven.org/maven2
 - https://rubygems.org/api/v1
 - workday/integrations/workday-integration-edges.yml
-source:
-- workday/integrations/workday-integration-edges.yml
+- https://composio.dev/toolkits/tray-ai
+- https://monid.ai/tools/tray-ai
+- https://n8n.io/integrations/tray-ai/
+- https://n8n.io/integrations/tray/
+- https://zapier.com/apps/tray-ai/integrations
+- https://zapier.com/apps/tray/integrations
+summary: null
+marketplace_apps: []
 edges:
 - partner_name: Workday (own)
   partner: workday
@@ -79,3 +93,4 @@ edges:
     detected: '2026-10-18'
   detected_by: sweep-official-sdks.py
   first_seen: '2026-10-18'
+templates: []
