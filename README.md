@@ -1,4 +1,4 @@
-# Tray.ai (tray-ai)
+# Tray.ai
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,129 +66,277 @@
 
 Tray.ai (formerly Tray.io) is an AI-ready enterprise orchestration platform for data and AI, combining a Merlin Agent Builder for no-code AI agent creation, an Agent Gateway for governed MCP server management, and an intelligent iPaaS with 700+ pre-built connectors. It exposes a REST Platform API (Connectivity API) and a GraphQL Embedded API for building, embedding, and operating AI agents and integration automations at enterprise scale.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/tray-ai/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/tray-ai/refs/heads/main/apis.yml)
+**Areas:** Automation · Integration · iPaaS · AI Agents · MCP · Orchestration · Workflow Automation · Connectors · Agent Gateway · Embedded Integration · Enterprise Automation
 
-## Scope
+## Tray.ai on APIs.io
 
-- **Type:** Index
-- **Position:** Consumer
-- **Access:** 3rd-Party
+Everything profiled for Tray.ai is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/tray-ai/](https://apis.io/providers/tray-ai/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (15)
 
-- Automation
-- Integration
-- iPaaS
-- AI Agents
-- MCP
+- [Tray.ai Authentication API](https://apis.io/apis/tray-ai/tray-ai-authentication-api/) — Generate and manage user tokens for authenticating API calls. The authorize mutation generates a user token from a master token.
+- [Tray.ai Authentications API](https://apis.io/apis/tray-ai/tray-ai-authentications-api/) — Create, retrieve, and delete third-party service authentications that power Tray connectors (e.g., Salesforce, Slack).
+- [Tray.ai Call Connector API](https://apis.io/apis/tray-ai/tray-ai-call-connector-api/) — Call any Tray connector operation to pull data from a particular service and display it in your application.
+- [Tray.ai Connectors API](https://apis.io/apis/tray-ai/tray-ai-connectors-api/) — List available connectors and their operations, and call connector operations to interact with third-party services programmatically.
+- [Tray.ai Deployments API](https://apis.io/apis/tray-ai/tray-ai-deployments-api/) — Deploy CDK (Connector Development Kit) connectors to the Tray platform.
+- [Tray.ai Projects API](https://apis.io/apis/tray-ai/tray-ai-projects-api/) — Manage projects and solutions for environment promotion, including creating, exporting, and importing project versions.
+- [Tray.ai Solution Instances API](https://apis.io/apis/tray-ai/tray-ai-solution-instances-api/) — Create, update, enable, disable, and delete solution instances for end users. Requires a user token for most operations.
+- [Tray.ai Solutions API](https://apis.io/apis/tray-ai/tray-ai-solutions-api/) — Retrieve solutions (integrations) that have been built and published on the Tray platform.
+- [Tray.ai Triggers API](https://apis.io/apis/tray-ai/tray-ai-triggers-api/) — List available triggers and manage trigger subscriptions to receive real-time data from third-party services.
+- [Tray.ai Users API](https://apis.io/apis/tray-ai/tray-ai-users-api/) — Manage external users of your embedded application. Requires a master token for most operations.
+- [Tray.ai Workflows API](https://apis.io/apis/tray-ai/tray-ai-workflows-api/) — Import and export Tray workflows between embedded accounts, useful for promoting workflows from staging to production.
+- [Tray.ai Workspaces API](https://apis.io/apis/tray-ai/tray-ai-workspaces-api/) — Manage workspaces and workspace users. Workspaces divide your organization into sub-categories such as departments or dev/prod environments.
+- [Tray.ai Agent Groups API](https://apis.io/apis/tray-ai/tray-ai-agent-groups-api/) — {'$ref': 'descriptions/trayapi/tags/agent-groups.md'}
+- [Tray.ai Agent Instances API](https://apis.io/apis/tray-ai/tray-ai-agent-instances-api/) — {'$ref': 'descriptions/trayapi/tags/agent-instances.md'}
+- [Tray.ai Permissions API](https://apis.io/apis/tray-ai/tray-ai-permissions-api/) — {'$ref': 'descriptions/trayapi/tags/permissions.md'}
 
-## Timestamps
+### Published properties
 
-- **Created:** 2025-06-05
-- **Modified:** 2026-05-22
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### AsyncAPI (1)
 
-### Tray.ai Embedded API
+Event-driven and webhook contracts.
 
-The Tray.ai Embedded API is a GraphQL-based API that allows partners and customers to present in-app embedded integration experiences. It provides programmatic access to manage users, solutions, solution instances, authentications, workflows, and connector operations via HTTP POST to the GraphQL endpoint with Bearer token authentication. Two token types are supported, master tokens for admin operations and user tokens generated via the authorize mutation for user-scoped operations. All endpoints are rate limited to 30 requests per second.
+- [Tray Ai Webhooks](https://apis.io/asyncapis/tray-ai/tray-ai-webhooks/)
 
-- **Human URL:** [https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/](https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/)
-- **Base URL:** `https://tray.io/graphql`
+#### GraphQL (1)
 
-#### Tags
+GraphQL schemas.
 
-- Automation
-- Embedded
-- GraphQL
-- Integration
+- [Tray.ai GraphQL API](https://apis.io/graphqls/tray-ai/tray-ai-graphql/)
 
-#### Properties
+#### MCP servers (1)
 
-- [Documentation](https://tray.ai/documentation/developer/openapi/embeddedapi-introduction/)
-- [OpenAPI](openapi/tray-ai-embedded-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/tray-ai-embedded-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/tray-ai-embedded-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [Postman Collection](https://www.postman.com/tray-docs/tray-io-s-public-workspace/collection/uo51x8u/tray-embedded-apis-graphql) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [JSON Schema](json-schema/user.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/solution.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/solution-instance.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/authentication.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON-LD](json-ld/tray-ai-context.jsonld) — [JSON-LD](https://www.w3.org/TR/json-ld11/)
-- [JSON Structure](json-structure/tray-ai-solution-instance-structure.json)
-- [Example](examples/tray-ai-create-solution-instance-example.json)
+Model Context Protocol servers that expose the API to agents.
 
-### Tray.ai Platform API
+- [Tray MCP Server (Tray Headless MCP / Agent Gateway)](https://apis.io/servers/tray-ai/tray-mcp-server-tray-headless-mcp-agent-gateway/)
 
-The Tray.ai Platform API (also known as the Connectivity API) provides direct programmatic REST access to Tray's 700+ pre-built service connectors, authentication management, trigger subscriptions, user and workspace administration, and project/solution lifecycle operations. It is grouped into Core, CDK (Connector Development Kit), and On Premise endpoint families served from the US, EU, and APAC regions. All endpoints require a Bearer token and are rate limited to 30 requests per second (burst 50), with the Call Connector endpoint additionally capped at 1,000 concurrent requests.
+#### Agentic access (1)
 
-- **Human URL:** [https://tray.ai/documentation/developer/openapi/trayapi/overview/](https://tray.ai/documentation/developer/openapi/trayapi/overview/)
-- **Base URL:** `https://api.tray.io/core/v1`
+Which operations an agent can call, which act, and which need a human in the loop.
 
-#### Tags
+- [Tray Ai Agentic Access](https://apis.io/agentic-access/tray-ai/tray-ai-agentic-access/)
 
-- Automation
-- Connectors
-- Integration
-- iPaaS
+#### JSON Schema (17)
 
-#### Properties
+The data models the API reads and writes.
 
-- [Documentation](https://tray.ai/documentation/developer/openapi/trayapi/overview/)
-- [OpenAPI](openapi/tray-ai-platform-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/tray-ai-platform-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/tray-ai-platform-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [JSON Schema](json-schema/connector.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/authentication.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/subscription.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/user.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/workspace.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON-LD](json-ld/tray-ai-context.jsonld) — [JSON-LD](https://www.w3.org/TR/json-ld11/)
-- [JSON Structure](json-structure/tray-ai-connector-structure.json)
-- [Example](examples/tray-ai-list-connectors-example.json)
-- [Example](examples/tray-ai-call-connector-example.json)
-- [Example](examples/tray-ai-create-authentication-example.json)
-- [Spectral Ruleset](rules/tray-ai-rules.yml)
+- [Tray.ai Authentication](https://apis.io/schemas/tray-ai/authentication/)
+- [Tray.ai Connector](https://apis.io/schemas/tray-ai/connector/)
+- [Tray.ai Solution](https://apis.io/schemas/tray-ai/solution/)
+- [Tray.ai Solution Instance](https://apis.io/schemas/tray-ai/solution-instance/)
+- [Tray.ai Trigger Subscription](https://apis.io/schemas/tray-ai/subscription/)
+- [BasePage_PublicOnPremAgentGroupHttpResponse](https://apis.io/schemas/tray-ai/tray-ai-base-page-public-on-prem-agent-group-http-response/)
+- [BasePage_PublicOnPremAgentInstanceHttpResponse](https://apis.io/schemas/tray-ai/tray-ai-base-page-public-on-prem-agent-instance-http-response/)
+- [NewPublicCreateOnPremAgentGroupHttpRequest](https://apis.io/schemas/tray-ai/tray-ai-new-public-create-on-prem-agent-group-http-request/)
+- [PublicCreateOnPremAgentInstanceHttpRequest](https://apis.io/schemas/tray-ai/tray-ai-public-create-on-prem-agent-instance-http-request/)
+- [PublicCreateOnPremAgentInstanceHttpResponse](https://apis.io/schemas/tray-ai/tray-ai-public-create-on-prem-agent-instance-http-response/)
+- [PublicOnPremAgentGroupHttpResponse](https://apis.io/schemas/tray-ai/tray-ai-public-on-prem-agent-group-http-response/)
+- [PublicOnPremAgentInstanceHttpResponse](https://apis.io/schemas/tray-ai/tray-ai-public-on-prem-agent-instance-http-response/)
+- [PublicUpdateOnPremAgentInstanceHttpRequest](https://apis.io/schemas/tray-ai/tray-ai-public-update-on-prem-agent-instance-http-request/)
+- [ShareWithEmailsRequest](https://apis.io/schemas/tray-ai/tray-ai-share-with-emails-request/)
+- [ShareWithEmailsResponse](https://apis.io/schemas/tray-ai/tray-ai-share-with-emails-response/)
+- [Tray.ai User](https://apis.io/schemas/tray-ai/user/)
+- [Tray.ai Workspace](https://apis.io/schemas/tray-ai/workspace/)
 
-## Common Properties
+#### JSON Structure (2)
 
-- [GitHub Organization](https://github.com/trayio)
-- [LinkedIn](https://www.linkedin.com/company/tray-ai)
-- [Vocabulary](vocabulary/tray-ai-vocabulary.yml)
-- [Plans](https://tray.ai/packages)
-- [Plans Spec](plans/tray-ai-plans-pricing.yml)
-- [Rate Limits](rate-limits/tray-ai-rate-limits.yml)
-- [Fin Ops](finops/tray-ai-finops.yml)
-- [Integrations](https://tray.ai/connectors?sort=alphabetical)
-- [Login](https://app.tray.io/login)
-- [Blog](https://tray.ai/blog)
-- [Case Studies](https://tray.ai/customers)
-- [Privacy Policy](https://tray.ai/privacy)
-- [Terms of Service](https://tray.ai/terms)
-- [Status Page](https://status.tray.ai/)
-- [Atom Feed](https://status.tray.ai/history.atom)
-- [R S S Feed](https://status.tray.ai/history.rss)
+Data models expressed in JSON Structure.
+
+- [Tray Ai Connector Structure](https://apis.io/json-structure/tray-ai/tray-ai-connector-structure/)
+- [Tray Ai Solution Instance Structure](https://apis.io/json-structure/tray-ai/tray-ai-solution-instance-structure/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Tray Ai Context](https://apis.io/jsonld/tray-ai/tray-ai-context/)
+
+#### Vocabulary (1)
+
+The provider's domain terms, defined.
+
+- [Tray.ai Vocabulary](https://apis.io/vocabularies/tray-ai/tray-ai-vocabulary/)
+
+#### Examples (4)
+
+Example requests and responses.
+
+- [Tray Ai Call Connector Example](https://apis.io/examples/tray-ai/tray-ai-call-connector-example/)
+- [Tray Ai Create Authentication Example](https://apis.io/examples/tray-ai/tray-ai-create-authentication-example/)
+- [Tray Ai Create Solution Instance Example](https://apis.io/examples/tray-ai/tray-ai-create-solution-instance-example/)
+- [Tray Ai List Connectors Example](https://apis.io/examples/tray-ai/tray-ai-list-connectors-example/)
+
+#### Collections (26)
+
+Postman and Open Collection request collections.
+
+- [Tray.ai Embedded Authentication API](https://apis.io/collections/tray-ai/open-tray-ai-authentication-api/)
+- [Tray.ai Embedded Authentication Authentications API](https://apis.io/collections/tray-ai/open-tray-ai-authentications-api/)
+- [Tray.ai Embedded Authentication Call Connector API](https://apis.io/collections/tray-ai/open-tray-ai-call-connector-api/)
+- [Tray.ai Embedded Authentication Connectors API](https://apis.io/collections/tray-ai/open-tray-ai-connectors-api/)
+- [Tray.ai Embedded Authentication Deployments API](https://apis.io/collections/tray-ai/open-tray-ai-deployments-api/)
+- [Tray.ai Embedded API](https://apis.io/collections/tray-ai/open-tray-ai-embedded-api/)
+- [Tray.ai Platform API](https://apis.io/collections/tray-ai/open-tray-ai-platform-api/)
+- [Tray.ai Embedded Authentication Projects API](https://apis.io/collections/tray-ai/open-tray-ai-projects-api/)
+- [Tray.ai Embedded Authentication Solution Instances API](https://apis.io/collections/tray-ai/open-tray-ai-solution-instances-api/)
+- [Tray.ai Embedded Authentication Solutions API](https://apis.io/collections/tray-ai/open-tray-ai-solutions-api/)
+- [Tray.ai Embedded Authentication Triggers API](https://apis.io/collections/tray-ai/open-tray-ai-triggers-api/)
+- [Tray.ai Embedded Authentication Users API](https://apis.io/collections/tray-ai/open-tray-ai-users-api/)
+- [Tray.ai Embedded Authentication Workflows API](https://apis.io/collections/tray-ai/open-tray-ai-workflows-api/)
+- [Tray.ai Embedded Authentication Workspaces API](https://apis.io/collections/tray-ai/open-tray-ai-workspaces-api/)
+- [Tray.ai Embedded Authentication API](https://apis.io/collections/tray-ai/postman-tray-ai-authentication-api/)
+- [Tray.ai Embedded Authentication Authentications API](https://apis.io/collections/tray-ai/postman-tray-ai-authentications-api/)
+- [Tray.ai Embedded Authentication Call Connector API](https://apis.io/collections/tray-ai/postman-tray-ai-call-connector-api/)
+- [Tray.ai Embedded Authentication Connectors API](https://apis.io/collections/tray-ai/postman-tray-ai-connectors-api/)
+- [Tray.ai Embedded Authentication Deployments API](https://apis.io/collections/tray-ai/postman-tray-ai-deployments-api/)
+- [Tray.ai Embedded Authentication Projects API](https://apis.io/collections/tray-ai/postman-tray-ai-projects-api/)
+- [Tray.ai Embedded Authentication Solution Instances API](https://apis.io/collections/tray-ai/postman-tray-ai-solution-instances-api/)
+- [Tray.ai Embedded Authentication Solutions API](https://apis.io/collections/tray-ai/postman-tray-ai-solutions-api/)
+- [Tray.ai Embedded Authentication Triggers API](https://apis.io/collections/tray-ai/postman-tray-ai-triggers-api/)
+- [Tray.ai Embedded Authentication Users API](https://apis.io/collections/tray-ai/postman-tray-ai-users-api/)
+- [Tray.ai Embedded Authentication Workflows API](https://apis.io/collections/tray-ai/postman-tray-ai-workflows-api/)
+- …and 1 more published on APIs.io
+
+#### Overlays (27)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Tray Ai Agent Groups Api Phrasing Overlay](https://apis.io/overlays/tray-ai/tray-ai-agent-groups-api-phrasing-overlay/)
+- [Tray Ai Agent Instances Api Phrasing Overlay](https://apis.io/overlays/tray-ai/tray-ai-agent-instances-api-phrasing-overlay/)
+- [Tray Ai Authentication Api Phrasing Overlay](https://apis.io/overlays/tray-ai/tray-ai-authentication-api-phrasing-overlay/)
+- [Tray Ai Authentication Overlay](https://apis.io/overlays/tray-ai/tray-ai-authentication-overlay/)
+- [Tray Ai Authentications Api Phrasing Overlay](https://apis.io/overlays/tray-ai/tray-ai-authentications-api-phrasing-overlay/)
+- [Tray Ai Authentications Overlay](https://apis.io/overlays/tray-ai/tray-ai-authentications-overlay/)
+- [Tray Ai Call Connector Api Phrasing Overlay](https://apis.io/overlays/tray-ai/tray-ai-call-connector-api-phrasing-overlay/)
+- [Tray Ai Call Connector Overlay](https://apis.io/overlays/tray-ai/tray-ai-call-connector-overlay/)
+- [Tray Ai Connectors Api Phrasing Overlay](https://apis.io/overlays/tray-ai/tray-ai-connectors-api-phrasing-overlay/)
+- [Tray Ai Connectors Overlay](https://apis.io/overlays/tray-ai/tray-ai-connectors-overlay/)
+- [Tray Ai Deployments Api Phrasing Overlay](https://apis.io/overlays/tray-ai/tray-ai-deployments-api-phrasing-overlay/)
+- [Tray Ai Deployments Overlay](https://apis.io/overlays/tray-ai/tray-ai-deployments-overlay/)
+- [Tray Ai Permissions Api Phrasing Overlay](https://apis.io/overlays/tray-ai/tray-ai-permissions-api-phrasing-overlay/)
+- [Tray Ai Projects Api Phrasing Overlay](https://apis.io/overlays/tray-ai/tray-ai-projects-api-phrasing-overlay/)
+- [Tray Ai Projects Overlay](https://apis.io/overlays/tray-ai/tray-ai-projects-overlay/)
+- [Tray Ai Solution Instances Api Phrasing Overlay](https://apis.io/overlays/tray-ai/tray-ai-solution-instances-api-phrasing-overlay/)
+- [Tray Ai Solution Instances Overlay](https://apis.io/overlays/tray-ai/tray-ai-solution-instances-overlay/)
+- [Tray Ai Solutions Api Phrasing Overlay](https://apis.io/overlays/tray-ai/tray-ai-solutions-api-phrasing-overlay/)
+- [Tray Ai Solutions Overlay](https://apis.io/overlays/tray-ai/tray-ai-solutions-overlay/)
+- [Tray Ai Triggers Api Phrasing Overlay](https://apis.io/overlays/tray-ai/tray-ai-triggers-api-phrasing-overlay/)
+- [Tray Ai Triggers Overlay](https://apis.io/overlays/tray-ai/tray-ai-triggers-overlay/)
+- [Tray Ai Users Api Phrasing Overlay](https://apis.io/overlays/tray-ai/tray-ai-users-api-phrasing-overlay/)
+- [Tray Ai Users Overlay](https://apis.io/overlays/tray-ai/tray-ai-users-overlay/)
+- [Tray Ai Workflows Api Phrasing Overlay](https://apis.io/overlays/tray-ai/tray-ai-workflows-api-phrasing-overlay/)
+- [Tray Ai Workflows Overlay](https://apis.io/overlays/tray-ai/tray-ai-workflows-overlay/)
+- …and 2 more published on APIs.io
+
+#### Governance rules (2)
+
+Spectral rulesets for the provider's contracts.
+
+- [Tray.ai — jsonschema rules](https://apis.io/rules/tray-ai/tray-ai-jsonschema-spectral-rules/)
+- [Tray.ai API Rules](https://apis.io/rules/tray-ai/tray-ai-rules/)
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Tray Ai Authentication](https://apis.io/security/tray-ai/tray-ai-authentication/)
+- [Tray Ai Domain Security](https://apis.io/security/tray-ai/tray-ai-domain-security/)
+- [Tray Ai Trust Center](https://apis.io/security/tray-ai/tray-ai-trust-center/)
+- [Tray Ai Vulnerability Disclosure](https://apis.io/security/tray-ai/tray-ai-vulnerability-disclosure/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Tray Ai Scopes](https://apis.io/scopes/tray-ai/tray-ai-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Tray Ai Plans Pricing](https://apis.io/plans/tray-ai/tray-ai-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Tray Ai Rate Limits](https://apis.io/rate-limits/tray-ai/tray-ai-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Tray Ai Finops](https://apis.io/finops/tray-ai/tray-ai-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://tray.ai/)
-- [Portal](https://tray.ai/documentation/developer/)
-- [Product](https://tray.ai/documentation/agent-builder/)
-- [Product](https://tray.ai/documentation/agent-hub/)
-- [Product](https://tray.ai/)
-- [Product](https://tray.ai/)
-- [Product](https://tray.ai/products/embedded)
-- [SDK](https://github.com/trayio/falafel)
-- [SDK](https://github.com/trayio/threadneedle)
-- [Samples](https://github.com/trayio/CDK-examples-public)
-- [Samples](https://github.com/trayio/embedded-edition-sample-app)
-- [Tools](https://github.com/trayio/connector-tester-public)
-- [Tools](https://github.com/trayio/script-connector-tester)
-- [Tools](https://github.com/trayio/embedded-customjs-public)
-- [Postman Collection](https://www.postman.com/tray-docs/tray-io-s-public-workspace) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Use Cases](undefined)
-- [Features](undefined)
-- [Plan Tiers](undefined)
-- [L L Ms Txt](https://tray.ai/llms.txt)
+- [Documentation](https://tray.ai/documentation/)
+- [Getting started](https://tray.ai/documentation/developer/getting-started/introduction)
+- [API reference](https://tray.ai/documentation/developer/)
+- [Pricing](https://tray.ai/pricing)
+- [Support](https://tray.ai/documentation/help/)
+- [Blog](https://tray.ai/blog)
+- [Terms of service](https://tray.ai/terms)
+- [Privacy policy](https://tray.ai/privacy)
+- [GitHub](https://github.com/trayio)
+- [Status](https://status.tray.ai/)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 87.8** — exemplar · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 81.7 |
+| Contract quality | 75.3 |
+| Contract governance | 45.5 |
+| Operational transparency | 92.1 |
+| Developer ergonomics | 92.1 |
+| Access clarity | 92.1 |
+
+**Agent readiness 61.6** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | unknown |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 45.1** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/tray-ai/](https://apis.io/providers/tray-ai/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Tray.ai: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/tray-ai/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
