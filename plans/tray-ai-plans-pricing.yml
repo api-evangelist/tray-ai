@@ -1,0 +1,100 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-28'
+method: searched
+source: https://tray.ai/pricing/
+sources:
+- https://tray.ai/pricing/
+- https://tray.ai/pricing
+provenance:
+  tool: engine/economics/harvest_pricing.py
+  run: 20261028T120612
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: usage-other
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-28'
+  managed_tier: Pro
+published: true
+note: iPaaS tiers (Pro/Team/Enterprise) are quote-only; only numeric price shown is Tray Helix starting
+  at $50 a month. Usage metered in Tasks and HCUs with annual commits and true-ups.
+plan_count: 5
+currency: USD
+plans:
+- name: Tray Helix (Builder Edition)
+  price_text: Starts at $50 a month
+  price: 50
+  currency: USD
+  period: month
+  included_quota: Managed runtime for AI-built apps and integrations; usage measured in Helix Compute
+    Units (HCUs)
+- name: Pro
+  price_text: Get a clear quote
+  period: none
+  included_quota: 3 workspaces, 7-day insights, 7-day log retention, 700+ connectors
+- name: Team
+  price_text: Get a clear quote
+  period: none
+  included_quota: 20 workspaces, 30-day insights, 7-day expandable log retention, log retention management,
+    Guardian Log Masking, all add-ons available
+- name: Enterprise
+  price_text: Get a clear quote
+  period: none
+  included_quota: Unlimited workspaces, 180-day insights, advanced on-premise, SSO, HIPAA, regional hosting,
+    log streaming, data engineering
+- name: Free trial
+  price_text: 30 days and 1 million Tasks
+  period: none
+  unit: Tasks
+  included_quota: 30 days, 1 million Tasks on Tray iPaaS, full connector library, can include Tray Helix
+rate_limit_statements:
+- 30 days and 1 million Tasks on Tray iPaaS
+- 3 workspaces
+- 20 workspaces
+- Unlimited workspaces
+x-canonical:
+  generated: '2026-11-01'
+  vocabulary: engine/economics/plans-canonical.yml
+  models:
+  - metered
+  - subscription
+  units:
+  - request
+  plans:
+  - name: Tray Helix (Builder Edition)
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Pro
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
+  - name: Team
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
+  - name: Enterprise
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
+  - name: Free trial
+    access: other
+    model: metered
+    model_how: derived
+    units:
+    - request
+    periods:
+    - none
